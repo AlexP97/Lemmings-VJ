@@ -6,6 +6,8 @@
 #include "ShaderProgram.h"
 #include "MaskedTexturedQuad.h"
 #include "Lemming.h"
+#include "Puerta.h"
+#include "Cursor.h"
 
 
 // Scene contains all the entities of our game.
@@ -38,7 +40,8 @@ private:
 	float currentTime;
 	glm::mat4 projection;
 	Lemming lemming;
-
+	Puerta puerta;
+	Cursor cursor;
 };
 
 
