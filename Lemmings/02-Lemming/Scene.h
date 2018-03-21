@@ -31,6 +31,7 @@ private:
 	void initShaders();
 	void eraseMask(int mouseX, int mouseY);
 	void applyMask(int mouseX, int mouseY);
+	bool cursorOnLemming(int mouseX, int mouseY);
 
 private:
 	Texture colorTexture;

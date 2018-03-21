@@ -80,6 +80,27 @@ void Scene::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButt
 		applyMask(mouseX, mouseY);
 
 	cursor.setPosition(mouseX, mouseY);
+	
+	bool cOL = cursorOnLemming(mouseX, mouseY);
+	if (cursor.currentAnimation() == 0) {
+		if (cOL) cursor.changeAnimation(1);
+	}
+	else {
+		if (!cOL) cursor.changeAnimation(0);
+	}
+}
+
+bool Scene::cursorOnLemming(int mouseX, int mouseY) {
+	glm::vec2 position;
+	int x = mouseX / 3;
+	int y = mouseY / 3;
+	//for (int i = 0; i < lemmings.size(); i++) {
+		position = lemming.position();
+		if (x > position.x && (x -15) < position.x) {
+			if (y > position.y && (y - 15) < position.y) return true;
+		}
+	//}
+	return false;
 }
 
 void Scene::eraseMask(int mouseX, int mouseY)

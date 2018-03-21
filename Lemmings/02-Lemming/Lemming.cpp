@@ -105,6 +105,10 @@ void Lemming::render()
 	sprite->render();
 }
 
+glm::vec2 Lemming::position() {
+	return sprite->position();
+}
+
 void Lemming::setMapMask(VariableTexture *mapMask)
 {
 	mask = mapMask;

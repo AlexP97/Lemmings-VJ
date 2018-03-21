@@ -15,14 +15,11 @@ public:
 	void update(int deltaTime);
 	void render();
 	void setPosition(int x, int y);
+	int currentAnimation();
+	void changeAnimation(int anim);
 
 private:
-	enum CursorState
-	{
-		NORMAL, HOVER
-	};
 
-	CursorState state;
 	Texture spritesheet;
 	Sprite *sprite;
 

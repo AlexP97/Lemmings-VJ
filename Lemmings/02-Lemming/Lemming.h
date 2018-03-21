@@ -17,6 +17,7 @@ public:
 	void init(const glm::vec2 &initialPosition, ShaderProgram &shaderProgram);
 	void update(int deltaTime);
 	void render();
+	glm::vec2 position();
 	
 	void setMapMask(VariableTexture *mapMask);
 	
