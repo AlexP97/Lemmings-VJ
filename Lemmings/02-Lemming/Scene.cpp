@@ -33,11 +33,13 @@ void Scene::init()
 
 	projection = glm::ortho(0.f, float(CAMERA_WIDTH - 1), float(CAMERA_HEIGHT - 1), 0.f);
 
-	lemming.init(glm::vec2(60, 30), simpleTexProgram);
-	lemming.setMapMask(&maskTexture);
+	for (int i = 0; i < 20; i++) {
+		lemming[i].init(glm::vec2(60 + 2 * i, 30), simpleTexProgram);
+		lemming[i].setMapMask(&maskTexture);
+	}
 
 	puerta.init(glm::vec2(60, 30), simpleTexProgram);
-
+	botonPlay.init(glm::vec2(150,100), simpleTexProgram);
 	cursor.init(glm::vec2(90, 30), simpleTexProgram);
 }
 
@@ -46,9 +48,12 @@ unsigned int x = 0;
 void Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;
-	lemming.update(deltaTime);
+	for (int i = 0; i < 20; i++) {
+		lemming[i].update(deltaTime);
+	}
 	puerta.update(deltaTime);
 	cursor.update(deltaTime);
+	botonPlay.update(deltaTime);
 }
 
 void Scene::render()
@@ -67,9 +72,12 @@ void Scene::render()
 	simpleTexProgram.setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);
 	modelview = glm::mat4(1.0f);
 	simpleTexProgram.setUniformMatrix4f("modelview", modelview);
-	lemming.render();
+	for (int i = 0; i < 20; i++) {
+		lemming[i].render();
+	}
 	puerta.render();
 	cursor.render();
+	botonPlay.render();
 }
 
 void Scene::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton)
@@ -94,12 +102,12 @@ bool Scene::cursorOnLemming(int mouseX, int mouseY) {
 	glm::vec2 position;
 	int x = mouseX / 3;
 	int y = mouseY / 3;
-	//for (int i = 0; i < lemmings.size(); i++) {
-		position = lemming.position();
+	for (int i = 0; i < 20; i++) {
+		position = lemming[i].position();
 		if (x > position.x && (x -15) < position.x) {
 			if (y > position.y && (y - 15) < position.y) return true;
 		}
-	//}
+	}
 	return false;
 }
 

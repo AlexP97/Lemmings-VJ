@@ -8,6 +8,7 @@
 #include "Lemming.h"
 #include "Puerta.h"
 #include "Cursor.h"
+#include "Boton.h"
 
 
 // Scene contains all the entities of our game.
@@ -40,9 +41,10 @@ private:
 	ShaderProgram simpleTexProgram, maskedTexProgram;
 	float currentTime;
 	glm::mat4 projection;
-	Lemming lemming;
+	Lemming lemming[20];
 	Puerta puerta;
 	Cursor cursor;
+	Boton botonPlay;
 };
 
 
