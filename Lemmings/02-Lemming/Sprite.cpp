@@ -124,6 +124,14 @@ glm::vec2 &Sprite::position()
 	return pos;
 }
 
+int Sprite::currentKeyFrame()
+{
+	return currentKeyframe;
+}
+
+int Sprite::sizeCurrentAnimation() {
+	return animations[currentAnimation].keyframeDispl.size();
+}
 
 
 

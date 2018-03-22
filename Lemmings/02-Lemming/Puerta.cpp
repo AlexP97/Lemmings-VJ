@@ -41,7 +41,8 @@ void Puerta::update(int deltaTime)
 	switch (state)
 	{
 	case OPENING:
-		sprite->changeAnimation(OPENED);
+		if(sprite->currentKeyFrame() == sprite->sizeCurrentAnimation()-1)
+			sprite->changeAnimation(OPENED);
 		break;
 	
 	}

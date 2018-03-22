@@ -1,3 +1,13 @@
 ﻿  Boton.cpp
 c:\users\usuario\desktop\universidad\vj\lemmings\lemmings\02-lemming\boton.cpp(33): warning C4101: 'fall': variable local sin referencia
+  Cursor.cpp
+c:\users\usuario\desktop\universidad\vj\lemmings\lemmings\02-lemming\cursor.cpp(34): warning C4101: 'fall': variable local sin referencia
+  Game.cpp
+  Lemming.cpp
+  Puerta.cpp
+c:\users\usuario\desktop\universidad\vj\lemmings\lemmings\02-lemming\puerta.cpp(36): warning C4101: 'fall': variable local sin referencia
+  Scene.cpp
+  Sprite.cpp
+  main.cpp
+  Generando código...
   02-Lemming.vcxproj -> C:\Users\usuario\Desktop\UNIVERSIDAD\VJ\Lemmings\Lemmings\02-Lemming\Debug\02-Lemming.exe
