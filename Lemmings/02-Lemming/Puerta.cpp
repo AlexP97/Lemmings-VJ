@@ -15,17 +15,18 @@ enum PuertaAnims
 void Puerta::init(const glm::vec2 &initialPosition, ShaderProgram &shaderProgram)
 {
 	state = OPENING;
-	spritesheet.loadFromFile("images/miscelanea.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	spritesheet.loadFromFile("images/puertaSinFondo.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spritesheet.setMinFilter(GL_NEAREST);
 	spritesheet.setMagFilter(GL_NEAREST);
-	sprite = Sprite::createSprite(glm::ivec2(32, 32), glm::vec2(2.0f/20.0f, 2.0f/32.0f), &spritesheet, &shaderProgram);
+	sprite = Sprite::createSprite(glm::ivec2(32, 32), glm::vec2(1.f, 0.1f), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(2);
 
-	sprite->setAnimationSpeed(OPENING, 3);
+	sprite->setAnimationSpeed(OPENING, 10);
+
 	for (int i = 0; i<10; i++)
-		sprite->addKeyframe(OPENING, glm::vec2(12.0f/16.0f, float(i) / 18.));
-	sprite->setAnimationSpeed(OPENED, 3);
-	sprite->addKeyframe(OPENED, glm::vec2(12.0f / 16.0f, 9. / 18.));
+		sprite->addKeyframe(OPENING, glm::vec2(0.f, float(i) / 10.));
+	sprite->setAnimationSpeed(OPENED, 0);
+	sprite->addKeyframe(OPENED, glm::vec2(0.0f , 9. / 10.));
 	sprite->changeAnimation(OPENING);
 	sprite->setPosition(initialPosition);
 

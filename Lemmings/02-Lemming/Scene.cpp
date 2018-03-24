@@ -39,7 +39,7 @@ void Scene::init()
 	}
 
 	puerta.init(glm::vec2(60, 30), simpleTexProgram);
-	botonPlay.init(glm::vec2(150,100), simpleTexProgram);
+	botonPlay.init(glm::vec2(float(CAMERA_WIDTH-31),float(CAMERA_HEIGHT - 21)), simpleTexProgram);
 	cursor.init(glm::vec2(90, 30), simpleTexProgram);
 }
 
@@ -105,7 +105,10 @@ bool Scene::cursorOnLemming(int mouseX, int mouseY) {
 	for (int i = 0; i < 20; i++) {
 		position = lemming[i].position();
 		if (x > position.x && (x -15) < position.x) {
-			if (y > position.y && (y - 15) < position.y) return true;
+			if (y > position.y && (y - 15) < position.y) {
+				lemming.pop_back();
+				return true;
+			}
 		}
 	}
 	return false;
