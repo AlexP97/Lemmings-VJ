@@ -33,10 +33,7 @@ void Scene::init()
 
 	projection = glm::ortho(0.f, float(CAMERA_WIDTH - 1), float(CAMERA_HEIGHT - 1), 0.f);
 
-	for (int i = 0; i < 20; i++) {
-		lemming[i].init(glm::vec2(60 + 2 * i, 30), simpleTexProgram);
-		lemming[i].setMapMask(&maskTexture);
-	}
+	
 
 	puerta.init(glm::vec2(60, 30), simpleTexProgram);
 	botonPlay.init(glm::vec2(float(CAMERA_WIDTH-31),float(CAMERA_HEIGHT - 21)), simpleTexProgram);
@@ -45,10 +42,28 @@ void Scene::init()
 
 unsigned int x = 0;
 
+bool first = true;
+ 
+
 void Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;
-	for (int i = 0; i < 20; i++) {
+
+	if (first && currentTime >= 2000) {
+		float aux = currentTime;
+		for (int i = 0; i < 20; i++) {
+			Lemming lem;
+			lemming.push_back(lem);
+		}
+		for (int i = 0; i < lemming.size(); i++) {
+			lemming[i].init(glm::vec2(60, 30), simpleTexProgram);
+			lemming[i].setMapMask(&maskTexture);
+		}
+		first = false;
+	}
+
+
+	for (int i = 0; i < lemming.size(); i++) {
 		lemming[i].update(deltaTime);
 	}
 	puerta.update(deltaTime);
@@ -72,7 +87,7 @@ void Scene::render()
 	simpleTexProgram.setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);
 	modelview = glm::mat4(1.0f);
 	simpleTexProgram.setUniformMatrix4f("modelview", modelview);
-	for (int i = 0; i < 20; i++) {
+	for (int i = 0; i < lemming.size(); i++) {
 		lemming[i].render();
 	}
 	puerta.render();
@@ -98,15 +113,17 @@ void Scene::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButt
 	}
 }
 
+
+
 bool Scene::cursorOnLemming(int mouseX, int mouseY) {
 	glm::vec2 position;
 	int x = mouseX / 3;
 	int y = mouseY / 3;
-	for (int i = 0; i < 20; i++) {
+	for (int i = 0; i < lemming.size(); i++) {
 		position = lemming[i].position();
 		if (x > position.x && (x -15) < position.x) {
 			if (y > position.y && (y - 15) < position.y) {
-				lemming.pop_back();
+				lemming.erase(lemming.begin()+i);
 				return true;
 			}
 		}

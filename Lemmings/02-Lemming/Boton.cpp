@@ -15,7 +15,7 @@ enum BotonAnims
 void Boton::init(const glm::vec2 &initialPosition, ShaderProgram &shaderProgram)
 {
 	state = OPENING;
-	spritesheet.loadFromFile("images/oie_transparent.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	spritesheet.loadFromFile("images/botonesSinFondo.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spritesheet.setMinFilter(GL_NEAREST);
 	spritesheet.setMagFilter(GL_NEAREST);
 	sprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(1.0f / 2.0f, 2.0f / 2.0f), &spritesheet, &shaderProgram);
@@ -41,6 +41,10 @@ void Boton::update(int deltaTime)
 		break;
 
 	}
+}
+
+glm::vec2 Boton::position() {
+	return sprite->position();
 }
 
 void Boton::render()

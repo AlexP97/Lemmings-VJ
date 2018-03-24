@@ -3,6 +3,7 @@
 
 
 #include <glm/glm.hpp>
+#include <vector>
 #include "ShaderProgram.h"
 #include "MaskedTexturedQuad.h"
 #include "Lemming.h"
@@ -41,7 +42,7 @@ private:
 	ShaderProgram simpleTexProgram, maskedTexProgram;
 	float currentTime;
 	glm::mat4 projection;
-	Lemming lemming[20];
+	vector<Lemming> lemming;
 	Puerta puerta;
 	Cursor cursor;
 	Boton botonPlay;
