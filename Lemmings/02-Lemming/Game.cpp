@@ -2,10 +2,10 @@
 #include <GL/glut.h>
 #include "Game.h"
 
-
 void Game::init()
 {
 	bPlay = true;
+	paused = false;
 	bLeftMouse = bRightMouse = false;
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 	scene.init();
@@ -13,7 +13,7 @@ void Game::init()
 
 bool Game::update(int deltaTime)
 {
-	scene.update(deltaTime);
+	if(!paused) scene.update(deltaTime);
 	
 	return bPlay;
 }
@@ -58,7 +58,7 @@ void Game::mousePress(int button)
 	if(button == GLUT_LEFT_BUTTON)
 	{
 		bLeftMouse = true;
-		scene.mouseMoved(mouseX, mouseY, bLeftMouse, bRightMouse);
+		if (scene.mouseMoved(mouseX, mouseY, bLeftMouse, bRightMouse)) paused = !paused;
 	}
 	else if(button == GLUT_RIGHT_BUTTON)
 	{

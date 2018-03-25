@@ -27,13 +27,14 @@ public:
 	void update(int deltaTime);
 	void render();
 	
-	void mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton);
+	bool mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton);
 
 private:
 	void initShaders();
 	void eraseMask(int mouseX, int mouseY);
 	void applyMask(int mouseX, int mouseY);
 	bool cursorOnLemming(int mouseX, int mouseY);
+	bool clickOnPause(int mouseX, int mouseY);
 
 private:
 	Texture colorTexture;
@@ -46,6 +47,7 @@ private:
 	Puerta puerta;
 	Cursor cursor;
 	Boton botonPlay;
+	int lemmingsIn;
 };
 
 

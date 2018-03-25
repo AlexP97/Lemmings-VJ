@@ -33,35 +33,24 @@ void Scene::init()
 
 	projection = glm::ortho(0.f, float(CAMERA_WIDTH - 1), float(CAMERA_HEIGHT - 1), 0.f);
 
-	
-
 	puerta.init(glm::vec2(60, 30), simpleTexProgram);
-	botonPlay.init(glm::vec2(float(CAMERA_WIDTH-31),float(CAMERA_HEIGHT - 21)), simpleTexProgram);
+	botonPlay.init(glm::vec2(float(289.f),float(139.f)), simpleTexProgram);
 	cursor.init(glm::vec2(90, 30), simpleTexProgram);
 }
 
-unsigned int x = 0;
-
-bool first = true;
- 
+unsigned int x = 0; 
 
 void Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;
 
-	if (first && currentTime >= 2000) {
-		float aux = currentTime;
-		for (int i = 0; i < 20; i++) {
-			Lemming lem;
-			lemming.push_back(lem);
-		}
-		for (int i = 0; i < lemming.size(); i++) {
-			lemming[i].init(glm::vec2(60, 30), simpleTexProgram);
-			lemming[i].setMapMask(&maskTexture);
-		}
-		first = false;
+	if (lemmingsIn <= 20 && currentTime >= 2000 * lemmingsIn) {
+		Lemming lem;
+		lemming.push_back(lem);
+		lemming[lemming.size() - 1].init(glm::vec2(70, 30), simpleTexProgram);
+		lemming[lemming.size() - 1].setMapMask(&maskTexture);
+		lemmingsIn++;
 	}
-
 
 	for (int i = 0; i < lemming.size(); i++) {
 		lemming[i].update(deltaTime);
@@ -87,15 +76,16 @@ void Scene::render()
 	simpleTexProgram.setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);
 	modelview = glm::mat4(1.0f);
 	simpleTexProgram.setUniformMatrix4f("modelview", modelview);
+
 	for (int i = 0; i < lemming.size(); i++) {
 		lemming[i].render();
 	}
 	puerta.render();
-	cursor.render();
 	botonPlay.render();
+	cursor.render();
 }
 
-void Scene::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton)
+bool Scene::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton)
 {
 	if(bLeftButton)
 		eraseMask(mouseX, mouseY);
@@ -111,19 +101,33 @@ void Scene::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButt
 	else {
 		if (!cOL) cursor.changeAnimation(0);
 	}
+
+	return (bLeftButton && clickOnPause(mouseX, mouseY));
 }
 
+bool Scene::clickOnPause(int mouseX, int mouseY) {
+	glm::vec2 center = botonPlay.centerPosition();
+	int x = mouseX / 3;
+	int y = mouseY / 3;
 
+	float distFromCenter = sqrt((x - center.x) * (x - center.x) + (y - center.y) * (y - center.y));
+	if (distFromCenter <= 8.f) {
+		botonPlay.changeAnimation();
+		return true;
+	}
+	return false;
+}
 
 bool Scene::cursorOnLemming(int mouseX, int mouseY) {
 	glm::vec2 position;
 	int x = mouseX / 3;
 	int y = mouseY / 3;
+
 	for (int i = 0; i < lemming.size(); i++) {
 		position = lemming[i].position();
-		if (x > position.x && (x -15) < position.x) {
+		if (x > position.x && (x - 15) < position.x) {
 			if (y > position.y && (y - 15) < position.y) {
-				lemming.erase(lemming.begin()+i);
+				lemming.erase(lemming.begin() + i);
 				return true;
 			}
 		}
