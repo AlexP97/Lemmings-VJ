@@ -39,6 +39,12 @@ void Scene::init()
 	salida.init(glm::vec2(245, 107), simpleTexProgram);
 
 	lemmingsIn = 0;
+
+	lemmingInit = vector<bool>(20, false);
+	for (int i = 0; i < 20; i++) {
+		Lemming lem;
+		lemming.push_back(lem);
+	}
 }
 
 unsigned int x = 0; 
@@ -48,22 +54,23 @@ void Scene::update(int deltaTime)
 	currentTime += deltaTime;
 
 	for (int i = 0; i < lemming.size(); i++) {
-		if (lemmingOnExit(lemming[i].position())) lemming[i].come_Out();
-		if (lemming[i].getDisappear()) {
-			lemming.erase(lemming.begin() + i);
+		if (lemmingInit[i]) {
+			if (lemmingOnExit(lemming[i].position())) lemming[i].come_Out();
+			if (lemming[i].getDisappear()) {
+				lemming.erase(lemming.begin() + i);
+			}
 		}
 	}
 
-	if (lemmingsIn <= 1 && currentTime >= 2000 * lemmingsIn) {
-		Lemming lem;
-		lemming.push_back(lem);
-		lemming[lemming.size() - 1].init(glm::vec2(70, 30), simpleTexProgram);
-		lemming[lemming.size() - 1].setMapMask(&maskTexture);
-		lemmingsIn++;
+	if (lemmingsIn < 20 && currentTime >= 2000 * lemmingsIn) {
+		lemming[lemmingsIn].init(glm::vec2(70, 30), simpleTexProgram);
+		lemming[lemmingsIn].setMapMask(&maskTexture);
+		lemmingInit[lemmingsIn] = true;
+		++lemmingsIn;
 	}
 
 	for (int i = 0; i < lemming.size(); i++) {
-		lemming[i].update(deltaTime);
+		if (lemmingInit[i]) lemming[i].update(deltaTime);
 	}
 	puerta.update(deltaTime);
 	cursor.update(deltaTime);
@@ -91,7 +98,7 @@ void Scene::render()
 	puerta.render();
 	salida.render();
 	for (int i = 0; i < lemming.size(); i++) {
-		lemming[i].render();
+		if (lemmingInit[i]) lemming[i].render();
 	}
 	
 	botonPlay.render();
@@ -147,11 +154,13 @@ bool Scene::cursorOnLemming(int mouseX, int mouseY) {
 	int y = mouseY / 3;
 
 	for (int i = 0; i < lemming.size(); i++) {
-		position = lemming[i].position();
-		if (x > position.x && (x - 15) < position.x) {
-			if (y > position.y && (y - 15) < position.y) {
-				lemming.erase(lemming.begin() + i);
-				return true;
+		if (lemmingInit[i]) {
+			position = lemming[i].position();
+			if (x > position.x && (x - 15) < position.x) {
+				if (y > position.y && (y - 15) < position.y) {
+					lemmingInit[i] = false;
+					return true;
+				}
 			}
 		}
 	}

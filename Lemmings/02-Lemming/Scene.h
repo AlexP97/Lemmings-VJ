@@ -46,6 +46,7 @@ private:
 	float currentTime;
 	glm::mat4 projection;
 	vector<Lemming> lemming;
+	vector<bool> lemmingInit;
 	Puerta puerta;
 	Cursor cursor;
 	Boton botonPlay;
