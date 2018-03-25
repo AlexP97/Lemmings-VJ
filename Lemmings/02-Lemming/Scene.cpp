@@ -34,8 +34,11 @@ void Scene::init()
 	projection = glm::ortho(0.f, float(CAMERA_WIDTH - 1), float(CAMERA_HEIGHT - 1), 0.f);
 
 	puerta.init(glm::vec2(60, 30), simpleTexProgram);
-	botonPlay.init(glm::vec2(float(289.f),float(139.f)), simpleTexProgram);
+	botonPlay.init(glm::vec2(289, 139), simpleTexProgram);
 	cursor.init(glm::vec2(90, 30), simpleTexProgram);
+	salida.init(glm::vec2(245, 107), simpleTexProgram);
+
+	lemmingsIn = 0;
 }
 
 unsigned int x = 0; 
@@ -44,7 +47,14 @@ void Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;
 
-	if (lemmingsIn <= 20 && currentTime >= 2000 * lemmingsIn) {
+	for (int i = 0; i < lemming.size(); i++) {
+		if (lemmingOnExit(lemming[i].position())) lemming[i].come_Out();
+		if (lemming[i].getDisappear()) {
+			lemming.erase(lemming.begin() + i);
+		}
+	}
+
+	if (lemmingsIn <= 1 && currentTime >= 2000 * lemmingsIn) {
 		Lemming lem;
 		lemming.push_back(lem);
 		lemming[lemming.size() - 1].init(glm::vec2(70, 30), simpleTexProgram);
@@ -58,6 +68,7 @@ void Scene::update(int deltaTime)
 	puerta.update(deltaTime);
 	cursor.update(deltaTime);
 	botonPlay.update(deltaTime);
+	salida.update(deltaTime);
 }
 
 void Scene::render()
@@ -77,10 +88,12 @@ void Scene::render()
 	modelview = glm::mat4(1.0f);
 	simpleTexProgram.setUniformMatrix4f("modelview", modelview);
 
+	puerta.render();
+	salida.render();
 	for (int i = 0; i < lemming.size(); i++) {
 		lemming[i].render();
 	}
-	puerta.render();
+	
 	botonPlay.render();
 	cursor.render();
 }
@@ -114,6 +127,16 @@ bool Scene::clickOnPause(int mouseX, int mouseY) {
 	if (distFromCenter <= 8.f) {
 		botonPlay.changeAnimation();
 		return true;
+	}
+	return false;
+}
+
+bool Scene::lemmingOnExit(glm::vec2 position) {
+	glm::vec2 salidaPos = salida.position();
+	if (position.x > (salidaPos.x - 5.f) && position.x < (salidaPos.x + 30.f)) {
+		if (position.y < (salidaPos.y - 20.f) && position.y < (salidaPos.y + 20.f)) {
+			return true;
+		}
 	}
 	return false;
 }

@@ -8,6 +8,7 @@
 #include "MaskedTexturedQuad.h"
 #include "Lemming.h"
 #include "Puerta.h"
+#include "Salida.h"
 #include "Cursor.h"
 #include "Boton.h"
 
@@ -35,6 +36,7 @@ private:
 	void applyMask(int mouseX, int mouseY);
 	bool cursorOnLemming(int mouseX, int mouseY);
 	bool clickOnPause(int mouseX, int mouseY);
+	bool lemmingOnExit(glm::vec2 position);
 
 private:
 	Texture colorTexture;
@@ -47,6 +49,7 @@ private:
 	Puerta puerta;
 	Cursor cursor;
 	Boton botonPlay;
+	Salida salida;
 	int lemmingsIn;
 };
 

@@ -14,7 +14,7 @@ enum BotonAnims
 
 void Boton::init(const glm::vec2 &initialPosition, ShaderProgram &shaderProgram)
 {
-	spritesheet.loadFromFile("images/botones3.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	spritesheet.loadFromFile("images/botones.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spritesheet.setMinFilter(GL_NEAREST);
 	spritesheet.setMagFilter(GL_NEAREST);
 	sprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(1.0f / 2.0f, 2.0f / 2.0f), &spritesheet, &shaderProgram);
@@ -33,8 +33,6 @@ void Boton::init(const glm::vec2 &initialPosition, ShaderProgram &shaderProgram)
 
 void Boton::update(int deltaTime)
 {
-	int fall;
-
 	if (sprite->update(deltaTime) == 0)
 		return;
 }

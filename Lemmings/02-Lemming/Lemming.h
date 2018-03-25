@@ -18,6 +18,8 @@ public:
 	void update(int deltaTime);
 	void render();
 	glm::vec2 position();
+	void come_Out();
+	bool getDisappear();
 	
 	void setMapMask(VariableTexture *mapMask);
 	
@@ -28,13 +30,14 @@ private:
 private:
 	enum LemmingState
 	{
-		WALKING_LEFT_STATE, WALKING_RIGHT_STATE, FALLING_LEFT_STATE, FALLING_RIGHT_STATE
+		WALKING_LEFT_STATE, WALKING_RIGHT_STATE, FALLING_LEFT_STATE, FALLING_RIGHT_STATE, COMING_OUT_STATE
 	};
 
 	LemmingState state;
 	Texture spritesheet;
 	Sprite *sprite;
 	VariableTexture *mask;
+	bool disappear;
 
 };
 
