@@ -31,8 +31,6 @@ void Cursor::init(const glm::vec2 &initialPosition, ShaderProgram &shaderProgram
 
 void Cursor::update(int deltaTime)
 {
-	int fall;
-
 	if (sprite->update(deltaTime) == 0)
 		return;
 }
