@@ -19,33 +19,33 @@ enum LemmingAnims
 
 void Lemming::init(const glm::vec2 &initialPosition, ShaderProgram &shaderProgram)
 {
-	disappear = false;
+	come_Out = false;
 	state = FALLING_RIGHT_STATE;
-	spritesheet.loadFromFile("images/lemming_sinfondo2.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	spritesheet.loadFromFile("images/lemming_sinfondo3.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spritesheet.setMinFilter(GL_NEAREST);
 	spritesheet.setMagFilter(GL_NEAREST);
-	sprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(0.125, 0.25), &spritesheet, &shaderProgram);
+	sprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(0.125, 1 / 16.f), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(5);
 	
 		sprite->setAnimationSpeed(WALKING_RIGHT, 12);
 		for(int i=0; i<8; i++)
-			sprite->addKeyframe(WALKING_RIGHT, glm::vec2(float(i) / 8, 0.0f));
+			sprite->addKeyframe(WALKING_RIGHT, glm::vec2(float(i) / 8, 0.f / 16.f));
 		
 		sprite->setAnimationSpeed(WALKING_LEFT, 12);
 		for(int i=0; i<8; i++)
-			sprite->addKeyframe(WALKING_LEFT, glm::vec2(float(i) / 8, 0.25f));
+			sprite->addKeyframe(WALKING_LEFT, glm::vec2(float(i) / 8, 1.f / 16.f));
 
-		sprite->setAnimationSpeed(COMING_OUT, 12);
+		sprite->setAnimationSpeed(COMING_OUT, 9);
 		for (int i = 0; i<8; i++)
-			sprite->addKeyframe(COMING_OUT, glm::vec2(float(i) / 8, 0.5f));
+			sprite->addKeyframe(COMING_OUT, glm::vec2(float(i) / 8, 2.f / 16.f));
 
 		sprite->setAnimationSpeed(FALLING_LEFT, 12);
 		for (int i = 0; i<4; i++)
-			sprite->addKeyframe(FALLING_LEFT, glm::vec2(float(i) / 4, 0.75f));
+			sprite->addKeyframe(FALLING_LEFT, glm::vec2(float(i) / 4, 3.f / 16.f));
 
 		sprite->setAnimationSpeed(FALLING_RIGHT, 12);
 		for (int i = 0; i<4; i++)
-			sprite->addKeyframe(FALLING_RIGHT, glm::vec2(float(i) / 4, 0.75f));
+			sprite->addKeyframe(FALLING_RIGHT, glm::vec2(float(i) / 4, 3.f / 16.f));
 		
 	sprite->changeAnimation(FALLING_RIGHT);
 	sprite->setPosition(initialPosition);
@@ -80,7 +80,11 @@ void Lemming::update(int deltaTime)
 		break;
 	case WALKING_LEFT_STATE:
 		sprite->position() += glm::vec2(-1, -1);
-		if(collision())
+		if (come_Out) {
+			sprite->changeAnimation(COMING_OUT);
+			state = COMING_OUT_STATE;
+		}
+		else if(collision())
 		{
 			sprite->position() -= glm::vec2(-1, -1);
 			sprite->changeAnimation(WALKING_RIGHT);
@@ -101,7 +105,11 @@ void Lemming::update(int deltaTime)
 		break;
 	case WALKING_RIGHT_STATE:
 		sprite->position() += glm::vec2(1, -1);
-		if(collision())
+		if (come_Out) {
+			sprite->changeAnimation(COMING_OUT);
+			state = COMING_OUT_STATE;
+		}
+		else if(collision())
 		{
 			sprite->position() -= glm::vec2(1, -1);
 			sprite->changeAnimation(WALKING_LEFT);
@@ -119,7 +127,7 @@ void Lemming::update(int deltaTime)
 		}
 		break;
 	case COMING_OUT_STATE:
-			if (sprite->animation() == 7) disappear = true;
+			
 		break;
 	}
 }
@@ -138,13 +146,13 @@ void Lemming::setMapMask(VariableTexture *mapMask)
 	mask = mapMask;
 }
 
-void Lemming::come_Out() {
-	state = COMING_OUT_STATE;
-	sprite->changeAnimation(COMING_OUT);
+bool Lemming::eliminar() 
+{
+	return (sprite->animation() == COMING_OUT) && (sprite->currentKeyFrame() == 7);
 }
 
-bool Lemming::getDisappear() {
-	return disappear;
+void Lemming::setComeOut(bool b) {
+	come_Out = b;
 }
 
 int Lemming::collisionFloor(int maxFall)

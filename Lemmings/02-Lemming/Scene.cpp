@@ -53,20 +53,21 @@ void Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;
 
-	for (int i = 0; i < lemming.size(); i++) {
-		if (lemmingInit[i]) {
-			if (lemmingOnExit(lemming[i].position())) lemming[i].come_Out();
-			if (lemming[i].getDisappear()) {
-				lemming.erase(lemming.begin() + i);
-			}
-		}
-	}
-
 	if (lemmingsIn < 20 && currentTime >= 2000 * lemmingsIn) {
 		lemming[lemmingsIn].init(glm::vec2(70, 30), simpleTexProgram);
+		//lemming[lemmingsIn].init(glm::vec2(200, 95), simpleTexProgram);
 		lemming[lemmingsIn].setMapMask(&maskTexture);
 		lemmingInit[lemmingsIn] = true;
 		++lemmingsIn;
+	}
+
+	for (int i = 0; i < lemming.size(); i++) {
+		if (lemmingInit[i]) {
+			if (lemmingOnExit(lemming[i].position())) lemming[i].setComeOut(true);
+			if (lemming[i].eliminar()) {
+				lemmingInit[i] = false;
+			}
+		}
 	}
 
 	for (int i = 0; i < lemming.size(); i++) {
@@ -140,10 +141,8 @@ bool Scene::clickOnPause(int mouseX, int mouseY) {
 
 bool Scene::lemmingOnExit(glm::vec2 position) {
 	glm::vec2 salidaPos = salida.position();
-	if (position.x > (salidaPos.x - 5.f) && position.x < (salidaPos.x + 30.f)) {
-		if (position.y < (salidaPos.y - 20.f) && position.y < (salidaPos.y + 20.f)) {
-			return true;
-		}
+	if (position.x > (salidaPos.x + 4.f) && position.x < (salidaPos.x + 10.f)) {
+		if (position.y < (salidaPos.y + 12.f) && position.y > salidaPos.y) return true;
 	}
 	return false;
 }

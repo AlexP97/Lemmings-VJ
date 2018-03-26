@@ -18,8 +18,8 @@ public:
 	void update(int deltaTime);
 	void render();
 	glm::vec2 position();
-	void come_Out();
-	bool getDisappear();
+	bool eliminar();
+	void setComeOut(bool b);
 	
 	void setMapMask(VariableTexture *mapMask);
 	
@@ -37,7 +37,7 @@ private:
 	Texture spritesheet;
 	Sprite *sprite;
 	VariableTexture *mask;
-	bool disappear;
+	bool come_Out;
 
 };
 
