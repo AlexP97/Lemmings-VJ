@@ -42,8 +42,8 @@ void Cursor::render()
 
 void Cursor::setPosition(int x, int y)
 {
-	int posX = x / 3 - 6;
-	int posY = y / 3 - 6;
+	int posX = x / 3 - 8;
+	int posY = y / 3 - 8;
 	sprite->setPosition(glm::vec2(posX, posY));
 }
 

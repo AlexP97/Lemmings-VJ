@@ -18,7 +18,8 @@ Scene::~Scene()
 
 void Scene::init()
 {
-	glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(float(CAMERA_WIDTH), float(CAMERA_HEIGHT)) };
+	//glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(float(CAMERA_WIDTH), float(CAMERA_HEIGHT)) };
+	glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(float(CAMERA_WIDTH), float(160.f)) };
 	glm::vec2 texCoords[2] = { glm::vec2(120.f / 512.0, 0.f), glm::vec2((120.f + 320.f) / 512.0f, 160.f / 256.0f) };
 
 	initShaders();
@@ -34,9 +35,12 @@ void Scene::init()
 	projection = glm::ortho(0.f, float(CAMERA_WIDTH - 1), float(CAMERA_HEIGHT - 1), 0.f);
 
 	puerta.init(glm::vec2(60, 30), simpleTexProgram);
-	botonPlay.init(glm::vec2(289, 139), simpleTexProgram);
+	botonPlay.init(glm::vec2(300, 185), simpleTexProgram);
 	cursor.init(glm::vec2(90, 30), simpleTexProgram);
 	salida.init(glm::vec2(245, 107), simpleTexProgram);
+	panel.init(glm::vec2(10, 159), simpleTexProgram);
+	iconSelected.init(glm::vec2(9, 158), simpleTexProgram);
+	//iconSelected.init(glm::vec2(60, 30), simpleTexProgram);
 
 	lemmingsIn = 0;
 
@@ -74,9 +78,11 @@ void Scene::update(int deltaTime)
 		if (lemmingInit[i]) lemming[i].update(deltaTime);
 	}
 	puerta.update(deltaTime);
-	cursor.update(deltaTime);
 	botonPlay.update(deltaTime);
 	salida.update(deltaTime);
+	panel.update(deltaTime);
+	if (iconSelected.getState() == 1) iconSelected.update(deltaTime);
+	cursor.update(deltaTime);
 }
 
 void Scene::render()
@@ -103,6 +109,8 @@ void Scene::render()
 	}
 	
 	botonPlay.render();
+	panel.render();
+	if(iconSelected.getState() == 1) iconSelected.render();
 	cursor.render();
 }
 
@@ -123,13 +131,14 @@ bool Scene::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButt
 		if (!cOL) cursor.changeAnimation(0);
 	}
 
+	if (bLeftButton) clickOnAbility(mouseX, mouseY);
 	return (bLeftButton && clickOnPause(mouseX, mouseY));
 }
 
 bool Scene::clickOnPause(int mouseX, int mouseY) {
 	glm::vec2 center = botonPlay.centerPosition();
-	int x = mouseX / 3;
-	int y = mouseY / 3;
+	int x = mouseX / 3 - 2.f;
+	int y = mouseY / 3 - 2.f;
 
 	float distFromCenter = sqrt((x - center.x) * (x - center.x) + (y - center.y) * (y - center.y));
 	if (distFromCenter <= 8.f) {
@@ -149,21 +158,67 @@ bool Scene::lemmingOnExit(glm::vec2 position) {
 
 bool Scene::cursorOnLemming(int mouseX, int mouseY) {
 	glm::vec2 position;
-	int x = mouseX / 3;
-	int y = mouseY / 3;
+	int x = mouseX / 3 - 2.f;
+	int y = mouseY / 3 - 2.f;
 
 	for (int i = 0; i < lemming.size(); i++) {
 		if (lemmingInit[i]) {
 			position = lemming[i].position();
 			if (x > position.x && (x - 15) < position.x) {
 				if (y > position.y && (y - 15) < position.y) {
-					lemmingInit[i] = false;
 					return true;
 				}
 			}
 		}
 	}
 	return false;
+}
+
+int Scene::clickOnAbility(int mouseX, int mouseY) {
+	int x = mouseX / 3;
+	int y = mouseY / 3;
+	glm::vec2 positionPanel = panel.position();
+	float sizeX = 530.f / 3.f;
+	float sizeY = 135.f / 3.f;
+	float sizeAbility = sizeX / 8.f;
+
+	if (x > (positionPanel.x - 2) && x < (positionPanel.x + sizeX)) {
+		if (y > positionPanel.y && y < (positionPanel.y + sizeY)) {
+			if (x < (positionPanel.x + sizeAbility - 2)) {
+				iconSelected.changeState(1);
+				iconSelected.setPosition(9, 159);
+			}
+			else if (x > (positionPanel.x + sizeAbility - 2) && x < (positionPanel.x + sizeAbility * 2 - 2)) {
+				iconSelected.changeState(1);
+				iconSelected.setPosition(9 + sizeAbility, 159);
+			}
+			else if (x >(positionPanel.x + sizeAbility*2 - 2) && x < (positionPanel.x + sizeAbility * 3 - 2)) {
+				iconSelected.changeState(1);
+				iconSelected.setPosition(9 + sizeAbility*2, 159);
+			}
+			else if (x >(positionPanel.x + sizeAbility * 3 - 2) && x < (positionPanel.x + sizeAbility * 4 - 2)) {
+				iconSelected.changeState(1);
+				iconSelected.setPosition(9 + sizeAbility * 3, 159);
+			}
+			else if (x >(positionPanel.x + sizeAbility * 4 - 2) && x < (positionPanel.x + sizeAbility * 5 - 2)) {
+				iconSelected.changeState(1);
+				iconSelected.setPosition(9 + sizeAbility * 4, 159);
+			}
+			else if (x >(positionPanel.x + sizeAbility * 5 - 2) && x < (positionPanel.x + sizeAbility * 6 - 2)) {
+				iconSelected.changeState(1);
+				iconSelected.setPosition(9 + sizeAbility * 5, 159);
+			}
+			else if (x >(positionPanel.x + sizeAbility * 6 - 2) && x < (positionPanel.x + sizeAbility * 7 - 2)) {
+				iconSelected.changeState(1);
+				iconSelected.setPosition(9 + sizeAbility * 6, 159);
+			}
+			else if (x >(positionPanel.x + sizeAbility * 7 - 2) && x < (positionPanel.x + sizeAbility * 8 - 2)) {
+				iconSelected.changeState(1);
+				iconSelected.setPosition(9 + sizeAbility * 7, 159);
+			}
+		}
+	}
+	return 0;
 }
 
 void Scene::eraseMask(int mouseX, int mouseY)

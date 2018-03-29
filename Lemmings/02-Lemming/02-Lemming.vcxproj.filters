@@ -60,6 +60,12 @@
     <ClInclude Include="Salida.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="IconPanel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IconSelected.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -102,6 +108,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Salida.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IconPanel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IconSelected.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

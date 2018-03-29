@@ -16,6 +16,8 @@
     <ClInclude Include="common_defs.h" />
     <ClInclude Include="Cursor.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="IconPanel.h" />
+    <ClInclude Include="IconSelected.h" />
     <ClInclude Include="Lemming.h" />
     <ClInclude Include="MaskedTexturedQuad.h" />
     <ClInclude Include="Puerta.h" />
@@ -30,6 +32,8 @@
   <ItemGroup>
     <ClCompile Include="Cursor.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="IconPanel.cpp" />
+    <ClCompile Include="IconSelected.cpp" />
     <ClCompile Include="Lemming.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MaskedTexturedQuad.cpp" />
