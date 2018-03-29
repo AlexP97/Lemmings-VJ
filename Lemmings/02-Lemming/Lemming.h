@@ -27,13 +27,14 @@ public:
 private:
 	int collisionFloor(int maxFall);
 	bool collision();
-	void eraseMask();
+	void eraseMask(int posX, int posY, float ymin, float ymax, float xmin, float xmax);
+	void applyMask();
 	
 	
 private:
 	enum LemmingState
 	{
-		WALKING_LEFT_STATE, WALKING_RIGHT_STATE, FALLING_LEFT_STATE, FALLING_RIGHT_STATE, COMING_OUT_STATE, DIG_STATE,
+		WALKING_LEFT_STATE, WALKING_RIGHT_STATE, FALLING_LEFT_STATE, FALLING_RIGHT_STATE, COMING_OUT_STATE, DIG_STATE, BLOCKING_STATE, DIG_LEFT_STATE, DIG_RIGHT_STATE
 	};
 
 	LemmingState state;
