@@ -22,15 +22,18 @@ public:
 	void setComeOut(bool b);
 	
 	void setMapMask(VariableTexture *mapMask);
+	void putAbility(int ability);
 	
 private:
 	int collisionFloor(int maxFall);
 	bool collision();
+	void eraseMask();
+	
 	
 private:
 	enum LemmingState
 	{
-		WALKING_LEFT_STATE, WALKING_RIGHT_STATE, FALLING_LEFT_STATE, FALLING_RIGHT_STATE, COMING_OUT_STATE
+		WALKING_LEFT_STATE, WALKING_RIGHT_STATE, FALLING_LEFT_STATE, FALLING_RIGHT_STATE, COMING_OUT_STATE, DIG_STATE,
 	};
 
 	LemmingState state;

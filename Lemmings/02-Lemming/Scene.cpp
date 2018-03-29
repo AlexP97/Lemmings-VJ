@@ -49,6 +49,7 @@ void Scene::init()
 		Lemming lem;
 		lemming.push_back(lem);
 	}
+	ability = 0;
 }
 
 unsigned int x = 0; 
@@ -123,16 +124,27 @@ bool Scene::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButt
 
 	cursor.setPosition(mouseX, mouseY);
 	
-	bool cOL = cursorOnLemming(mouseX, mouseY);
+	pair<bool,int> cOL = cursorOnLemming(mouseX, mouseY);
 	if (cursor.currentAnimation() == 0) {
-		if (cOL) cursor.changeAnimation(1);
+		if (cOL.first) cursor.changeAnimation(1);
 	}
 	else {
-		if (!cOL) cursor.changeAnimation(0);
+		if (!cOL.first) cursor.changeAnimation(0);
 	}
 
-	if (bLeftButton) clickOnAbility(mouseX, mouseY);
+	if (bLeftButton) {
+		clickOnAbility(mouseX, mouseY);
+		if (cOL.first) {
+			clickOnLemming(cOL.second);
+		}
+	}
 	return (bLeftButton && clickOnPause(mouseX, mouseY));
+}
+
+void Scene::clickOnLemming(int indLemming) {
+	
+	lemming[indLemming].putAbility(ability);
+
 }
 
 bool Scene::clickOnPause(int mouseX, int mouseY) {
@@ -156,23 +168,29 @@ bool Scene::lemmingOnExit(glm::vec2 position) {
 	return false;
 }
 
-bool Scene::cursorOnLemming(int mouseX, int mouseY) {
+pair<bool, int> Scene::cursorOnLemming(int mouseX, int mouseY) {
 	glm::vec2 position;
 	int x = mouseX / 3 - 2.f;
 	int y = mouseY / 3 - 2.f;
-
+	pair<bool, int> p;
+	p.first = false;
+	p.second = -1;
 	for (int i = 0; i < lemming.size(); i++) {
 		if (lemmingInit[i]) {
 			position = lemming[i].position();
 			if (x > position.x && (x - 15) < position.x) {
 				if (y > position.y && (y - 15) < position.y) {
-					return true;
+					p.first = true;
+					p.second = i;
+					return p;
 				}
 			}
 		}
 	}
-	return false;
+	return p;
 }
+
+
 
 int Scene::clickOnAbility(int mouseX, int mouseY) {
 	int x = mouseX / 3;
@@ -185,35 +203,91 @@ int Scene::clickOnAbility(int mouseX, int mouseY) {
 	if (x > (positionPanel.x - 2) && x < (positionPanel.x + sizeX)) {
 		if (y > positionPanel.y && y < (positionPanel.y + sizeY)) {
 			if (x < (positionPanel.x + sizeAbility - 2)) {
-				iconSelected.changeState(1);
+				if (ability == 1) {
+					iconSelected.changeState(0);
+					ability = 0;
+				}
+				else {
+					iconSelected.changeState(1);
+					ability = 1;
+				}
 				iconSelected.setPosition(9, 159);
 			}
 			else if (x > (positionPanel.x + sizeAbility - 2) && x < (positionPanel.x + sizeAbility * 2 - 2)) {
-				iconSelected.changeState(1);
+				if (ability == 2) {
+					iconSelected.changeState(0);
+					ability = 0;
+				}
+				else {
+					iconSelected.changeState(1);
+					ability = 2;
+				}
 				iconSelected.setPosition(9 + sizeAbility, 159);
 			}
 			else if (x >(positionPanel.x + sizeAbility*2 - 2) && x < (positionPanel.x + sizeAbility * 3 - 2)) {
-				iconSelected.changeState(1);
+				if (ability == 3) {
+					iconSelected.changeState(0);
+					ability = 0;
+				}
+				else {
+					iconSelected.changeState(1);
+					ability = 3;
+				}
 				iconSelected.setPosition(9 + sizeAbility*2, 159);
 			}
 			else if (x >(positionPanel.x + sizeAbility * 3 - 2) && x < (positionPanel.x + sizeAbility * 4 - 2)) {
-				iconSelected.changeState(1);
+				if (ability == 4) {
+					iconSelected.changeState(0);
+					ability = 0;
+				}
+				else {
+					iconSelected.changeState(1);
+					ability = 4;
+				}
 				iconSelected.setPosition(9 + sizeAbility * 3, 159);
 			}
 			else if (x >(positionPanel.x + sizeAbility * 4 - 2) && x < (positionPanel.x + sizeAbility * 5 - 2)) {
-				iconSelected.changeState(1);
+				if (ability == 5) {
+					iconSelected.changeState(0);
+					ability = 0;
+				}
+				else {
+					iconSelected.changeState(1);
+					ability = 5;
+				}
 				iconSelected.setPosition(9 + sizeAbility * 4, 159);
 			}
 			else if (x >(positionPanel.x + sizeAbility * 5 - 2) && x < (positionPanel.x + sizeAbility * 6 - 2)) {
-				iconSelected.changeState(1);
+				if (ability == 6) {
+					iconSelected.changeState(0);
+					ability = 0;
+				}
+				else {
+					iconSelected.changeState(1);
+					ability = 6;
+				}
 				iconSelected.setPosition(9 + sizeAbility * 5, 159);
 			}
 			else if (x >(positionPanel.x + sizeAbility * 6 - 2) && x < (positionPanel.x + sizeAbility * 7 - 2)) {
-				iconSelected.changeState(1);
+				if (ability == 7) {
+					iconSelected.changeState(0);
+					ability = 0;
+				}
+				else {
+					iconSelected.changeState(1);
+					ability = 7;
+				}
 				iconSelected.setPosition(9 + sizeAbility * 6, 159);
 			}
 			else if (x >(positionPanel.x + sizeAbility * 7 - 2) && x < (positionPanel.x + sizeAbility * 8 - 2)) {
-				iconSelected.changeState(1);
+				if (ability == 8) {
+					iconSelected.changeState(0);
+					ability = 0;
+				}
+				else {
+					iconSelected.changeState(1);
+					ability = 8;
+				}
 				iconSelected.setPosition(9 + sizeAbility * 7, 159);
 			}
 		}

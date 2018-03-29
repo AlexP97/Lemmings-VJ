@@ -36,7 +36,8 @@ private:
 	void initShaders();
 	void eraseMask(int mouseX, int mouseY);
 	void applyMask(int mouseX, int mouseY);
-	bool cursorOnLemming(int mouseX, int mouseY);
+	pair<bool,int> cursorOnLemming(int mouseX, int mouseY);
+	void clickOnLemming(int indLemming);
 	bool clickOnPause(int mouseX, int mouseY);
 	bool lemmingOnExit(glm::vec2 position);
 	int clickOnAbility(int mouseX, int mouseY);
@@ -57,6 +58,7 @@ private:
 	IconPanel panel;
 	IconSelected iconSelected;
 	int lemmingsIn;
+	int ability;
 };
 
 
