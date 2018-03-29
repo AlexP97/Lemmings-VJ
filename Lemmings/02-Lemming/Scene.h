@@ -40,7 +40,7 @@ private:
 	void clickOnLemming(int indLemming);
 	bool clickOnPause(int mouseX, int mouseY);
 	bool lemmingOnExit(glm::vec2 position);
-	int clickOnAbility(int mouseX, int mouseY);
+	void clickOnAbility(int mouseX, int mouseY);
 
 private:
 	Texture colorTexture;

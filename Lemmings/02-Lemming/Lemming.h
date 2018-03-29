@@ -22,7 +22,7 @@ public:
 	void setComeOut(bool b);
 	
 	void setMapMask(VariableTexture *mapMask);
-	void putAbility(int ability);
+	void setAbility(int ability);
 	
 private:
 	int collisionFloor(int maxFall);
@@ -34,7 +34,8 @@ private:
 private:
 	enum LemmingState
 	{
-		WALKING_LEFT_STATE, WALKING_RIGHT_STATE, FALLING_LEFT_STATE, FALLING_RIGHT_STATE, COMING_OUT_STATE, DIG_STATE, BLOCKING_STATE, DIG_LEFT_STATE, DIG_RIGHT_STATE
+		WALKING_LEFT_STATE, WALKING_RIGHT_STATE, FALLING_LEFT_STATE, FALLING_RIGHT_STATE, COMING_OUT_STATE, DIG_STATE, 
+		BLOCKING_STATE, DIG_LEFT_STATE, DIG_RIGHT_STATE, EXPLODE_STATE
 	};
 
 	LemmingState state;

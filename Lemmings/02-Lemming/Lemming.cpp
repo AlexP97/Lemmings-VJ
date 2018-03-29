@@ -14,7 +14,7 @@
 
 enum LemmingAnims
 {
-	WALKING_LEFT, WALKING_RIGHT, COMING_OUT, FALLING_LEFT, FALLING_RIGHT, DIG, BLOCKING, DIG_LEFT, DIG_RIGHT
+	WALKING_LEFT, WALKING_RIGHT, COMING_OUT, FALLING_LEFT, FALLING_RIGHT, DIG, BLOCKING, DIG_LEFT, DIG_RIGHT, EXPLODING
 };
 
 
@@ -22,11 +22,11 @@ void Lemming::init(const glm::vec2 &initialPosition, ShaderProgram &shaderProgra
 {
 	come_Out = false;
 	state = FALLING_RIGHT_STATE;
-	spritesheet.loadFromFile("images/lemming_sinfondo3.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	spritesheet.loadFromFile("images/lemming4_sinfondo.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spritesheet.setMinFilter(GL_NEAREST);
 	spritesheet.setMagFilter(GL_NEAREST);
 	sprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(0.125, 1 / 16.f), &spritesheet, &shaderProgram);
-	sprite->setNumberAnimations(7);
+	sprite->setNumberAnimations(8);
 	
 		sprite->setAnimationSpeed(WALKING_RIGHT, 12);
 		for(int i=0; i<8; i++)
@@ -57,6 +57,11 @@ void Lemming::init(const glm::vec2 &initialPosition, ShaderProgram &shaderProgra
 			for (int i = 0; i < 8; i++) {
 				sprite->addKeyframe(BLOCKING, glm::vec2(float(i) / 8, (4.f+float(j)) / 16.f));
 			}
+		}
+
+		sprite->setAnimationSpeed(EXPLODING, 9);
+		for (int i = 0; i < 8; i++) {
+				sprite->addKeyframe(EXPLODING, glm::vec2(float(i) / 8, 6.f / 16.f));
 		}
 		
 		
@@ -187,13 +192,9 @@ void Lemming::update(int deltaTime)
 			state = WALKING_RIGHT_STATE;
 		}
 		break;
+	case EXPLODE_STATE:
+		break;
 	}
-
-	
-
-
-	
-
 }
 
 void Lemming::render()
@@ -212,7 +213,7 @@ void Lemming::setMapMask(VariableTexture *mapMask)
 
 bool Lemming::eliminar() 
 {
-	return (sprite->animation() == COMING_OUT) && (sprite->currentKeyFrame() == 7);
+	return ((sprite->animation() == COMING_OUT || sprite->animation() == EXPLODING) && (sprite->currentKeyFrame() == 7));
 }
 
 void Lemming::setComeOut(bool b) {
@@ -248,7 +249,7 @@ bool Lemming::collision()
 	return true;
 }
 
-void Lemming::putAbility(int ability) {
+void Lemming::setAbility(int ability) {
 	if (ability == 4) {
 		state = DIG_STATE;
 		sprite->changeAnimation(DIG);
@@ -267,6 +268,10 @@ void Lemming::putAbility(int ability) {
 			state = DIG_RIGHT_STATE;
 			sprite->changeAnimation(DIG_RIGHT);
 		}
+	}
+	else if (ability == 8) {
+		state = EXPLODE_STATE;
+		sprite->changeAnimation(EXPLODING);
 	}
 }
 
