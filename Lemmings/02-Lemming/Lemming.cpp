@@ -5,6 +5,8 @@
 #include <GL/glut.h>
 #include "Lemming.h"
 #include "Game.h"
+#include <Windows.h>
+#include <mmsystem.h>
 
 
 #define JUMP_ANGLE_STEP 4
@@ -60,7 +62,7 @@ void Lemming::init(const glm::vec2 &initialPosition, ShaderProgram &shaderProgra
 			}
 		}
 
-		sprite->setAnimationSpeed(EXPLODING, 3);
+		sprite->setAnimationSpeed(EXPLODING, 6);
 		for (int i = 0; i < 8; i++) {
 				sprite->addKeyframe(EXPLODING, glm::vec2(float(i) / 8, 15.f / 16.f));
 		}
@@ -143,8 +145,9 @@ void Lemming::update(int deltaTime)
 
 	case COMING_OUT_STATE:
 		cout << sprite->currentKeyFrame();
-		if (sprite->currentKeyFrame() == 7)
+		if (sprite->currentKeyFrame() == 7) {
 			eliminado = true;
+		}
 		break;
 
 	case DIG_STATE:
@@ -189,8 +192,11 @@ void Lemming::update(int deltaTime)
 		}
 		break;
 	case EXPLODE_STATE:
-		if (sprite->currentKeyFrame() == 7)
+		if (sprite->currentKeyFrame() == 7) {
+			mciSendString(TEXT("play sound/EXPLODE.WAV"), NULL, 0, NULL);
+			//PlaySound(TEXT("sound/EXPLODE.WAV"), NULL, SND_ASYNC | SND_FILENAME);
 			eliminado = true;
+		}
 		break;
 	}
 }

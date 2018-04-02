@@ -1,6 +1,8 @@
 #include <GL/glew.h>
 #include <GL/glut.h>
 #include "Game.h"
+#include <Windows.h>
+#include <mmsystem.h>
 
 void Game::init()
 {
@@ -8,6 +10,7 @@ void Game::init()
 	paused = false;
 	bLeftMouse = bRightMouse = false;
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
+	mciSendString(TEXT("play sound/BACKGROUND-2.mp3 repeat"), NULL, 0, NULL);
 	scene.init();
 }
 

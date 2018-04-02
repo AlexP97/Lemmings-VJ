@@ -14,11 +14,12 @@ public:
 	void init(const glm::vec2 &initialPosition, ShaderProgram &shaderProgram);
 	void update(int deltaTime);
 	void render();
+	void open();
 
 private:
 	enum PuertaState
 	{
-		OPENING
+		OPENING_STATE, CLOSED_STATE
 	};
 
 	PuertaState state;

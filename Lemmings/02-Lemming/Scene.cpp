@@ -3,6 +3,8 @@
 #include <algorithm>
 #include <glm/gtc/matrix_transform.hpp>
 #include "Scene.h"
+#include <Windows.h>
+#include <mmsystem.h>
 
 
 Scene::Scene()
@@ -50,17 +52,26 @@ void Scene::init()
 		lemming.push_back(lem);
 	}
 	ability = 0;
+	//PlaySound(TEXT("sound/LETSGO.WAV"), NULL, SND_ASYNC | SND_FILENAME);
+	mciSendString(TEXT("play sound/LETSGO.WAV"), NULL, 0, NULL);
 }
 
 unsigned int x = 0; 
 
-
+bool abre_Puerta = true;
 
 void Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;
 
-	if (lemmingsIn < 20 && currentTime >= 2000 * lemmingsIn) {
+	if (abre_Puerta && currentTime >= 2000) {
+		puerta.open();
+		//PlaySound(TEXT("sound/DOOR.WAV"), NULL, SND_ASYNC | SND_FILENAME);
+		mciSendString(TEXT("play sound/DOOR.WAV"), NULL, 0, NULL);
+		abre_Puerta = false;
+	}
+
+	if (lemmingsIn < 20 && currentTime >= (3000 * (lemmingsIn + 1))) {
 		lemming[lemmingsIn].init(glm::vec2(70, 30), simpleTexProgram);
 		//lemming[lemmingsIn].init(glm::vec2(200, 95), simpleTexProgram);
 		lemming[lemmingsIn].setMapMask(&maskTexture);
@@ -70,7 +81,11 @@ void Scene::update(int deltaTime)
 
 	for (int i = 0; i < lemming.size(); i++) {
 		if (lemmingInit[i]) {
-			if (lemmingOnExit(lemming[i].position()) && !lemming[i].goOut()) lemming[i].setComeOut(true);
+			if (lemmingOnExit(lemming[i].position()) && !lemming[i].goOut()) {
+				//PlaySound(TEXT("sound/YIPPEE.WAV"), NULL, SND_ASYNC | SND_FILENAME);
+				mciSendString(TEXT("play sound/YIPPEE.WAV"), NULL, 0, NULL);
+				lemming[i].setComeOut(true);
+			}
 			if (lemming[i].eliminar()) {
 				lemmingInit[i] = false;
 			}
@@ -154,7 +169,8 @@ bool Scene::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButt
 void Scene::clickOnLemming(int indLemming) {
 	
 	lemming[indLemming].setAbility(ability);
-
+	if(ability != 0) mciSendString(TEXT("play sound/ACTION.WAV"), NULL, 0, NULL);
+		//PlaySound(TEXT("sound/ACTION.WAV"), NULL, SND_ASYNC | SND_FILENAME);
 }
 
 bool Scene::clickOnPause(int mouseX, int mouseY) {
