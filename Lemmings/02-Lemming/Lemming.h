@@ -23,6 +23,7 @@ public:
 	
 	void setMapMask(VariableTexture *mapMask);
 	void setAbility(int ability);
+	bool goOut();
 	
 private:
 	int collisionFloor(int maxFall);
@@ -43,6 +44,7 @@ private:
 	Sprite *sprite;
 	VariableTexture *mask;
 	bool come_Out;
+	bool eliminado;
 
 };
 

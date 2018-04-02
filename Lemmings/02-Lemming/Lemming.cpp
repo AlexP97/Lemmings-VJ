@@ -20,13 +20,14 @@ enum LemmingAnims
 
 void Lemming::init(const glm::vec2 &initialPosition, ShaderProgram &shaderProgram)
 {
+	eliminado = false;
 	come_Out = false;
 	state = FALLING_RIGHT_STATE;
 	spritesheet.loadFromFile("images/lemming4_sinfondo.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spritesheet.setMinFilter(GL_NEAREST);
 	spritesheet.setMagFilter(GL_NEAREST);
 	sprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(0.125, 1 / 16.f), &spritesheet, &shaderProgram);
-	sprite->setNumberAnimations(8);
+	sprite->setNumberAnimations(10);
 	
 		sprite->setAnimationSpeed(WALKING_RIGHT, 12);
 		for(int i=0; i<8; i++)
@@ -59,9 +60,9 @@ void Lemming::init(const glm::vec2 &initialPosition, ShaderProgram &shaderProgra
 			}
 		}
 
-		sprite->setAnimationSpeed(EXPLODING, 9);
+		sprite->setAnimationSpeed(EXPLODING, 3);
 		for (int i = 0; i < 8; i++) {
-				sprite->addKeyframe(EXPLODING, glm::vec2(float(i) / 8, 6.f / 16.f));
+				sprite->addKeyframe(EXPLODING, glm::vec2(float(i) / 8, 15.f / 16.f));
 		}
 		
 		
@@ -100,11 +101,7 @@ void Lemming::update(int deltaTime)
 
 	case WALKING_LEFT_STATE:
 		sprite->position() += glm::vec2(-1, -1);
-		if (come_Out) {
-			sprite->changeAnimation(COMING_OUT);
-			state = COMING_OUT_STATE;
-		}
-		else if (collision())
+		if (collision())
 		{
 			sprite->position() -= glm::vec2(-1, -1);
 			sprite->changeAnimation(WALKING_RIGHT);
@@ -126,11 +123,7 @@ void Lemming::update(int deltaTime)
 
 	case WALKING_RIGHT_STATE:
 		sprite->position() += glm::vec2(1, -1);
-		if (come_Out) {
-			sprite->changeAnimation(COMING_OUT);
-			state = COMING_OUT_STATE;
-		}
-		else if (collision())
+		if (collision())
 		{
 			sprite->position() -= glm::vec2(1, -1);
 			sprite->changeAnimation(WALKING_LEFT);
@@ -149,6 +142,9 @@ void Lemming::update(int deltaTime)
 		break;
 
 	case COMING_OUT_STATE:
+		cout << sprite->currentKeyFrame();
+		if (sprite->currentKeyFrame() == 7)
+			eliminado = true;
 		break;
 
 	case DIG_STATE:
@@ -193,6 +189,8 @@ void Lemming::update(int deltaTime)
 		}
 		break;
 	case EXPLODE_STATE:
+		if (sprite->currentKeyFrame() == 7)
+			eliminado = true;
 		break;
 	}
 }
@@ -213,11 +211,19 @@ void Lemming::setMapMask(VariableTexture *mapMask)
 
 bool Lemming::eliminar() 
 {
-	return ((sprite->animation() == COMING_OUT || sprite->animation() == EXPLODING) && (sprite->currentKeyFrame() == 7));
+	return eliminado;
 }
 
 void Lemming::setComeOut(bool b) {
 	come_Out = b;
+	if (b) {
+		sprite->changeAnimation(COMING_OUT);
+		state = COMING_OUT_STATE;
+	}
+}
+
+bool Lemming::goOut() {
+	return come_Out;
 }
 
 int Lemming::collisionFloor(int maxFall)

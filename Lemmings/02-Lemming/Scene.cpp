@@ -54,6 +54,8 @@ void Scene::init()
 
 unsigned int x = 0; 
 
+
+
 void Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;
@@ -68,10 +70,11 @@ void Scene::update(int deltaTime)
 
 	for (int i = 0; i < lemming.size(); i++) {
 		if (lemmingInit[i]) {
-			if (lemmingOnExit(lemming[i].position())) lemming[i].setComeOut(true);
+			if (lemmingOnExit(lemming[i].position()) && !lemming[i].goOut()) lemming[i].setComeOut(true);
 			if (lemming[i].eliminar()) {
 				lemmingInit[i] = false;
 			}
+			
 		}
 	}
 
@@ -138,7 +141,6 @@ bool Scene::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButt
 			for (int i = 0; i < lemming.size(); i++) {
 				if (lemmingInit[i]) {
 					lemming[i].setAbility(ability);
-					lemmingInit[i] = false;
 				}
 			}
 		}
