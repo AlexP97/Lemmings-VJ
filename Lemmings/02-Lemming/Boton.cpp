@@ -14,7 +14,7 @@ enum BotonAnims
 
 void Boton::init(const glm::vec2 &initialPosition, ShaderProgram &shaderProgram, int typeOfButton)
 {
-	if (typeOfButton == 0) spritesheet.loadFromFile("images/botones.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	if (typeOfButton == 0) spritesheet.loadFromFile("images/botones_sinfondo.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	else if (typeOfButton == 1) spritesheet.loadFromFile("images/1x-2x_sinfondo.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spritesheet.setMinFilter(GL_NEAREST);
 	spritesheet.setMagFilter(GL_NEAREST);

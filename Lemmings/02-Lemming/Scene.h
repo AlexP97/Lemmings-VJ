@@ -30,7 +30,7 @@ public:
 	void update(int deltaTime);
 	void render();
 	
-	bool mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton);
+	pair<bool, bool> mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton, bool paused);
 
 private:
 	void initShaders();
@@ -61,7 +61,6 @@ private:
 	IconSelected iconSelected;
 	int lemmingsIn;
 	int ability;
-	bool doubleSpeed;
 };
 
 

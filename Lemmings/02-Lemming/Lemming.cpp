@@ -16,20 +16,22 @@
 
 enum LemmingAnims
 {
-	WALKING_LEFT, WALKING_RIGHT, COMING_OUT, FALLING_LEFT, FALLING_RIGHT, DIG, BLOCKING, DIG_LEFT, DIG_RIGHT, EXPLODING
+	WALKING_LEFT, WALKING_RIGHT, COMING_OUT, FALLING_LEFT, FALLING_RIGHT, DIG, BLOCKING, DIG_LEFT, DIG_RIGHT, EXPLODING, CLIMBING_LEFT,
+	CLIMBING_RIGHT, STOPPING_CLIMB_LEFT, STOPPING_CLIMB_RIGHT
 };
 
 
 void Lemming::init(const glm::vec2 &initialPosition, ShaderProgram &shaderProgram)
 {
 	eliminado = false;
+	climber = false;
 	come_Out = false;
 	state = FALLING_RIGHT_STATE;
-	spritesheet.loadFromFile("images/lemming4_sinfondo.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	spritesheet.loadFromFile("images/lemming5_sinfondo.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spritesheet.setMinFilter(GL_NEAREST);
 	spritesheet.setMagFilter(GL_NEAREST);
 	sprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(0.125, 1 / 16.f), &spritesheet, &shaderProgram);
-	sprite->setNumberAnimations(10);
+	sprite->setNumberAnimations(12);
 	
 		sprite->setAnimationSpeed(WALKING_RIGHT, 12);
 		for(int i=0; i<8; i++)
@@ -65,6 +67,26 @@ void Lemming::init(const glm::vec2 &initialPosition, ShaderProgram &shaderProgra
 		sprite->setAnimationSpeed(EXPLODING, 6);
 		for (int i = 0; i < 8; i++) {
 				sprite->addKeyframe(EXPLODING, glm::vec2(float(i) / 8, 15.f / 16.f));
+		}
+
+		sprite->setAnimationSpeed(CLIMBING_LEFT, 9);
+		for (int i = 0; i < 8; i++) {
+			sprite->addKeyframe(CLIMBING_LEFT, glm::vec2(float(i) / 8, 13.f / 16.f));
+		}
+
+		sprite->setAnimationSpeed(CLIMBING_RIGHT, 9);
+		for (int i = 0; i < 8; i++) {
+			sprite->addKeyframe(CLIMBING_RIGHT, glm::vec2(float(i) / 8, 11.f / 16.f));
+		}
+
+		sprite->setAnimationSpeed(STOPPING_CLIMB_LEFT, 9);
+		for (int i = 0; i < 8; i++) {
+			sprite->addKeyframe(STOPPING_CLIMB_LEFT, glm::vec2(float(i) / 8, 14.f / 16.f));
+		}
+
+		sprite->setAnimationSpeed(STOPPING_CLIMB_RIGHT, 9);
+		for (int i = 0; i < 8; i++) {
+			sprite->addKeyframe(STOPPING_CLIMB_RIGHT, glm::vec2(float(i) / 8, 12.f / 16.f));
 		}
 		
 		
@@ -105,9 +127,16 @@ void Lemming::update(int deltaTime)
 		sprite->position() += glm::vec2(-1, -1);
 		if (collision())
 		{
-			sprite->position() -= glm::vec2(-1, -1);
-			sprite->changeAnimation(WALKING_RIGHT);
-			state = WALKING_RIGHT_STATE;
+			if (!climber) {
+				sprite->position() -= glm::vec2(-1, -1);
+				sprite->changeAnimation(WALKING_RIGHT);
+				state = WALKING_RIGHT_STATE;
+			}
+			else {
+				sprite->position() -= glm::vec2(-1, -1);
+				sprite->changeAnimation(CLIMBING_LEFT);
+				state = CLIMBING_LEFT_STATE;
+			}
 		}
 		else
 		{
@@ -127,9 +156,16 @@ void Lemming::update(int deltaTime)
 		sprite->position() += glm::vec2(1, -1);
 		if (collision())
 		{
-			sprite->position() -= glm::vec2(1, -1);
-			sprite->changeAnimation(WALKING_LEFT);
-			state = WALKING_LEFT_STATE;
+			if (!climber) {
+				sprite->position() -= glm::vec2(1, -1);
+				sprite->changeAnimation(WALKING_LEFT);
+				state = WALKING_LEFT_STATE;
+			}
+			else {
+				sprite->position() -= glm::vec2(1, -1);
+				sprite->changeAnimation(CLIMBING_RIGHT);
+				state = CLIMBING_RIGHT_STATE;
+			}
 		}
 		else
 		{
@@ -197,6 +233,11 @@ void Lemming::update(int deltaTime)
 			//PlaySound(TEXT("sound/EXPLODE.WAV"), NULL, SND_ASYNC | SND_FILENAME);
 			eliminado = true;
 		}
+		break;
+	case CLIMBING_LEFT_STATE:
+		
+		break;
+	case CLIMBING_RIGHT_STATE:
 		break;
 	}
 }
@@ -281,6 +322,7 @@ void Lemming::setAbility(int ability) {
 			sprite->changeAnimation(DIG_RIGHT);
 		}
 	}
+	else if (ability == 6) climber = true;
 	else if (ability == 8) {
 		state = EXPLODE_STATE;
 		sprite->changeAnimation(EXPLODING);

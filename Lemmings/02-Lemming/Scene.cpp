@@ -20,7 +20,6 @@ Scene::~Scene()
 
 void Scene::init()
 {
-	doubleSpeed = false;
 	//glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(float(CAMERA_WIDTH), float(CAMERA_HEIGHT)) };
 	glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(float(CAMERA_WIDTH), float(160.f)) };
 	glm::vec2 texCoords[2] = { glm::vec2(120.f / 512.0, 0.f), glm::vec2((120.f + 320.f) / 512.0f, 160.f / 256.0f) };
@@ -64,7 +63,6 @@ bool abre_Puerta = true;
 
 void Scene::update(int deltaTime)
 {
-	if (doubleSpeed) deltaTime = deltaTime * 2;
 	currentTime += deltaTime;
 
 	if (abre_Puerta && currentTime >= 2000) {
@@ -138,41 +136,46 @@ void Scene::render()
 	cursor.render();
 }
 
-bool Scene::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton)
+pair<bool, bool> Scene::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton, bool paused)
 {
-	if(bLeftButton)
-		eraseMask(mouseX, mouseY);
-	else if(bRightButton)
-		applyMask(mouseX, mouseY);
-
+	pair<bool, bool> ret;
+	ret.first = false;
+	ret.second = false;
 	cursor.setPosition(mouseX, mouseY);
-	
-	pair<bool,int> cOL = cursorOnLemming(mouseX, mouseY);
-	if (cursor.currentAnimation() == 0) {
-		if (cOL.first) cursor.changeAnimation(1);
-	}
-	else {
-		if (!cOL.first) cursor.changeAnimation(0);
-	}
+	if (!paused) {
+		if (bLeftButton)
+			eraseMask(mouseX, mouseY);
+		else if (bRightButton)
+			applyMask(mouseX, mouseY);
 
-	if (bLeftButton) {
-		clickOnAbility(mouseX, mouseY);
-		if (ability == 8) {
-			for (int i = 0; i < lemming.size(); i++) {
-				if (lemmingInit[i]) {
-					lemming[i].setAbility(ability);
+		pair<bool, int> cOL = cursorOnLemming(mouseX, mouseY);
+		if (cursor.currentAnimation() == 0) {
+			if (cOL.first) cursor.changeAnimation(1);
+		}
+		else {
+			if (!cOL.first) cursor.changeAnimation(0);
+		}
+
+		if (bLeftButton) {
+			clickOnAbility(mouseX, mouseY);
+			if (ability == 8) {
+				for (int i = 0; i < lemming.size(); i++) {
+					if (lemmingInit[i]) {
+						lemming[i].setAbility(ability);
+					}
 				}
 			}
-		}
-		if (cOL.first && ability != 8) {
-			clickOnLemming(cOL.second);
+			if (cOL.first && ability != 8) {
+				clickOnLemming(cOL.second);
+			}
 		}
 	}
+	
 	if (bLeftButton) {
-		if (clickOnSpeed(mouseX, mouseY)) doubleSpeed = !doubleSpeed;
-		return clickOnPause(mouseX, mouseY);
+		if (clickOnSpeed(mouseX, mouseY)) ret.first = true;
+		if (clickOnPause(mouseX, mouseY)) ret.second = true;
 	}
-	return false;
+	return ret;
 }
 
 void Scene::clickOnLemming(int indLemming) {
