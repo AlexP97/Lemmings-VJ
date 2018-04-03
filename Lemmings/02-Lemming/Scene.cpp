@@ -53,7 +53,6 @@ void Scene::init()
 		lemming.push_back(lem);
 	}
 	ability = 0;
-	//PlaySound(TEXT("sound/LETSGO.WAV"), NULL, SND_ASYNC | SND_FILENAME);
 	mciSendString(TEXT("play sound/LETSGO.WAV"), NULL, 0, NULL);
 }
 
@@ -67,7 +66,6 @@ void Scene::update(int deltaTime)
 
 	if (abre_Puerta && currentTime >= 2000) {
 		puerta.open();
-		//PlaySound(TEXT("sound/DOOR.WAV"), NULL, SND_ASYNC | SND_FILENAME);
 		mciSendString(TEXT("play sound/DOOR.WAV"), NULL, 0, NULL);
 		abre_Puerta = false;
 	}
@@ -83,7 +81,6 @@ void Scene::update(int deltaTime)
 	for (int i = 0; i < lemming.size(); i++) {
 		if (lemmingInit[i]) {
 			if (lemmingOnExit(lemming[i].position()) && !lemming[i].goOut()) {
-				//PlaySound(TEXT("sound/YIPPEE.WAV"), NULL, SND_ASYNC | SND_FILENAME);
 				mciSendString(TEXT("play sound/YIPPEE.WAV"), NULL, 0, NULL);
 				lemming[i].setComeOut(true);
 			}
@@ -182,7 +179,6 @@ void Scene::clickOnLemming(int indLemming) {
 	
 	lemming[indLemming].setAbility(ability);
 	if(ability != 0) mciSendString(TEXT("play sound/ACTION.WAV"), NULL, 0, NULL);
-		//PlaySound(TEXT("sound/ACTION.WAV"), NULL, SND_ASYNC | SND_FILENAME);
 }
 
 bool Scene::clickOnPause(int mouseX, int mouseY) {

@@ -68,7 +68,7 @@ void Game::mousePress(int button)
 		pair<bool, bool> speedOrPause = scene.mouseMoved(mouseX, mouseY, bLeftMouse, bRightMouse, paused);
 		if (speedOrPause.second) {
 			if (paused) mciSendString(TEXT("play background repeat"), NULL, 0, NULL);
-			else mciSendString(TEXT("stop background"), NULL, 0, NULL);
+			else mciSendString(TEXT("pause background"), NULL, 0, NULL);
 			paused = !paused;
 		}
 		if (speedOrPause.first) {

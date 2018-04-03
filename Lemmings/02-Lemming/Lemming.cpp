@@ -27,11 +27,11 @@ void Lemming::init(const glm::vec2 &initialPosition, ShaderProgram &shaderProgra
 	climber = false;
 	come_Out = false;
 	state = FALLING_RIGHT_STATE;
-	spritesheet.loadFromFile("images/lemming5_sinfondo.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	spritesheet.loadFromFile("images/lemming2_sinfondo.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spritesheet.setMinFilter(GL_NEAREST);
 	spritesheet.setMagFilter(GL_NEAREST);
 	sprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(0.125, 1 / 16.f), &spritesheet, &shaderProgram);
-	sprite->setNumberAnimations(12);
+	sprite->setNumberAnimations(14);
 	
 		sprite->setAnimationSpeed(WALKING_RIGHT, 12);
 		for(int i=0; i<8; i++)
@@ -46,8 +46,8 @@ void Lemming::init(const glm::vec2 &initialPosition, ShaderProgram &shaderProgra
 			sprite->addKeyframe(COMING_OUT, glm::vec2(float(i) / 8, 2.f / 16.f));
 
 		sprite->setAnimationSpeed(FALLING_LEFT, 12);
-		for (int i = 0; i<4; i++)
-			sprite->addKeyframe(FALLING_LEFT, glm::vec2(float(i)+4 / 8, 3.f / 16.f));
+		for (int i = 7; i>3; i--)
+			sprite->addKeyframe(FALLING_LEFT, glm::vec2(float(i) / 8, 3.f / 16.f));
 
 		sprite->setAnimationSpeed(FALLING_RIGHT, 12);
 		for (int i = 0; i<4; i++)
@@ -79,16 +79,15 @@ void Lemming::init(const glm::vec2 &initialPosition, ShaderProgram &shaderProgra
 			sprite->addKeyframe(CLIMBING_RIGHT, glm::vec2(float(i) / 8, 11.f / 16.f));
 		}
 
-		sprite->setAnimationSpeed(STOPPING_CLIMB_LEFT, 9);
+		sprite->setAnimationSpeed(STOPPING_CLIMB_LEFT, 12);
 		for (int i = 0; i < 8; i++) {
 			sprite->addKeyframe(STOPPING_CLIMB_LEFT, glm::vec2(float(i) / 8, 14.f / 16.f));
 		}
 
-		sprite->setAnimationSpeed(STOPPING_CLIMB_RIGHT, 9);
+		sprite->setAnimationSpeed(STOPPING_CLIMB_RIGHT, 12);
 		for (int i = 0; i < 8; i++) {
 			sprite->addKeyframe(STOPPING_CLIMB_RIGHT, glm::vec2(float(i) / 8, 12.f / 16.f));
 		}
-		
 		
 	sprite->changeAnimation(FALLING_RIGHT);
 	sprite->setPosition(initialPosition);
@@ -230,14 +229,40 @@ void Lemming::update(int deltaTime)
 	case EXPLODE_STATE:
 		if (sprite->currentKeyFrame() == 7) {
 			mciSendString(TEXT("play sound/EXPLODE.WAV"), NULL, 0, NULL);
-			//PlaySound(TEXT("sound/EXPLODE.WAV"), NULL, SND_ASYNC | SND_FILENAME);
 			eliminado = true;
 		}
 		break;
 	case CLIMBING_LEFT_STATE:
-		
+		sprite->position() += glm::vec2(-1, -1);
+		if (collision()) {
+			sprite->position() += glm::vec2(1, 0.5);
+		}
+		else {
+			sprite->changeAnimation(STOPPING_CLIMB_LEFT);
+			state = STOPPING_CLIMB_LEFT_STATE;
+		}
 		break;
 	case CLIMBING_RIGHT_STATE:
+		sprite->position() += glm::vec2(1, -1);
+		if (collision()) {
+			sprite->position() += glm::vec2(-1, 0.5);
+		}
+		else {
+			sprite->changeAnimation(STOPPING_CLIMB_RIGHT);
+			state = STOPPING_CLIMB_RIGHT_STATE;
+		}
+		break;
+	case STOPPING_CLIMB_LEFT_STATE:
+		if (sprite->animation() == STOPPING_CLIMB_LEFT && sprite->currentKeyFrame() == 7) {
+			sprite->changeAnimation(WALKING_LEFT);
+			state = WALKING_LEFT_STATE;
+		}
+		break;
+	case STOPPING_CLIMB_RIGHT_STATE:
+		if (sprite->animation() == STOPPING_CLIMB_RIGHT && sprite->currentKeyFrame() == 7) {
+			sprite->changeAnimation(WALKING_RIGHT);
+			state = WALKING_RIGHT_STATE;
+		}
 		break;
 	}
 }
