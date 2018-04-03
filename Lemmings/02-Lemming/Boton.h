@@ -11,7 +11,7 @@ class Boton
 {
 
 public:
-	void init(const glm::vec2 &initialPosition, ShaderProgram &shaderProgram);
+	void init(const glm::vec2 &initialPosition, ShaderProgram &shaderProgram, int typeOfButton);
 	void update(int deltaTime);
 	void render();
 	glm::vec2 centerPosition();

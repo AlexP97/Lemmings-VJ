@@ -39,6 +39,7 @@ private:
 	pair<bool,int> cursorOnLemming(int mouseX, int mouseY);
 	void clickOnLemming(int indLemming);
 	bool clickOnPause(int mouseX, int mouseY);
+	bool clickOnSpeed(int mouseX, int mouseY);
 	bool lemmingOnExit(glm::vec2 position);
 	void clickOnAbility(int mouseX, int mouseY);
 
@@ -54,11 +55,13 @@ private:
 	Puerta puerta;
 	Cursor cursor;
 	Boton botonPlay;
+	Boton botonSpeed;
 	Salida salida;
 	IconPanel panel;
 	IconSelected iconSelected;
 	int lemmingsIn;
 	int ability;
+	bool doubleSpeed;
 };
 
 

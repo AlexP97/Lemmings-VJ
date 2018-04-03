@@ -20,6 +20,7 @@ Scene::~Scene()
 
 void Scene::init()
 {
+	doubleSpeed = false;
 	//glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(float(CAMERA_WIDTH), float(CAMERA_HEIGHT)) };
 	glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(float(CAMERA_WIDTH), float(160.f)) };
 	glm::vec2 texCoords[2] = { glm::vec2(120.f / 512.0, 0.f), glm::vec2((120.f + 320.f) / 512.0f, 160.f / 256.0f) };
@@ -37,7 +38,8 @@ void Scene::init()
 	projection = glm::ortho(0.f, float(CAMERA_WIDTH - 1), float(CAMERA_HEIGHT - 1), 0.f);
 
 	puerta.init(glm::vec2(60, 30), simpleTexProgram);
-	botonPlay.init(glm::vec2(300, 185), simpleTexProgram);
+	botonPlay.init(glm::vec2(300, 185), simpleTexProgram, 0);
+	botonSpeed.init(glm::vec2(280, 185), simpleTexProgram, 1);
 	cursor.init(glm::vec2(90, 30), simpleTexProgram);
 	salida.init(glm::vec2(245, 107), simpleTexProgram);
 	panel.init(glm::vec2(10, 159), simpleTexProgram);
@@ -62,6 +64,7 @@ bool abre_Puerta = true;
 
 void Scene::update(int deltaTime)
 {
+	if (doubleSpeed) deltaTime = deltaTime * 2;
 	currentTime += deltaTime;
 
 	if (abre_Puerta && currentTime >= 2000) {
@@ -71,7 +74,7 @@ void Scene::update(int deltaTime)
 		abre_Puerta = false;
 	}
 
-	if (lemmingsIn < 20 && currentTime >= (3000 * (lemmingsIn + 1))) {
+	if (lemmingsIn < 1 && currentTime >= (3000 * (lemmingsIn + 1))) {
 		lemming[lemmingsIn].init(glm::vec2(70, 30), simpleTexProgram);
 		//lemming[lemmingsIn].init(glm::vec2(200, 95), simpleTexProgram);
 		lemming[lemmingsIn].setMapMask(&maskTexture);
@@ -98,6 +101,7 @@ void Scene::update(int deltaTime)
 	}
 	puerta.update(deltaTime);
 	botonPlay.update(deltaTime);
+	botonSpeed.update(deltaTime);
 	salida.update(deltaTime);
 	panel.update(deltaTime);
 	if (iconSelected.getState() == 1) iconSelected.update(deltaTime);
@@ -128,6 +132,7 @@ void Scene::render()
 	}
 	
 	botonPlay.render();
+	botonSpeed.render();
 	panel.render();
 	if(iconSelected.getState() == 1) iconSelected.render();
 	cursor.render();
@@ -163,7 +168,11 @@ bool Scene::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButt
 			clickOnLemming(cOL.second);
 		}
 	}
-	return (bLeftButton && clickOnPause(mouseX, mouseY));
+	if (bLeftButton) {
+		if (clickOnSpeed(mouseX, mouseY)) doubleSpeed = !doubleSpeed;
+		return clickOnPause(mouseX, mouseY);
+	}
+	return false;
 }
 
 void Scene::clickOnLemming(int indLemming) {
@@ -181,6 +190,19 @@ bool Scene::clickOnPause(int mouseX, int mouseY) {
 	float distFromCenter = sqrt((x - center.x) * (x - center.x) + (y - center.y) * (y - center.y));
 	if (distFromCenter <= 8.f) {
 		botonPlay.changeAnimation();
+		return true;
+	}
+	return false;
+}
+
+bool Scene::clickOnSpeed(int mouseX, int mouseY) {
+	glm::vec2 center = botonSpeed.centerPosition();
+	int x = mouseX / 3 - 2.f;
+	int y = mouseY / 3 - 2.f;
+
+	float distFromCenter = sqrt((x - center.x) * (x - center.x) + (y - center.y) * (y - center.y));
+	if (distFromCenter <= 8.f) {
+		botonSpeed.changeAnimation();
 		return true;
 	}
 	return false;

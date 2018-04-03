@@ -8,27 +8,29 @@
 
 enum BotonAnims
 {
-	RUNNING, PAUSED
+	NORMAL, CLICKED
 };
 
 
-void Boton::init(const glm::vec2 &initialPosition, ShaderProgram &shaderProgram)
+void Boton::init(const glm::vec2 &initialPosition, ShaderProgram &shaderProgram, int typeOfButton)
 {
-	spritesheet.loadFromFile("images/botones.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	if (typeOfButton == 0) spritesheet.loadFromFile("images/botones.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	else if (typeOfButton == 1) spritesheet.loadFromFile("images/1x-2x_sinfondo.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spritesheet.setMinFilter(GL_NEAREST);
 	spritesheet.setMagFilter(GL_NEAREST);
-	sprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(1.0f / 2.0f, 2.0f / 2.0f), &spritesheet, &shaderProgram);
-	sprite->setNumberAnimations(2);
 
-	sprite->setAnimationSpeed(RUNNING, 0);
-	sprite->addKeyframe(RUNNING, glm::vec2(0.0f / 1.0f, 0.0f / 1.0f));
+		sprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(1.0f / 2.0f, 2.0f / 2.0f), &spritesheet, &shaderProgram);
+		sprite->setNumberAnimations(2);
 
-	sprite->setAnimationSpeed(PAUSED, 0);
-	sprite->addKeyframe(PAUSED, glm::vec2(0.5f / 1.0f, 0.0f / 1.0f));
+		sprite->setAnimationSpeed(NORMAL, 0);
+		sprite->addKeyframe(NORMAL, glm::vec2(0.0f / 1.0f, 0.0f / 1.0f));
 
-	sprite->changeAnimation(RUNNING);
+		sprite->setAnimationSpeed(CLICKED, 0);
+		sprite->addKeyframe(CLICKED, glm::vec2(0.5f / 1.0f, 0.0f / 1.0f));
+
+		sprite->changeAnimation(NORMAL);
+
 	sprite->setPosition(initialPosition);
-
 }
 
 void Boton::update(int deltaTime)
