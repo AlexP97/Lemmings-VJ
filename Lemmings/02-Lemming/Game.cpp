@@ -6,35 +6,54 @@
 
 void Game::init()
 {
+	actualScene = 0;
 	bPlay = true;
 	paused = false;
 	doubleSpeed = false;
 	bLeftMouse = bRightMouse = false;
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
-	mciSendString(TEXT("open sound/BACKGROUND-2.mp3 alias background"), NULL, 0, NULL);
-	mciSendString(TEXT("play background repeat"), NULL, 0, NULL);
-	scene.init();
+	mciSendString(TEXT("open sound/MAIN_THEME.mp3 alias main"), NULL, 0, NULL);
+	mciSendString(TEXT("play main repeat"), NULL, 0, NULL);
+	home.init();
 }
 
 bool Game::update(int deltaTime)
 {
-	if (!paused) {
-		if(!doubleSpeed) scene.update(deltaTime);
-		else scene.update(deltaTime*2);
+	switch (actualScene) {
+
+	case 0:
+		home.update(deltaTime);
+		break;
+	case 1:
+		if (!paused) {
+			if (!doubleSpeed) scene.update(deltaTime);
+			else scene.update(deltaTime * 2);
+		}
+		break;
 	}
+	
 	return bPlay;
 }
 
 void Game::render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	scene.render();
+	switch (actualScene) {
+
+	case 0:
+		home.render();
+		break;
+	case 1:
+		scene.render();
+		break;
+	}
 }
 
 void Game::keyPressed(int key)
 {
 	if(key == 27) // Escape code
 		bPlay = false;
+
 	keys[key] = true;
 }
 
@@ -45,6 +64,13 @@ void Game::keyReleased(int key)
 
 void Game::specialKeyPressed(int key)
 {
+	if (actualScene == 0 && key == GLUT_KEY_F1) {
+		mciSendString(TEXT("stop main"), NULL, 0, NULL);
+		mciSendString(TEXT("open sound/BACKGROUND-2.mp3 alias scene1"), NULL, 0, NULL);
+		mciSendString(TEXT("play scene1 repeat"), NULL, 0, NULL);
+		scene.init();
+		actualScene = 1;
+	}
 	specialKeys[key] = true;
 }
 
@@ -57,7 +83,11 @@ void Game::mouseMove(int x, int y)
 {
 	mouseX = x;
 	mouseY = y;
-	scene.mouseMoved(mouseX, mouseY, bLeftMouse, bRightMouse, paused);
+	switch (actualScene) {
+	case 1:
+		scene.mouseMoved(mouseX, mouseY, bLeftMouse, bRightMouse, paused);
+		break;
+	}
 }
 
 void Game::mousePress(int button)
@@ -65,22 +95,33 @@ void Game::mousePress(int button)
 	if(button == GLUT_LEFT_BUTTON)
 	{
 		bLeftMouse = true;
-		pair<bool, bool> speedOrPause = scene.mouseMoved(mouseX, mouseY, bLeftMouse, bRightMouse, paused);
+		pair<bool, bool> speedOrPause;
+		speedOrPause.first = false;
+		speedOrPause.second = false;
+		switch (actualScene) {
+		case 1:
+			speedOrPause = scene.mouseMoved(mouseX, mouseY, bLeftMouse, bRightMouse, paused);
+			break;
+		}
 		if (speedOrPause.second) {
-			if (paused) mciSendString(TEXT("play background repeat"), NULL, 0, NULL);
-			else mciSendString(TEXT("pause background"), NULL, 0, NULL);
+			if (paused) mciSendString(TEXT("play scene1 repeat"), NULL, 0, NULL);
+			else mciSendString(TEXT("pause scene1"), NULL, 0, NULL);
 			paused = !paused;
 		}
 		if (speedOrPause.first) {
-			if (doubleSpeed) mciSendString(TEXT("set background speed 1000"), NULL, 0, NULL);
-			else mciSendString(TEXT("set background speed 1500"), NULL, 0, NULL);
 			doubleSpeed = !doubleSpeed;
+			if (doubleSpeed) mciSendString(TEXT("set scene1 speed 1500"), NULL, 0, NULL);
+			else mciSendString(TEXT("set scene1 speed 1000"), NULL, 0, NULL);
 		}
 	}
 	else if(button == GLUT_RIGHT_BUTTON)
 	{
 		bRightMouse = true;
-		scene.mouseMoved(mouseX, mouseY, bLeftMouse, bRightMouse, paused);
+		switch (actualScene) {
+		case 1:
+			scene.mouseMoved(mouseX, mouseY, bLeftMouse, bRightMouse, paused);
+			break;
+		}
 	}
 }
 
