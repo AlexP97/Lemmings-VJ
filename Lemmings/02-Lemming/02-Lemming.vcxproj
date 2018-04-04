@@ -15,6 +15,7 @@
     <ClInclude Include="Boton.h" />
     <ClInclude Include="common_defs.h" />
     <ClInclude Include="Cursor.h" />
+    <ClInclude Include="Explosion.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Home.h" />
     <ClInclude Include="IconPanel.h" />
@@ -32,6 +33,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Cursor.cpp" />
+    <ClCompile Include="Explosion.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Home.cpp" />
     <ClCompile Include="IconPanel.cpp" />

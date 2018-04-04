@@ -51,9 +51,14 @@ void Scene::init()
 	lemmingsIn = 0;
 
 	lemmingInit = vector<bool>(20, false);
+	Lemming lem;
 	for (int i = 0; i < 20; i++) {
-		Lemming lem;
 		lemming.push_back(lem);
+	}
+	explode = vector<bool>(20, false);
+	Explosion expl;
+	for (int i = 0; i < 20; i++) {
+		explosion.push_back(expl);
 	}
 	ability = 0;
 	mciSendString(TEXT("play sound/LETSGO.WAV"), NULL, 0, NULL);
@@ -73,7 +78,7 @@ void Scene::update(int deltaTime)
 		abre_Puerta = false;
 	}
 
-	if (lemmingsIn < 4 && currentTime >= (3000 * (lemmingsIn + 1))) {
+	if (lemmingsIn < 8 && currentTime >= (3000 * (lemmingsIn + 1))) {
 		lemming[lemmingsIn].init(glm::vec2(70, 30), simpleTexProgram);
 		//lemming[lemmingsIn].init(glm::vec2(200, 95), simpleTexProgram);
 		lemming[lemmingsIn].setMapMask(&maskTexture, &parados);
@@ -95,7 +100,17 @@ void Scene::update(int deltaTime)
 	}
 
 	for (int i = 0; i < lemming.size(); i++) {
-		if (lemmingInit[i]) lemming[i].update(deltaTime);
+		if (lemmingInit[i]) {
+			bool showExplosion = lemming[i].update(deltaTime);
+			if (showExplosion) {
+				glm::vec2 explosionPos = lemming[i].position();
+				explosionPos.x -= 8;
+				explosionPos.y -= 10;
+				explosion[i].init(explosionPos, simpleTexProgram);
+				explode[i] = true;
+
+			}
+		}
 	}
 	puerta.update(deltaTime);
 	botonPlay.update(deltaTime);
@@ -132,6 +147,13 @@ void Scene::render()
 	botonPlay.render();
 	botonSpeed.render();
 	panel.render();
+	for (int i = 0; i < explode.size(); i++) {
+		if (explode[i]) {
+			explosion[i].render();
+			explode[i] = false;
+		}
+	}
+
 	if(iconSelected.getState() == 1) iconSelected.render();
 	cursor.render();
 }
