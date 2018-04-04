@@ -45,7 +45,7 @@ private:
 
 private:
 	Texture colorTexture;
-	VariableTexture maskTexture;
+	VariableTexture maskTexture, parados;
 	MaskedTexturedQuad *map;
 	ShaderProgram simpleTexProgram, maskedTexProgram;
 	float currentTime;

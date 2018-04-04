@@ -21,13 +21,14 @@ public:
 	bool eliminar();
 	void setComeOut(bool b);
 	
-	void setMapMask(VariableTexture *mapMask);
+	void setMapMask(VariableTexture *mapMask, VariableTexture* lemmingMask);
 	void setAbility(int ability);
 	bool goOut();
 	
 private:
 	int collisionFloor(int maxFall);
 	bool collision();
+	bool hayParado();
 	void eraseMask(int posX, int posY, float ymin, float ymax, float xmin, float xmax);
 	void applyMask();
 	
@@ -44,9 +45,11 @@ private:
 	Texture spritesheet;
 	Sprite *sprite;
 	VariableTexture *mask;
+	VariableTexture *parados;
 	bool come_Out;
 	bool eliminado;
 	bool climber;
+	bool primeraPasada;
 };
 
 

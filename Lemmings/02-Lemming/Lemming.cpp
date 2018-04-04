@@ -26,6 +26,7 @@ void Lemming::init(const glm::vec2 &initialPosition, ShaderProgram &shaderProgra
 	eliminado = false;
 	climber = false;
 	come_Out = false;
+	primeraPasada = false;
 	state = FALLING_RIGHT_STATE;
 	spritesheet.loadFromFile("images/lemming2_sinfondo.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spritesheet.setMinFilter(GL_NEAREST);
@@ -103,6 +104,7 @@ void Lemming::update(int deltaTime)
 	switch (state) {
 
 	case FALLING_LEFT_STATE:
+		primeraPasada = false;
 		fall = collisionFloor(2);
 		if (fall > 0)
 			sprite->position() += glm::vec2(0, fall);
@@ -113,6 +115,7 @@ void Lemming::update(int deltaTime)
 		break;
 
 	case FALLING_RIGHT_STATE:
+		primeraPasada = false;
 		fall = collisionFloor(2);
 		if (fall > 0)
 			sprite->position() += glm::vec2(0, fall);
@@ -123,9 +126,11 @@ void Lemming::update(int deltaTime)
 		break;
 
 	case WALKING_LEFT_STATE:
+		
 		sprite->position() += glm::vec2(-1, -1);
-		if (collision())
+		if (collision() || hayParado() && primeraPasada)
 		{
+			primeraPasada = true;
 			if (!climber) {
 				sprite->position() -= glm::vec2(-1, -1);
 				sprite->changeAnimation(WALKING_RIGHT);
@@ -149,12 +154,14 @@ void Lemming::update(int deltaTime)
 				state = FALLING_LEFT_STATE;
 			}
 		}
+		
 		break;
 
 	case WALKING_RIGHT_STATE:
 		sprite->position() += glm::vec2(1, -1);
-		if (collision())
+		if (collision() || (hayParado() && primeraPasada))
 		{
+			primeraPasada = true;
 			if (!climber) {
 				sprite->position() -= glm::vec2(1, -1);
 				sprite->changeAnimation(WALKING_LEFT);
@@ -276,9 +283,10 @@ glm::vec2 Lemming::position() {
 	return sprite->position();
 }
 
-void Lemming::setMapMask(VariableTexture *mapMask)
+void Lemming::setMapMask(VariableTexture *mapMask, VariableTexture *lemmingMask)
 {
 	mask = mapMask;
+	parados = lemmingMask;
 }
 
 bool Lemming::eliminar() 
@@ -327,6 +335,17 @@ bool Lemming::collision()
 	return true;
 }
 
+bool Lemming::hayParado()
+{
+	glm::ivec2 posBase = sprite->position() + glm::vec2(120, 0); // Add the map displacement
+
+	posBase += glm::ivec2(7, 15);
+	if ((parados->pixel(posBase.x, posBase.y) == 0) && (parados->pixel(posBase.x + 1, posBase.y) == 0))
+		return false;
+
+	return true;
+}
+
 void Lemming::setAbility(int ability) {
 	if (ability == 4) {
 		state = DIG_STATE;
@@ -369,7 +388,7 @@ void Lemming::applyMask() {
 
 	for (int y = max(0, posY); y <= min(mask->height() - 1, posY + 16); y++) {
 		for (int x = max(0, posX); x <= min(mask->width() - 1, posX + 16); x++) {
-			mask->setPixel(x, y, 255);
+			parados->setPixel(x, y, 255);
 		}
 	}
 }

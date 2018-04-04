@@ -33,6 +33,9 @@ void Scene::init()
 	maskTexture.loadFromFile("images/fun1_mask.png", TEXTURE_PIXEL_FORMAT_L);
 	maskTexture.setMinFilter(GL_NEAREST);
 	maskTexture.setMagFilter(GL_NEAREST);
+	parados.loadFromFile("images/fun1_mask.png", TEXTURE_PIXEL_FORMAT_L);
+	parados.setMinFilter(GL_NEAREST);
+	parados.setMagFilter(GL_NEAREST);
 
 	projection = glm::ortho(0.f, float(CAMERA_WIDTH - 1), float(CAMERA_HEIGHT - 1), 0.f);
 
@@ -70,10 +73,10 @@ void Scene::update(int deltaTime)
 		abre_Puerta = false;
 	}
 
-	if (lemmingsIn < 1 && currentTime >= (3000 * (lemmingsIn + 1))) {
+	if (lemmingsIn < 4 && currentTime >= (3000 * (lemmingsIn + 1))) {
 		lemming[lemmingsIn].init(glm::vec2(70, 30), simpleTexProgram);
 		//lemming[lemmingsIn].init(glm::vec2(200, 95), simpleTexProgram);
-		lemming[lemmingsIn].setMapMask(&maskTexture);
+		lemming[lemmingsIn].setMapMask(&maskTexture, &parados);
 		lemmingInit[lemmingsIn] = true;
 		++lemmingsIn;
 	}
