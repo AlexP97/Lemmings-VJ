@@ -1,5 +1,5 @@
-#ifndef _EXPLOSION_INCLUDE
-#define _EXPLOSION_INCLUDE
+#ifndef _STAIRS_INCLUDE
+#define _STAIRS_INCLUDE
 
 
 #include "Sprite.h"
@@ -7,7 +7,7 @@
 
 
 
-class Explosion
+class Stairs
 {
 
 public:
@@ -23,4 +23,4 @@ private:
 };
 
 
-#endif // _EXPLOSION_INCLUDE
+#endif // _STAIRS_INCLUDE

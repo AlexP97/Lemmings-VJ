@@ -27,6 +27,7 @@ void Lemming::init(const glm::vec2 &initialPosition, ShaderProgram &shaderProgra
 	climber = false;
 	come_Out = false;
 	primeraPasada = false;
+	numberOfStairs = 0;
 	state = FALLING_RIGHT_STATE;
 	spritesheet.loadFromFile("images/lemming2_sinfondo.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spritesheet.setMinFilter(GL_NEAREST);
@@ -111,12 +112,12 @@ void Lemming::init(const glm::vec2 &initialPosition, ShaderProgram &shaderProgra
 	sprite->setPosition(initialPosition);
 }
 
-bool Lemming::update(int deltaTime)
+void Lemming::update(int deltaTime)
 {
 	int fall;
 
 	if(sprite->update(deltaTime) == 0)
-		return false;
+		return;
 
 	switch (state) {
 
@@ -253,7 +254,6 @@ bool Lemming::update(int deltaTime)
 	case EXPLODE_STATE:
 		if (sprite->currentKeyFrame() == 20) {
 			mciSendString(TEXT("play sound/BANG.WAV"), NULL, 0, NULL);
-			return true;
 		}
 		else if (sprite->currentKeyFrame() == 31) {
 			mciSendString(TEXT("play sound/EXPLODE.WAV"), NULL, 0, NULL);
@@ -293,12 +293,63 @@ bool Lemming::update(int deltaTime)
 		}
 		break;
 	case BUILDING_LEFT_STATE:
+		sprite->position() += glm::vec2(-3, -1);
+		if (numberOfStairs == 12) {
+			sprite->position() -= glm::vec2(-3, -1);
+			sprite->changeAnimation(WALKING_LEFT);
+			state = WALKING_LEFT_STATE;
+		}
+		else if (collision()) {
+			sprite->position() -= glm::vec2(-3, -1);
+			sprite->changeAnimation(WALKING_RIGHT);
+			state = WALKING_RIGHT_STATE;
+		}
+		else {
+			sprite->position() -= glm::vec2(-3, 0);
+			fall = collisionFloor(3);
+			sprite->position() -= glm::vec2(0, -1);
+			if (fall < 3) {
+				if (sprite->currentKeyFrame() == 0) {
+					sprite->position() += glm::vec2(-2.0f, -1.0f);
+					numberOfStairs++;
+				}
+			}
+			else {
+				sprite->changeAnimation(FALLING_RIGHT);
+				state = FALLING_RIGHT_STATE;
+			}
+		}
 		break;
 	case BUILDING_RIGHT_STATE:
+		sprite->position() += glm::vec2(3, -1);
+		if (numberOfStairs == 12) {
+			sprite->position() -= glm::vec2(3, -1);
+			sprite->changeAnimation(WALKING_RIGHT);
+			state = WALKING_RIGHT_STATE;
+		}
+		else if (collision()) {
+			sprite->position() -= glm::vec2(3, -1);
+			sprite->changeAnimation(WALKING_LEFT);
+			state = WALKING_LEFT_STATE;
+		}
+		else {
+			sprite->position() -= glm::vec2(3, 0);
+			fall = collisionFloor(3);
+			sprite->position() -= glm::vec2(0, -1);
+			if (fall < 3) {
+				if (sprite->currentKeyFrame() == 0) {
+					sprite->position() += glm::vec2(2.0f, -1.0f);
+					numberOfStairs++;
+				}
+			}
+			else {
+				sprite->changeAnimation(FALLING_RIGHT);
+				state = FALLING_RIGHT_STATE;
+			}
+		}
 		break;
 
 	}
-	return false;
 }
 
 void Lemming::render()
@@ -331,6 +382,19 @@ void Lemming::setComeOut(bool b) {
 
 bool Lemming::goOut() {
 	return come_Out;
+}
+
+pair<bool, int> Lemming::putStair() {
+	pair<bool, int> ret;
+	if (state == BUILDING_LEFT_STATE && sprite->currentKeyFrame() == 9) {
+		ret.first = true;
+		ret.second = 0;
+	}
+	else if (state == BUILDING_RIGHT_STATE && sprite->currentKeyFrame() == 9) {
+		ret.first = true;
+		ret.second = 1;
+	}
+	return ret;
 }
 
 int Lemming::collisionFloor(int maxFall)
@@ -398,11 +462,14 @@ void Lemming::setAbility(int ability) {
 		if (state == WALKING_LEFT_STATE) {
 			state = BUILDING_LEFT_STATE;
 			sprite->changeAnimation(BUILDING_LEFT);
+			numberOfStairs = 0;
 		}
 		else if (state == WALKING_RIGHT_STATE) {
 			state = BUILDING_RIGHT_STATE;
 			sprite->changeAnimation(BUILDING_RIGHT);
+			numberOfStairs = 0;
 		}
+		else if (state == BUILDING_LEFT_STATE || state == BUILDING_RIGHT_STATE) numberOfStairs = 0;
 	}
 
 	else if (ability == 8) {

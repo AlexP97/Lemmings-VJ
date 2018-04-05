@@ -55,11 +55,6 @@ void Scene::init()
 	for (int i = 0; i < 20; i++) {
 		lemming.push_back(lem);
 	}
-	explode = vector<bool>(20, false);
-	Explosion expl;
-	for (int i = 0; i < 20; i++) {
-		explosion.push_back(expl);
-	}
 	ability = 0;
 	mciSendString(TEXT("play sound/LETSGO.WAV"), NULL, 0, NULL);
 }
@@ -101,21 +96,45 @@ void Scene::update(int deltaTime)
 
 	for (int i = 0; i < lemming.size(); i++) {
 		if (lemmingInit[i]) {
-			bool showExplosion = lemming[i].update(deltaTime);
-			if (showExplosion) {
-				glm::vec2 explosionPos = lemming[i].position();
-				explosionPos.x -= 8;
-				explosionPos.y -= 10;
-				explosion[i].init(explosionPos, simpleTexProgram);
-				explode[i] = true;
+			lemming[i].update(deltaTime);
+		}
+	}
 
+	for (int i = 0; i < lemming.size(); i++) {
+		if (lemmingInit[i]) {
+			pair<bool, int> putStair = lemming[i].putStair();
+			if (putStair.first) {
+				Stairs stair;
+				glm::vec2 pos = lemming[i].position();
+				pos.y += 15;
+				if (putStair.second == 0) {		//escalera hacia la izquierda
+					pos.x += 3;
+					stair.init(pos, simpleTexProgram);
+				}
+				else if (putStair.second == 1) {	//escalera hacia la derecha
+					pos.x += 9;
+					stair.init(pos, simpleTexProgram);
+				}
+				for (int j = 0; j < 4; j++) {
+					maskTexture.setPixel(pos.x + j + 120, pos.y, 255);
+				}
+				for (int j = 0; j < lemming.size(); j++) {
+					if (lemmingInit[i]) {
+						lemming[i].setMapMask(&maskTexture, &parados);
+					}
+				}
+				stairs.push_back(stair);
 			}
 		}
 	}
+
 	puerta.update(deltaTime);
 	botonPlay.update(deltaTime);
 	botonSpeed.update(deltaTime);
 	salida.update(deltaTime);
+	for (int i = 0; i < stairs.size(); i++) {
+		stairs[i].update(deltaTime);
+	}
 	panel.update(deltaTime);
 	if (iconSelected.getState() == 1) iconSelected.update(deltaTime);
 	cursor.update(deltaTime);
@@ -146,13 +165,10 @@ void Scene::render()
 	
 	botonPlay.render();
 	botonSpeed.render();
-	panel.render();
-	for (int i = 0; i < explode.size(); i++) {
-		if (explode[i]) {
-			explosion[i].render();
-			explode[i] = false;
-		}
+	for (int i = 0; i < stairs.size(); i++) {
+		stairs[i].render();
 	}
+	panel.render();
 
 	if(iconSelected.getState() == 1) iconSelected.render();
 	cursor.render();

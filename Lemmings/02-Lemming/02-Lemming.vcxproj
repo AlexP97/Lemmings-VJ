@@ -15,7 +15,6 @@
     <ClInclude Include="Boton.h" />
     <ClInclude Include="common_defs.h" />
     <ClInclude Include="Cursor.h" />
-    <ClInclude Include="Explosion.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Home.h" />
     <ClInclude Include="IconPanel.h" />
@@ -28,12 +27,13 @@
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="Sprite.h" />
+    <ClInclude Include="Stairs.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="TexturedQuad.h" />
     <ClInclude Include="VariableTexture.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Cursor.cpp" />
-    <ClCompile Include="Explosion.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Home.cpp" />
     <ClCompile Include="IconPanel.cpp" />
@@ -48,7 +48,9 @@
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="Boton.cpp" />
     <ClCompile Include="Sprite.cpp" />
+    <ClCompile Include="Stairs.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="TexturedQuad.cpp" />
     <ClCompile Include="VariableTexture.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -94,12 +96,12 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\libs\freeglut\include;..\..\libs\glew-1.13.0\include;..\..\libs\glm;..\..\libs\Simple OpenGL Image Library\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\libs\freeglut\include;..\..\libs\glew-1.13.0\include;..\..\libs\glm;..\..\libs\Simple OpenGL Image Library\src;%(AdditionalIncludeDirectories);..\..\libs\freetype-2.3.5-1-bin\include\freetype2;..\..\libs\freetype-2.3.5-1-bin\include;..\..\libs\Simple OpenGL Image Library\src;..\..\libs\freeglut\include;..\..\libs\glew-1.13.0\include;..\..\libs\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>..\..\libs\freetype-2.3.5-1-bin\lib;..\..\libs\freetype-2.3.5-1-bin\include;..\..\libs\freeglut\lib;..\..\libs\glew-1.13.0\lib\Release\Win32;..\..\libs\Simple OpenGL Image Library\projects\VC9\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\libs\freetype-2.3.5-1-bin\lib;..\..\libs\freetype-2.3.5-1-bin\include;..\..\libs\freeglut\lib;..\..\libs\glew-1.13.0\lib\Release\Win32;..\..\libs\Simple OpenGL Image Library\projects\VC9\Debug;%(AdditionalLibraryDirectories);..\..\libs\freetype-2.3.5-1-bin\lib;..\..\libs\Simple OpenGL Image Library\projects\VC9\Debug;..\..\libs\freeglut\lib;..\..\libs\glew-1.13.0\lib\Release\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>freeglut.lib;glew32.lib;SOIL.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>

@@ -15,7 +15,7 @@ class Lemming
 
 public:
 	void init(const glm::vec2 &initialPosition, ShaderProgram &shaderProgram);
-	bool update(int deltaTime);
+	void update(int deltaTime);
 	void render();
 	glm::vec2 position();
 	bool eliminar();
@@ -24,6 +24,7 @@ public:
 	void setMapMask(VariableTexture *mapMask, VariableTexture* lemmingMask);
 	void setAbility(int ability);
 	bool goOut();
+	pair<bool, int> putStair();
 	
 private:
 	int collisionFloor(int maxFall);
@@ -50,6 +51,7 @@ private:
 	bool eliminado;
 	bool climber;
 	bool primeraPasada;
+	int numberOfStairs;
 };
 
 

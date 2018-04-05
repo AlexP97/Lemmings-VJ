@@ -13,7 +13,7 @@
 #include "Boton.h"
 #include "IconPanel.h"
 #include "IconSelected.h"
-#include "Explosion.h"
+#include "Stairs.h"
 
 
 // Scene contains all the entities of our game.
@@ -60,8 +60,7 @@ private:
 	Salida salida;
 	IconPanel panel;
 	IconSelected iconSelected;
-	vector<Explosion> explosion;
-	vector<bool> explode;
+	vector<Stairs> stairs;
 	int lemmingsIn;
 	int ability;
 };
