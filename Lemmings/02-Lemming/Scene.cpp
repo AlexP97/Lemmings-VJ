@@ -99,7 +99,7 @@ bool Scene::update(int deltaTime)
 	for (int i = 0; i < lemming.size(); i++) {
 		if (lemmingInit[i]) {
 			int cont = lemming[i].update(deltaTime);
-			if (!cont) return false;
+			if (stop_Lemmings && !cont) return false;
 		}
 	}
 
@@ -204,10 +204,11 @@ pair<bool, bool> Scene::mouseMoved(int mouseX, int mouseY, bool bLeftButton, boo
 				for (int i = 0; i < lemming.size(); i++) {
 					if (lemmingInit[i]) {
 						lemming[i].setAbility(ability);
+						bool stop_Lemmings = true;
 					}
 				}
 			}
-			if (cOL.first && ability != 8) {
+			if (cOL.first && ability != 7) {
 				clickOnLemming(cOL.second);
 			}
 		}

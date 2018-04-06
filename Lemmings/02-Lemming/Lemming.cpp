@@ -473,7 +473,7 @@ void Lemming::setAbility(int ability) {
 		else if (state == BUILDING_LEFT_STATE || state == BUILDING_RIGHT_STATE) numberOfStairs = 0;
 	}
 
-	else if (ability == 7) {
+	else if (ability == 7 || ability == 1) {
 		state = EXPLODE_STATE;
 		sprite->changeAnimation(EXPLODING);
 	}
