@@ -26,8 +26,16 @@ bool Game::update(int deltaTime)
 		break;
 	case 1:
 		if (!paused) {
-			if (!doubleSpeed) scene.update(deltaTime);
-			else scene.update(deltaTime * 2);
+			bool cont;
+			if (!doubleSpeed) cont = scene.update(deltaTime);
+			else cont = scene.update(deltaTime * 2);
+			if (!cont) {
+				mciSendString(TEXT("close scene1"), NULL, 0, NULL);
+				mciSendString(TEXT("open sound/MAIN_THEME.mp3 alias main"), NULL, 0, NULL);
+				mciSendString(TEXT("play main repeat"), NULL, 0, NULL);
+				home.init();
+				actualScene = 0;
+			}
 		}
 		break;
 	}

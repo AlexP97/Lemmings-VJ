@@ -112,12 +112,12 @@ void Lemming::init(const glm::vec2 &initialPosition, ShaderProgram &shaderProgra
 	sprite->setPosition(initialPosition);
 }
 
-void Lemming::update(int deltaTime)
+bool Lemming::update(int deltaTime)
 {
 	int fall;
 
 	if(sprite->update(deltaTime) == 0)
-		return;
+		return true;
 
 	switch (state) {
 
@@ -258,6 +258,7 @@ void Lemming::update(int deltaTime)
 		else if (sprite->currentKeyFrame() == 31) {
 			mciSendString(TEXT("play sound/EXPLODE.WAV"), NULL, 0, NULL);
 			eliminado = true;
+			return false;
 		}
 		break;
 	case CLIMBING_LEFT_STATE:
@@ -348,8 +349,8 @@ void Lemming::update(int deltaTime)
 			}
 		}
 		break;
-
 	}
+	return true;
 }
 
 void Lemming::render()

@@ -20,6 +20,9 @@ Scene::~Scene()
 
 void Scene::init()
 {
+	currentTime = 0;
+	abre_Puerta = true;
+	stop_Lemmings = false;
 	//glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(float(CAMERA_WIDTH), float(CAMERA_HEIGHT)) };
 	glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(float(CAMERA_WIDTH), float(160.f)) };
 	glm::vec2 texCoords[2] = { glm::vec2(120.f / 512.0, 0.f), glm::vec2((120.f + 320.f) / 512.0f, 160.f / 256.0f) };
@@ -52,6 +55,7 @@ void Scene::init()
 
 	lemmingInit = vector<bool>(20, false);
 	Lemming lem;
+	lemming = vector<Lemming>(0);
 	for (int i = 0; i < 20; i++) {
 		lemming.push_back(lem);
 	}
@@ -61,9 +65,7 @@ void Scene::init()
 
 unsigned int x = 0; 
 
-bool abre_Puerta = true;
-
-void Scene::update(int deltaTime)
+bool Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;
 
@@ -73,7 +75,7 @@ void Scene::update(int deltaTime)
 		abre_Puerta = false;
 	}
 
-	if (lemmingsIn < 8 && currentTime >= (3000 * (lemmingsIn + 1))) {
+	if (!stop_Lemmings && lemmingsIn < 8 && currentTime >= (3000 * (lemmingsIn + 1))) {
 		lemming[lemmingsIn].init(glm::vec2(70, 30), simpleTexProgram);
 		//lemming[lemmingsIn].init(glm::vec2(200, 95), simpleTexProgram);
 		lemming[lemmingsIn].setMapMask(&maskTexture, &parados);
@@ -96,7 +98,8 @@ void Scene::update(int deltaTime)
 
 	for (int i = 0; i < lemming.size(); i++) {
 		if (lemmingInit[i]) {
-			lemming[i].update(deltaTime);
+			int cont = lemming[i].update(deltaTime);
+			if (!cont) return false;
 		}
 	}
 
@@ -138,6 +141,7 @@ void Scene::update(int deltaTime)
 	panel.update(deltaTime);
 	if (iconSelected.getState() == 1) iconSelected.update(deltaTime);
 	cursor.update(deltaTime);
+	return true;
 }
 
 void Scene::render()
@@ -375,6 +379,7 @@ void Scene::clickOnAbility(int mouseX, int mouseY) {
 				else {
 					iconSelected.changeState(1);
 					ability = 8;
+					stop_Lemmings = true;
 				}
 				iconSelected.setPosition(9 + sizeAbility * 7, 158);
 			}

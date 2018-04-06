@@ -15,7 +15,7 @@ class Lemming
 
 public:
 	void init(const glm::vec2 &initialPosition, ShaderProgram &shaderProgram);
-	void update(int deltaTime);
+	bool update(int deltaTime);
 	void render();
 	glm::vec2 position();
 	bool eliminar();

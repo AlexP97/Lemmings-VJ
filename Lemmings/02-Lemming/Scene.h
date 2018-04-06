@@ -28,7 +28,7 @@ public:
 	~Scene();
 
 	void init();
-	void update(int deltaTime);
+	bool update(int deltaTime);
 	void render();
 	
 	pair<bool, bool> mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton, bool paused);
@@ -63,6 +63,8 @@ private:
 	vector<Stairs> stairs;
 	int lemmingsIn;
 	int ability;
+	bool abre_Puerta;
+	bool stop_Lemmings;
 };
 
 
