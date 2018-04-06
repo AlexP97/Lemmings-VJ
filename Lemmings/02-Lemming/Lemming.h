@@ -30,7 +30,7 @@ private:
 	int collisionFloor(int maxFall);
 	bool collision();
 	bool hayParado();
-	void eraseMask(int posX, int posY, float ymin, float ymax, float xmin, float xmax);
+	void eraseMask(int posX, int posY, float ymin, float ymax, float xmin, float xmax, VariableTexture *mascara);
 	void applyMask();
 	
 	

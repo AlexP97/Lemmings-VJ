@@ -162,6 +162,8 @@ bool Lemming::update(int deltaTime)
 		}
 		else
 		{
+			if (!hayParado())
+				primeraPasada = true;
 			fall = collisionFloor(3);
 			if (fall > 0)
 				sprite->position() += glm::vec2(0, 1);
@@ -193,6 +195,8 @@ bool Lemming::update(int deltaTime)
 		}
 		else
 		{
+			if (!hayParado())
+				primeraPasada = true;
 			fall = collisionFloor(3);
 			if (fall < 3)
 				sprite->position() += glm::vec2(0, fall);
@@ -221,7 +225,7 @@ bool Lemming::update(int deltaTime)
 			state = FALLING_RIGHT_STATE;
 		}
 		if (state != FALLING_RIGHT_STATE) {
-			eraseMask(position()[0] + 8 + 120, position()[1] + 16, 0, 0.25,-3,3);
+			eraseMask(position()[0] + 8 + 120, position()[1] + 16, 0, 0.25,-3,3, mask);
 			sprite->position() += glm::vec2(0, 0.25);
 		}
 		break;
@@ -231,7 +235,7 @@ bool Lemming::update(int deltaTime)
 
 	case DIG_LEFT_STATE:
 		if(collision()) {
-			eraseMask(position()[0] + 120, position()[1] + 8, -3, 3, 0, -0.25);
+			eraseMask(position()[0] + 120, position()[1] + 8, -3, 3, 0, -0.25, mask);
 			sprite->position() += glm::vec2(-0.25, 0);
 		}
 		else {
@@ -243,7 +247,7 @@ bool Lemming::update(int deltaTime)
 	case DIG_RIGHT_STATE:
 		
 		if (mask->pixel(position()[0]+16+1,position()[1]+8) == 255) {
-			eraseMask(position()[0] + 16 + 120, position()[1] + 8, -8, 8, 0, 0.25);
+			eraseMask(position()[0] + 16 + 120, position()[1] + 8, -8, 8, 0, 0.25, mask);
 			sprite->position() += glm::vec2(0.25, 0);
 		}
 		else {
@@ -474,18 +478,22 @@ void Lemming::setAbility(int ability) {
 	}
 
 	else if (ability == 7 || ability == 1) {
+		if(ability == 1 && state == BLOCKING_STATE) 
+			eraseMask(position()[0] + 120, position()[1], 0, 16, 0, 16, parados);
 		state = EXPLODE_STATE;
 		sprite->changeAnimation(EXPLODING);
 	}
 }
 
-void Lemming::eraseMask(int posX, int posY, float ymin, float ymax, float xmin, float xmax) {
+void Lemming::eraseMask(int posX, int posY, float ymin, float ymax, float xmin, float xmax, VariableTexture* mascara) {
 	for (int y = max(0.f, posY+ymin); y <= min((float)mask->height() - 1, posY + ymax); y++) {
 		for (int x = max(0.f, posX + xmin); x <= min((float)mask->width() - 1, posX + xmax); x++) {
-			mask->setPixel(x, y, 0);
+			mascara->setPixel(x, y, 0);
 		}
 	}
 }
+
+
 
 void Lemming::applyMask() {
 	int posX, posY;
