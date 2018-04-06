@@ -439,16 +439,16 @@ bool Lemming::hayParado()
 }
 
 void Lemming::setAbility(int ability) {
-	if (ability == 4) {
-		state = DIG_STATE;
-		sprite->changeAnimation(DIG);
-	}
-	else if (ability == 3) {
+	if (ability == 2) {
 		state = BLOCKING_STATE;
 		sprite->changeAnimation(BLOCKING);
 		applyMask();
 	}
-	else if (ability == 5) {
+	else if (ability == 3) {
+		state = DIG_STATE;
+		sprite->changeAnimation(DIG);
+	}
+	else if (ability == 4) {
 		if (state == WALKING_LEFT_STATE) {
 			state = DIG_LEFT_STATE;
 			sprite->changeAnimation(DIG_LEFT);
@@ -458,8 +458,8 @@ void Lemming::setAbility(int ability) {
 			sprite->changeAnimation(DIG_RIGHT);
 		}
 	}
-	else if (ability == 6) climber = true;
-	else if (ability == 7) {
+	else if (ability == 5) climber = true;
+	else if (ability == 6) {
 		if (state == WALKING_LEFT_STATE) {
 			state = BUILDING_LEFT_STATE;
 			sprite->changeAnimation(BUILDING_LEFT);
@@ -473,7 +473,7 @@ void Lemming::setAbility(int ability) {
 		else if (state == BUILDING_LEFT_STATE || state == BUILDING_RIGHT_STATE) numberOfStairs = 0;
 	}
 
-	else if (ability == 8) {
+	else if (ability == 7) {
 		state = EXPLODE_STATE;
 		sprite->changeAnimation(EXPLODING);
 	}

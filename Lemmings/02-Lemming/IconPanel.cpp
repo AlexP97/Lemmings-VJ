@@ -14,7 +14,7 @@ void IconPanel::init(const glm::vec2 &initialPosition, ShaderProgram &shaderProg
 	spritesheet.loadFromFile("images/icon_panel_sinfondo.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spritesheet.setMinFilter(GL_NEAREST);
 	spritesheet.setMagFilter(GL_NEAREST);
-	sprite = Sprite::createSprite(glm::ivec2(530.f / 3.f, 135.f / 3.f), glm::vec2(1.f, 1.f), &spritesheet, &shaderProgram);
+	sprite = Sprite::createSprite(glm::ivec2(465.f / 3.f, 135.f / 3.f), glm::vec2(1.f, 1.f), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(1);
 
 	sprite->setAnimationSpeed(NORMAL, 0);

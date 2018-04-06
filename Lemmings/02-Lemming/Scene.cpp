@@ -200,7 +200,7 @@ pair<bool, bool> Scene::mouseMoved(int mouseX, int mouseY, bool bLeftButton, boo
 
 		if (bLeftButton) {
 			clickOnAbility(mouseX, mouseY);
-			if (ability == 8) {
+			if (ability == 7) {
 				for (int i = 0; i < lemming.size(); i++) {
 					if (lemmingInit[i]) {
 						lemming[i].setAbility(ability);
@@ -288,9 +288,9 @@ void Scene::clickOnAbility(int mouseX, int mouseY) {
 	int x = mouseX / 3;
 	int y = mouseY / 3;
 	glm::vec2 positionPanel = panel.position();
-	float sizeX = 530.f / 3.f;
+	float sizeX = 465.f / 3.f;
 	float sizeY = 135.f / 3.f;
-	float sizeAbility = sizeX / 8.f;
+	float sizeAbility = sizeX / 7.f;
 
 	if (x > (positionPanel.x - 2) && x < (positionPanel.x + sizeX)) {
 		if (y > positionPanel.y && y < (positionPanel.y + sizeY)) {
@@ -303,7 +303,7 @@ void Scene::clickOnAbility(int mouseX, int mouseY) {
 					iconSelected.changeState(1);
 					ability = 1;
 				}
-				iconSelected.setPosition(9, 158);
+				iconSelected.setPosition(positionPanel.x - 1, 158);
 			}
 			else if (x > (positionPanel.x + sizeAbility - 2) && x < (positionPanel.x + sizeAbility * 2 - 2)) {
 				if (ability == 2) {
@@ -314,7 +314,7 @@ void Scene::clickOnAbility(int mouseX, int mouseY) {
 					iconSelected.changeState(1);
 					ability = 2;
 				}
-				iconSelected.setPosition(9 + sizeAbility, 158);
+				iconSelected.setPosition(positionPanel.x + sizeAbility, 158);
 			}
 			else if (x >(positionPanel.x + sizeAbility*2 - 2) && x < (positionPanel.x + sizeAbility * 3 - 2)) {
 				if (ability == 3) {
@@ -325,7 +325,7 @@ void Scene::clickOnAbility(int mouseX, int mouseY) {
 					iconSelected.changeState(1);
 					ability = 3;
 				}
-				iconSelected.setPosition(9 + sizeAbility*2, 158);
+				iconSelected.setPosition(positionPanel.x - 1 + sizeAbility*2, 158);
 			}
 			else if (x >(positionPanel.x + sizeAbility * 3 - 2) && x < (positionPanel.x + sizeAbility * 4 - 2)) {
 				if (ability == 4) {
@@ -336,7 +336,7 @@ void Scene::clickOnAbility(int mouseX, int mouseY) {
 					iconSelected.changeState(1);
 					ability = 4;
 				}
-				iconSelected.setPosition(9 + sizeAbility * 3, 158);
+				iconSelected.setPosition(positionPanel.x - 1 + sizeAbility * 3, 158);
 			}
 			else if (x >(positionPanel.x + sizeAbility * 4 - 2) && x < (positionPanel.x + sizeAbility * 5 - 2)) {
 				if (ability == 5) {
@@ -347,7 +347,7 @@ void Scene::clickOnAbility(int mouseX, int mouseY) {
 					iconSelected.changeState(1);
 					ability = 5;
 				}
-				iconSelected.setPosition(9 + sizeAbility * 4, 158);
+				iconSelected.setPosition(positionPanel.x - 1 + sizeAbility * 4, 158);
 			}
 			else if (x >(positionPanel.x + sizeAbility * 5 - 2) && x < (positionPanel.x + sizeAbility * 6 - 2)) {
 				if (ability == 6) {
@@ -356,9 +356,10 @@ void Scene::clickOnAbility(int mouseX, int mouseY) {
 				}
 				else {
 					iconSelected.changeState(1);
+					stop_Lemmings = true;
 					ability = 6;
 				}
-				iconSelected.setPosition(9 + sizeAbility * 5, 158);
+				iconSelected.setPosition(positionPanel.x - 1 + sizeAbility * 5, 158);
 			}
 			else if (x >(positionPanel.x + sizeAbility * 6 - 2) && x < (positionPanel.x + sizeAbility * 7 - 2)) {
 				if (ability == 7) {
@@ -367,21 +368,10 @@ void Scene::clickOnAbility(int mouseX, int mouseY) {
 				}
 				else {
 					iconSelected.changeState(1);
+					stop_Lemmings = true;
 					ability = 7;
 				}
-				iconSelected.setPosition(9 + sizeAbility * 6, 158);
-			}
-			else if (x >(positionPanel.x + sizeAbility * 7 - 2) && x < (positionPanel.x + sizeAbility * 8 - 2)) {
-				if (ability == 8) {
-					iconSelected.changeState(0);
-					ability = 0;
-				}
-				else {
-					iconSelected.changeState(1);
-					ability = 8;
-					stop_Lemmings = true;
-				}
-				iconSelected.setPosition(9 + sizeAbility * 7, 158);
+				iconSelected.setPosition(positionPanel.x - 1 + sizeAbility * 6, 158);
 			}
 		}
 	}
