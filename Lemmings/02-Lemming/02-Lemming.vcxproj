@@ -24,6 +24,7 @@
     <ClInclude Include="Puerta.h" />
     <ClInclude Include="Salida.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="Scene2.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="Sprite.h" />
@@ -44,6 +45,7 @@
     <ClCompile Include="Puerta.cpp" />
     <ClCompile Include="Salida.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="Scene2.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="Boton.cpp" />

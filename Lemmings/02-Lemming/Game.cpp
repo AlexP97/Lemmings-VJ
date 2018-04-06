@@ -38,6 +38,20 @@ bool Game::update(int deltaTime)
 			}
 		}
 		break;
+	case 2:
+		if (!paused) {
+			bool cont;
+			if (!doubleSpeed) cont = scene2.update(deltaTime);
+			else cont = scene2.update(deltaTime * 2);
+			if (!cont) {
+				mciSendString(TEXT("close scene1"), NULL, 0, NULL);
+				mciSendString(TEXT("open sound/MAIN_THEME.mp3 alias main"), NULL, 0, NULL);
+				mciSendString(TEXT("play main repeat"), NULL, 0, NULL);
+				home.init();
+				actualScene = 0;
+			}
+		}
+		break;
 	}
 	
 	return bPlay;
@@ -53,6 +67,9 @@ void Game::render()
 		break;
 	case 1:
 		scene.render();
+		break;
+	case 2:
+		scene2.render();
 		break;
 	}
 }
@@ -79,6 +96,13 @@ void Game::specialKeyPressed(int key)
 		scene.init();
 		actualScene = 1;
 	}
+	else if (actualScene == 0 && key == GLUT_KEY_F2) {
+		mciSendString(TEXT("stop main"), NULL, 0, NULL);
+		mciSendString(TEXT("open sound/BACKGROUND-2.mp3 alias scene1"), NULL, 0, NULL);
+		mciSendString(TEXT("play scene1 repeat"), NULL, 0, NULL);
+		scene2.init();
+		actualScene = 2;
+	}
 	specialKeys[key] = true;
 }
 
@@ -95,6 +119,9 @@ void Game::mouseMove(int x, int y)
 	case 1:
 		scene.mouseMoved(mouseX, mouseY, bLeftMouse, bRightMouse, paused);
 		break;
+	case 2:
+		scene2.mouseMoved(mouseX, mouseY, bLeftMouse, bRightMouse, paused);
+		break;
 	}
 }
 
@@ -109,6 +136,9 @@ void Game::mousePress(int button)
 		switch (actualScene) {
 		case 1:
 			speedOrPause = scene.mouseMoved(mouseX, mouseY, bLeftMouse, bRightMouse, paused);
+			break;
+		case 2:
+			speedOrPause = scene2.mouseMoved(mouseX, mouseY, bLeftMouse, bRightMouse, paused);
 			break;
 		}
 		if (speedOrPause.second) {
@@ -128,6 +158,9 @@ void Game::mousePress(int button)
 		switch (actualScene) {
 		case 1:
 			scene.mouseMoved(mouseX, mouseY, bLeftMouse, bRightMouse, paused);
+			break;
+		case 2:
+			scene2.mouseMoved(mouseX, mouseY, bLeftMouse, bRightMouse, paused);
 			break;
 		}
 	}

@@ -2,23 +2,23 @@
 #include <cmath>
 #include <algorithm>
 #include <glm/gtc/matrix_transform.hpp>
-#include "Scene.h"
+#include "Scene2.h"
 #include <Windows.h>
 #include <mmsystem.h>
 
 
-Scene::Scene()
+Scene2::Scene2()
 {
 	map = NULL;
 }
 
-Scene::~Scene()
+Scene2::~Scene2()
 {
-	if(map != NULL)
+	if (map != NULL)
 		delete map;
 }
 
-void Scene::init()
+void Scene2::init()
 {
 	currentTime = 0;
 	abre_Puerta = true;
@@ -30,13 +30,13 @@ void Scene::init()
 	initShaders();
 
 	map = MaskedTexturedQuad::createTexturedQuad(geom, texCoords, maskedTexProgram);
-	colorTexture.loadFromFile("images/fun1.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	colorTexture.loadFromFile("images/tricky9.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	colorTexture.setMinFilter(GL_NEAREST);
 	colorTexture.setMagFilter(GL_NEAREST);
-	maskTexture.loadFromFile("images/fun1_mask.png", TEXTURE_PIXEL_FORMAT_L);
+	maskTexture.loadFromFile("images/tricky9_mask.png", TEXTURE_PIXEL_FORMAT_L);
 	maskTexture.setMinFilter(GL_NEAREST);
 	maskTexture.setMagFilter(GL_NEAREST);
-	parados.loadFromFile("images/fun1_mask.png", TEXTURE_PIXEL_FORMAT_L);
+	parados.loadFromFile("images/tricky9_mask.png", TEXTURE_PIXEL_FORMAT_L);
 	parados.setMinFilter(GL_NEAREST);
 	parados.setMagFilter(GL_NEAREST);
 
@@ -63,9 +63,9 @@ void Scene::init()
 	mciSendString(TEXT("play sound/LETSGO.WAV"), NULL, 0, NULL);
 }
 
-//unsigned int x = 0; 
+//unsigned int x = 0;
 
-bool Scene::update(int deltaTime)
+bool Scene2::update(int deltaTime)
 {
 	currentTime += deltaTime;
 
@@ -92,7 +92,7 @@ bool Scene::update(int deltaTime)
 			if (lemming[i].eliminar()) {
 				lemmingInit[i] = false;
 			}
-			
+
 		}
 	}
 
@@ -144,7 +144,7 @@ bool Scene::update(int deltaTime)
 	return true;
 }
 
-void Scene::render()
+void Scene2::render()
 {
 	glm::mat4 modelview;
 
@@ -154,7 +154,7 @@ void Scene::render()
 	modelview = glm::mat4(1.0f);
 	maskedTexProgram.setUniformMatrix4f("modelview", modelview);
 	map->render(maskedTexProgram, colorTexture, maskTexture);
-	
+
 	simpleTexProgram.use();
 	simpleTexProgram.setUniformMatrix4f("projection", projection);
 	simpleTexProgram.setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);
@@ -166,7 +166,7 @@ void Scene::render()
 	for (int i = 0; i < lemming.size(); i++) {
 		if (lemmingInit[i]) lemming[i].render();
 	}
-	
+
 	botonPlay.render();
 	botonSpeed.render();
 	for (int i = 0; i < stairs.size(); i++) {
@@ -174,11 +174,11 @@ void Scene::render()
 	}
 	panel.render();
 
-	if(iconSelected.getState() == 1) iconSelected.render();
+	if (iconSelected.getState() == 1) iconSelected.render();
 	cursor.render();
 }
 
-pair<bool, bool> Scene::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton, bool paused)
+pair<bool, bool> Scene2::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton, bool paused)
 {
 	pair<bool, bool> ret;
 	ret.first = false;
@@ -213,7 +213,7 @@ pair<bool, bool> Scene::mouseMoved(int mouseX, int mouseY, bool bLeftButton, boo
 			}
 		}
 	}
-	
+
 	if (bLeftButton) {
 		if (clickOnSpeed(mouseX, mouseY)) ret.first = true;
 		if (clickOnPause(mouseX, mouseY)) ret.second = true;
@@ -221,13 +221,13 @@ pair<bool, bool> Scene::mouseMoved(int mouseX, int mouseY, bool bLeftButton, boo
 	return ret;
 }
 
-void Scene::clickOnLemming(int indLemming) {
-	
+void Scene2::clickOnLemming(int indLemming) {
+
 	lemming[indLemming].setAbility(ability);
-	if(ability != 0) mciSendString(TEXT("play sound/ACTION.WAV"), NULL, 0, NULL);
+	if (ability != 0) mciSendString(TEXT("play sound/ACTION.WAV"), NULL, 0, NULL);
 }
 
-bool Scene::clickOnPause(int mouseX, int mouseY) {
+bool Scene2::clickOnPause(int mouseX, int mouseY) {
 	glm::vec2 center = botonPlay.centerPosition();
 	int x = mouseX / 3 - 2.f;
 	int y = mouseY / 3 - 2.f;
@@ -240,7 +240,7 @@ bool Scene::clickOnPause(int mouseX, int mouseY) {
 	return false;
 }
 
-bool Scene::clickOnSpeed(int mouseX, int mouseY) {
+bool Scene2::clickOnSpeed(int mouseX, int mouseY) {
 	glm::vec2 center = botonSpeed.centerPosition();
 	int x = mouseX / 3 - 2.f;
 	int y = mouseY / 3 - 2.f;
@@ -253,7 +253,7 @@ bool Scene::clickOnSpeed(int mouseX, int mouseY) {
 	return false;
 }
 
-bool Scene::lemmingOnExit(glm::vec2 position) {
+bool Scene2::lemmingOnExit(glm::vec2 position) {
 	glm::vec2 salidaPos = salida.position();
 	if (position.x > (salidaPos.x + 4.f) && position.x < (salidaPos.x + 10.f)) {
 		if (position.y < (salidaPos.y + 12.f) && position.y > salidaPos.y) return true;
@@ -261,7 +261,7 @@ bool Scene::lemmingOnExit(glm::vec2 position) {
 	return false;
 }
 
-pair<bool, int> Scene::cursorOnLemming(int mouseX, int mouseY) {
+pair<bool, int> Scene2::cursorOnLemming(int mouseX, int mouseY) {
 	glm::vec2 position;
 	int x = mouseX / 3 - 2.f;
 	int y = mouseY / 3 - 2.f;
@@ -285,7 +285,7 @@ pair<bool, int> Scene::cursorOnLemming(int mouseX, int mouseY) {
 
 
 
-void Scene::clickOnAbility(int mouseX, int mouseY) {
+void Scene2::clickOnAbility(int mouseX, int mouseY) {
 	int x = mouseX / 3;
 	int y = mouseY / 3;
 	glm::vec2 positionPanel = panel.position();
@@ -317,7 +317,7 @@ void Scene::clickOnAbility(int mouseX, int mouseY) {
 				}
 				iconSelected.setPosition(positionPanel.x + sizeAbility, 158);
 			}
-			else if (x >(positionPanel.x + sizeAbility*2 - 2) && x < (positionPanel.x + sizeAbility * 3 - 2)) {
+			else if (x >(positionPanel.x + sizeAbility * 2 - 2) && x < (positionPanel.x + sizeAbility * 3 - 2)) {
 				if (ability == 3) {
 					iconSelected.changeState(0);
 					ability = 0;
@@ -326,7 +326,7 @@ void Scene::clickOnAbility(int mouseX, int mouseY) {
 					iconSelected.changeState(1);
 					ability = 3;
 				}
-				iconSelected.setPosition(positionPanel.x - 1 + sizeAbility*2, 158);
+				iconSelected.setPosition(positionPanel.x - 1 + sizeAbility * 2, 158);
 			}
 			else if (x >(positionPanel.x + sizeAbility * 3 - 2) && x < (positionPanel.x + sizeAbility * 4 - 2)) {
 				if (ability == 4) {
@@ -378,46 +378,46 @@ void Scene::clickOnAbility(int mouseX, int mouseY) {
 	}
 }
 
-void Scene::eraseMask(int mouseX, int mouseY)
+void Scene2::eraseMask(int mouseX, int mouseY)
 {
 	int posX, posY;
-	
+
 	// Transform from mouse coordinates to map coordinates
 	//   The map is enlarged 3 times and displaced 120 pixels
-	posX = mouseX/3 + 120;
-	posY = mouseY/3;
+	posX = mouseX / 3 + 120;
+	posY = mouseY / 3;
 
-	for(int y=max(0, posY-3); y<=min(maskTexture.height()-1, posY+3); y++)
-		for(int x=max(0, posX-3); x<=min(maskTexture.width()-1, posX+3); x++)
+	for (int y = max(0, posY - 3); y <= min(maskTexture.height() - 1, posY + 3); y++)
+		for (int x = max(0, posX - 3); x <= min(maskTexture.width() - 1, posX + 3); x++)
 			maskTexture.setPixel(x, y, 0);
 }
 
-void Scene::applyMask(int mouseX, int mouseY)
+void Scene2::applyMask(int mouseX, int mouseY)
 {
 	int posX, posY;
-	
+
 	// Transform from mouse coordinates to map coordinates
 	//   The map is enlarged 3 times and displaced 120 pixels
-	posX = mouseX/3 + 120;
-	posY = mouseY/3;
+	posX = mouseX / 3 + 120;
+	posY = mouseY / 3;
 
-	for(int y=max(0, posY-3); y<=min(maskTexture.height()-1, posY+3); y++)
-		for(int x=max(0, posX-3); x<=min(maskTexture.width()-1, posX+3); x++)
+	for (int y = max(0, posY - 3); y <= min(maskTexture.height() - 1, posY + 3); y++)
+		for (int x = max(0, posX - 3); x <= min(maskTexture.width() - 1, posX + 3); x++)
 			maskTexture.setPixel(x, y, 255);
 }
 
-void Scene::initShaders()
+void Scene2::initShaders()
 {
 	Shader vShader, fShader;
 
 	vShader.initFromFile(VERTEX_SHADER, "shaders/texture.vert");
-	if(!vShader.isCompiled())
+	if (!vShader.isCompiled())
 	{
 		cout << "Vertex Shader Error" << endl;
 		cout << "" << vShader.log() << endl << endl;
 	}
 	fShader.initFromFile(FRAGMENT_SHADER, "shaders/texture.frag");
-	if(!fShader.isCompiled())
+	if (!fShader.isCompiled())
 	{
 		cout << "Fragment Shader Error" << endl;
 		cout << "" << fShader.log() << endl << endl;
@@ -426,7 +426,7 @@ void Scene::initShaders()
 	simpleTexProgram.addShader(vShader);
 	simpleTexProgram.addShader(fShader);
 	simpleTexProgram.link();
-	if(!simpleTexProgram.isLinked())
+	if (!simpleTexProgram.isLinked())
 	{
 		cout << "Shader Linking Error" << endl;
 		cout << "" << simpleTexProgram.log() << endl << endl;
@@ -436,13 +436,13 @@ void Scene::initShaders()
 	fShader.free();
 
 	vShader.initFromFile(VERTEX_SHADER, "shaders/maskedTexture.vert");
-	if(!vShader.isCompiled())
+	if (!vShader.isCompiled())
 	{
 		cout << "Vertex Shader Error" << endl;
 		cout << "" << vShader.log() << endl << endl;
 	}
 	fShader.initFromFile(FRAGMENT_SHADER, "shaders/maskedTexture.frag");
-	if(!fShader.isCompiled())
+	if (!fShader.isCompiled())
 	{
 		cout << "Fragment Shader Error" << endl;
 		cout << "" << fShader.log() << endl << endl;
@@ -451,7 +451,7 @@ void Scene::initShaders()
 	maskedTexProgram.addShader(vShader);
 	maskedTexProgram.addShader(fShader);
 	maskedTexProgram.link();
-	if(!maskedTexProgram.isLinked())
+	if (!maskedTexProgram.isLinked())
 	{
 		cout << "Shader Linking Error" << endl;
 		cout << "" << maskedTexProgram.log() << endl << endl;
