@@ -59,6 +59,23 @@ void Lemming::init(const glm::vec2 &initialPosition, ShaderProgram &shaderProgra
 		for (int i = 0; i<8; i++)
 			sprite->addKeyframe(DIG, glm::vec2(float(i) / 8, 6.f / 23.f));
 
+		sprite->setAnimationSpeed(DIG_RIGHT, 9);
+		for (int j = 0; j < 2; j++) {
+			for (int i = 0; i < 8; i++) {
+				sprite->addKeyframe(DIG_RIGHT, glm::vec2(float(i) / 8, (7.f + float(j)) / 23.f));
+			}
+		}
+
+		sprite->setAnimationSpeed(DIG_LEFT, 9);
+		for (int j = 0; j < 2; j++) {
+			for (int i = 0; i < 8; i++) {
+				sprite->addKeyframe(DIG_LEFT, glm::vec2(float(i) / 8, (9.f + float(j)) / 23.f));
+			}
+		}
+
+
+
+
 		sprite->setAnimationSpeed(BLOCKING, 9);
 		for (int j = 0; j < 2; j++) {
 			for (int i = 0; i < 8; i++) {
@@ -235,7 +252,7 @@ bool Lemming::update(int deltaTime)
 
 	case DIG_LEFT_STATE:
 		if(collision()) {
-			eraseMask(position()[0] + 120, position()[1] + 8, -3, 3, 0, -0.25, mask);
+			eraseMask(position()[0] + 120, position()[1] + 8, -3, 3, -0.25, 0, mask);
 			sprite->position() += glm::vec2(-0.25, 0);
 		}
 		else {
@@ -245,15 +262,16 @@ bool Lemming::update(int deltaTime)
 		break;
 
 	case DIG_RIGHT_STATE:
-		
-		if (mask->pixel(position()[0]+16+1,position()[1]+8) == 255) {
-			eraseMask(position()[0] + 16 + 120, position()[1] + 8, -8, 8, 0, 0.25, mask);
+		sprite->position() += glm::vec2(1.0, 0);
+		if (collision()) {
+			eraseMask(position()[0] + 12 + 120, position()[1] + 8, -8, 8, 0, 0.25, mask);
 			sprite->position() += glm::vec2(0.25, 0);
 		}
 		else {
 			sprite->changeAnimation(WALKING_RIGHT);
 			state = WALKING_RIGHT_STATE;
 		}
+		sprite->position() += glm::vec2(-1.0, 0);;
 		break;
 	case EXPLODE_STATE:
 		if (sprite->currentKeyFrame() == 20) {
@@ -442,41 +460,42 @@ bool Lemming::hayParado()
 }
 
 void Lemming::setAbility(int ability) {
-	if (ability == 2) {
-		state = BLOCKING_STATE;
-		sprite->changeAnimation(BLOCKING);
-		applyMask();
-	}
-	else if (ability == 3) {
-		state = DIG_STATE;
-		sprite->changeAnimation(DIG);
-	}
-	else if (ability == 4) {
-		if (state == WALKING_LEFT_STATE) {
-			state = DIG_LEFT_STATE;
-			sprite->changeAnimation(DIG_LEFT);
+	if (state != BLOCKING_STATE) {
+		if (ability == 2) {
+			state = BLOCKING_STATE;
+			sprite->changeAnimation(BLOCKING);
+			applyMask();
 		}
-		if (state == WALKING_RIGHT_STATE) {
-			state = DIG_RIGHT_STATE;
-			sprite->changeAnimation(DIG_RIGHT);
+		else if (ability == 3) {
+			state = DIG_STATE;
+			sprite->changeAnimation(DIG);
+		}
+		else if (ability == 4) {
+			if (state == WALKING_LEFT_STATE) {
+				state = DIG_LEFT_STATE;
+				sprite->changeAnimation(DIG_LEFT);
+			}
+			if (state == WALKING_RIGHT_STATE) {
+				state = DIG_RIGHT_STATE;
+				sprite->changeAnimation(DIG_RIGHT);
+			}
+		}
+		else if (ability == 5) climber = true;
+		else if (ability == 6) {
+			if (state == WALKING_LEFT_STATE) {
+				state = BUILDING_LEFT_STATE;
+				sprite->changeAnimation(BUILDING_LEFT);
+				numberOfStairs = 0;
+			}
+			else if (state == WALKING_RIGHT_STATE) {
+				state = BUILDING_RIGHT_STATE;
+				sprite->changeAnimation(BUILDING_RIGHT);
+				numberOfStairs = 0;
+			}
+			else if (state == BUILDING_LEFT_STATE || state == BUILDING_RIGHT_STATE) numberOfStairs = 0;
 		}
 	}
-	else if (ability == 5) climber = true;
-	else if (ability == 6) {
-		if (state == WALKING_LEFT_STATE) {
-			state = BUILDING_LEFT_STATE;
-			sprite->changeAnimation(BUILDING_LEFT);
-			numberOfStairs = 0;
-		}
-		else if (state == WALKING_RIGHT_STATE) {
-			state = BUILDING_RIGHT_STATE;
-			sprite->changeAnimation(BUILDING_RIGHT);
-			numberOfStairs = 0;
-		}
-		else if (state == BUILDING_LEFT_STATE || state == BUILDING_RIGHT_STATE) numberOfStairs = 0;
-	}
-
-	else if (ability == 7 || ability == 1) {
+	if (ability == 7 || ability == 1) {
 		if(ability == 1 && state == BLOCKING_STATE) 
 			eraseMask(position()[0] + 120, position()[1], 0, 16, 0, 16, parados);
 		state = EXPLODE_STATE;
