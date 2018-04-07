@@ -59,6 +59,23 @@ void Lemming::init(const glm::vec2 &initialPosition, ShaderProgram &shaderProgra
 		for (int i = 0; i<8; i++)
 			sprite->addKeyframe(DIG, glm::vec2(float(i) / 8, 6.f / 23.f));
 
+		sprite->setAnimationSpeed(DIG_RIGHT, 9);
+		for (int j = 0; j < 2; j++) {
+			for (int i = 0; i < 8; i++) {
+				sprite->addKeyframe(DIG_RIGHT, glm::vec2(float(i) / 8, (7.f + float(j)) / 23.f));
+			}
+		}
+
+		sprite->setAnimationSpeed(DIG_LEFT, 9);
+		for (int j = 0; j < 2; j++) {
+			for (int i = 0; i < 8; i++) {
+				sprite->addKeyframe(DIG_LEFT, glm::vec2(float(i) / 8, (9.f + float(j)) / 23.f));
+			}
+		}
+
+
+
+
 		sprite->setAnimationSpeed(BLOCKING, 9);
 		for (int j = 0; j < 2; j++) {
 			for (int i = 0; i < 8; i++) {
@@ -235,7 +252,7 @@ bool Lemming::update(int deltaTime)
 
 	case DIG_LEFT_STATE:
 		if(collision()) {
-			eraseMask(position()[0] + 120, position()[1] + 8, -3, 3, 0, -0.25, mask);
+			eraseMask(position()[0] + 120, position()[1] + 8, -3, 3, -0.25, 0, mask);
 			sprite->position() += glm::vec2(-0.25, 0);
 		}
 		else {
@@ -245,15 +262,16 @@ bool Lemming::update(int deltaTime)
 		break;
 
 	case DIG_RIGHT_STATE:
-		
-		if (mask->pixel(position()[0]+16+1,position()[1]+8) == 255) {
-			eraseMask(position()[0] + 16 + 120, position()[1] + 8, -8, 8, 0, 0.25, mask);
+		sprite->position() += glm::vec2(1.0, 0);
+		if (collision()) {
+			eraseMask(position()[0] + 12 + 120, position()[1] + 8, -8, 8, 0, 0.25, mask);
 			sprite->position() += glm::vec2(0.25, 0);
 		}
 		else {
 			sprite->changeAnimation(WALKING_RIGHT);
 			state = WALKING_RIGHT_STATE;
 		}
+		sprite->position() += glm::vec2(-1.0, 0);;
 		break;
 	case EXPLODE_STATE:
 		if (sprite->currentKeyFrame() == 20) {
