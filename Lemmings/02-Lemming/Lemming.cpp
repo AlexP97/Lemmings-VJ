@@ -260,7 +260,6 @@ bool Lemming::update(int deltaTime)
 			mciSendString(TEXT("play sound/BANG.WAV"), NULL, 0, NULL);
 		}
 		else if (sprite->currentKeyFrame() == 31) {
-			mciSendString(TEXT("play sound/EXPLODE.WAV"), NULL, 0, NULL);
 			eliminado = true;
 			return false;
 		}

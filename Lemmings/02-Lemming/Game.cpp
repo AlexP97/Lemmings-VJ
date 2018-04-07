@@ -3,6 +3,7 @@
 #include "Game.h"
 #include <Windows.h>
 #include <mmsystem.h>
+#include <iostream>
 
 void Game::init()
 {
@@ -44,7 +45,21 @@ bool Game::update(int deltaTime)
 			if (!doubleSpeed) cont = scene2.update(deltaTime);
 			else cont = scene2.update(deltaTime * 2);
 			if (!cont) {
-				mciSendString(TEXT("close scene1"), NULL, 0, NULL);
+				mciSendString(TEXT("close scene2"), NULL, 0, NULL);
+				mciSendString(TEXT("open sound/MAIN_THEME.mp3 alias main"), NULL, 0, NULL);
+				mciSendString(TEXT("play main repeat"), NULL, 0, NULL);
+				home.init();
+				actualScene = 0;
+			}
+		}
+		break;
+	case 3:
+		if (!paused) {
+			bool cont;
+			if (!doubleSpeed) cont = scene3.update(deltaTime);
+			else cont = scene3.update(deltaTime * 2);
+			if (!cont) {
+				mciSendString(TEXT("close scene3"), NULL, 0, NULL);
 				mciSendString(TEXT("open sound/MAIN_THEME.mp3 alias main"), NULL, 0, NULL);
 				mciSendString(TEXT("play main repeat"), NULL, 0, NULL);
 				home.init();
@@ -61,7 +76,6 @@ void Game::render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	switch (actualScene) {
-
 	case 0:
 		home.render();
 		break;
@@ -70,6 +84,9 @@ void Game::render()
 		break;
 	case 2:
 		scene2.render();
+		break;
+	case 3:
+		scene3.render();
 		break;
 	}
 }
@@ -90,18 +107,25 @@ void Game::keyReleased(int key)
 void Game::specialKeyPressed(int key)
 {
 	if (actualScene == 0 && key == GLUT_KEY_F1) {
-		mciSendString(TEXT("stop main"), NULL, 0, NULL);
-		mciSendString(TEXT("open sound/BACKGROUND-2.mp3 alias scene1"), NULL, 0, NULL);
+		mciSendString(TEXT("close main"), NULL, 0, NULL);
+		mciSendString(TEXT("open sound/BACKGROUND-1.mp3 alias scene1"), NULL, 0, NULL);
 		mciSendString(TEXT("play scene1 repeat"), NULL, 0, NULL);
 		scene.init();
 		actualScene = 1;
 	}
 	else if (actualScene == 0 && key == GLUT_KEY_F2) {
-		mciSendString(TEXT("stop main"), NULL, 0, NULL);
-		mciSendString(TEXT("open sound/BACKGROUND-2.mp3 alias scene1"), NULL, 0, NULL);
-		mciSendString(TEXT("play scene1 repeat"), NULL, 0, NULL);
+		mciSendString(TEXT("close main"), NULL, 0, NULL);
+		mciSendString(TEXT("open sound/BACKGROUND-2.mp3 alias scene2"), NULL, 0, NULL);
+		mciSendString(TEXT("play scene2 repeat"), NULL, 0, NULL);
 		scene2.init();
 		actualScene = 2;
+	}
+	else if (actualScene == 0 && key == GLUT_KEY_F3) {
+		mciSendString(TEXT("close main"), NULL, 0, NULL);
+		mciSendString(TEXT("open sound/BACKGROUND-3.mp3 alias scene3"), NULL, 0, NULL);
+		mciSendString(TEXT("play scene3 repeat"), NULL, 0, NULL);
+		scene3.init();
+		actualScene = 3;
 	}
 	specialKeys[key] = true;
 }
@@ -122,6 +146,9 @@ void Game::mouseMove(int x, int y)
 	case 2:
 		scene2.mouseMoved(mouseX, mouseY, bLeftMouse, bRightMouse, paused);
 		break;
+	case 3:
+		scene3.mouseMoved(mouseX, mouseY, bLeftMouse, bRightMouse, paused);
+		break;
 	}
 }
 
@@ -136,20 +163,43 @@ void Game::mousePress(int button)
 		switch (actualScene) {
 		case 1:
 			speedOrPause = scene.mouseMoved(mouseX, mouseY, bLeftMouse, bRightMouse, paused);
+			if (speedOrPause.second) {
+				if (paused) mciSendString(TEXT("play scene1 repeat"), NULL, 0, NULL);
+				else mciSendString(TEXT("pause scene1"), NULL, 0, NULL);
+				paused = !paused;
+			}
+			if (speedOrPause.first) {
+				doubleSpeed = !doubleSpeed;
+				if (doubleSpeed) mciSendString(TEXT("set scene1 speed 1500"), NULL, 0, NULL);
+				else mciSendString(TEXT("set scene1 speed 1000"), NULL, 0, NULL);
+			}
 			break;
 		case 2:
 			speedOrPause = scene2.mouseMoved(mouseX, mouseY, bLeftMouse, bRightMouse, paused);
+			if (speedOrPause.second) {
+				if (paused) mciSendString(TEXT("play scene2 repeat"), NULL, 0, NULL);
+				else mciSendString(TEXT("pause scene2"), NULL, 0, NULL);
+				paused = !paused;
+			}
+			if (speedOrPause.first) {
+				doubleSpeed = !doubleSpeed;
+				if (doubleSpeed) mciSendString(TEXT("set scene2 speed 1500"), NULL, 0, NULL);
+				else mciSendString(TEXT("set scene2 speed 1000"), NULL, 0, NULL);
+			}
 			break;
-		}
-		if (speedOrPause.second) {
-			if (paused) mciSendString(TEXT("play scene1 repeat"), NULL, 0, NULL);
-			else mciSendString(TEXT("pause scene1"), NULL, 0, NULL);
-			paused = !paused;
-		}
-		if (speedOrPause.first) {
-			doubleSpeed = !doubleSpeed;
-			if (doubleSpeed) mciSendString(TEXT("set scene1 speed 1500"), NULL, 0, NULL);
-			else mciSendString(TEXT("set scene1 speed 1000"), NULL, 0, NULL);
+		case 3:
+			speedOrPause = scene3.mouseMoved(mouseX, mouseY, bLeftMouse, bRightMouse, paused);
+			if (speedOrPause.second) {
+				if (paused) mciSendString(TEXT("play scene3 repeat"), NULL, 0, NULL);
+				else mciSendString(TEXT("pause scene3"), NULL, 0, NULL);
+				paused = !paused;
+			}
+			if (speedOrPause.first) {
+				doubleSpeed = !doubleSpeed;
+				if (doubleSpeed) mciSendString(TEXT("set scene3 speed 1500"), NULL, 0, NULL);
+				else mciSendString(TEXT("set scene3 speed 1000"), NULL, 0, NULL);
+			}
+			break;
 		}
 	}
 	else if(button == GLUT_RIGHT_BUTTON)
@@ -161,6 +211,9 @@ void Game::mousePress(int button)
 			break;
 		case 2:
 			scene2.mouseMoved(mouseX, mouseY, bLeftMouse, bRightMouse, paused);
+			break;
+		case 3:
+			scene3.mouseMoved(mouseX, mouseY, bLeftMouse, bRightMouse, paused);
 			break;
 		}
 	}

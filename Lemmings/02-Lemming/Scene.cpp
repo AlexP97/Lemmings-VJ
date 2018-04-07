@@ -21,6 +21,8 @@ Scene::~Scene()
 void Scene::init()
 {
 	currentTime = 0;
+	lemmingsIn = 0;
+	int ability = 0;
 	abre_Puerta = true;
 	stop_Lemmings = false;
 	//glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(float(CAMERA_WIDTH), float(CAMERA_HEIGHT)) };
@@ -42,11 +44,11 @@ void Scene::init()
 
 	projection = glm::ortho(0.f, float(CAMERA_WIDTH - 1), float(CAMERA_HEIGHT - 1), 0.f);
 
-	puerta.init(glm::vec2(60, 30), simpleTexProgram);
+	puerta.init(glm::vec2(60, 30), simpleTexProgram, 0);
 	botonPlay.init(glm::vec2(300, 185), simpleTexProgram, 0);
 	botonSpeed.init(glm::vec2(280, 185), simpleTexProgram, 1);
 	cursor.init(glm::vec2(90, 30), simpleTexProgram);
-	salida.init(glm::vec2(245, 107), simpleTexProgram);
+	salida.init(glm::vec2(223, 108), simpleTexProgram, 0);
 	panel.init(glm::vec2(10, 159), simpleTexProgram);
 	iconSelected.init(glm::vec2(9, 158), simpleTexProgram);
 	//iconSelected.init(glm::vec2(60, 30), simpleTexProgram);
@@ -357,7 +359,6 @@ void Scene::clickOnAbility(int mouseX, int mouseY) {
 				}
 				else {
 					iconSelected.changeState(1);
-					stop_Lemmings = true;
 					ability = 6;
 				}
 				iconSelected.setPosition(positionPanel.x - 1 + sizeAbility * 5, 158);

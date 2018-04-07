@@ -4,6 +4,7 @@
 
 #include "Scene.h"
 #include "Scene2.h"
+#include "Scene3.h"
 #include "Home.h"
 
 
@@ -45,12 +46,13 @@ private:
 	Home home;						  // Home scene
 	Scene scene;                      // Scene to render
 	Scene2 scene2;
+	Scene3 scene3;
 	bool keys[256], specialKeys[256]; // Store key states so that 
 	                                  // we can have access at any time
 	int mouseX, mouseY;               // Mouse position
 	bool bLeftMouse, bRightMouse;     // Mouse button states
 	bool paused, doubleSpeed;
-	bool actualScene;
+	int actualScene;
 
 };
 

@@ -19,12 +19,14 @@
     <ClInclude Include="Home.h" />
     <ClInclude Include="IconPanel.h" />
     <ClInclude Include="IconSelected.h" />
+    <ClInclude Include="Lava.h" />
     <ClInclude Include="Lemming.h" />
     <ClInclude Include="MaskedTexturedQuad.h" />
     <ClInclude Include="Puerta.h" />
     <ClInclude Include="Salida.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Scene2.h" />
+    <ClInclude Include="Scene3.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="Sprite.h" />
@@ -39,6 +41,7 @@
     <ClCompile Include="Home.cpp" />
     <ClCompile Include="IconPanel.cpp" />
     <ClCompile Include="IconSelected.cpp" />
+    <ClCompile Include="Lava.cpp" />
     <ClCompile Include="Lemming.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MaskedTexturedQuad.cpp" />
@@ -46,6 +49,7 @@
     <ClCompile Include="Salida.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Scene2.cpp" />
+    <ClCompile Include="Scene3.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="Boton.cpp" />

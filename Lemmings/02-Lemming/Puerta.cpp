@@ -12,10 +12,12 @@ enum PuertaAnims
 };
 
 
-void Puerta::init(const glm::vec2 &initialPosition, ShaderProgram &shaderProgram)
+void Puerta::init(const glm::vec2 &initialPosition, ShaderProgram &shaderProgram, int escena)
 {
 	state = CLOSED_STATE;
-	spritesheet.loadFromFile("images/puertas2.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	if (escena == 0) spritesheet.loadFromFile("images/puertas2.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	else if (escena == 1) spritesheet.loadFromFile("images/puertas2.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	else if (escena == 2) spritesheet.loadFromFile("images/puertas6_sinfondo.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spritesheet.setMinFilter(GL_NEAREST);
 	spritesheet.setMagFilter(GL_NEAREST);
 	sprite = Sprite::createSprite(glm::ivec2(33, 20), glm::vec2(1.f, 1.f/10.f), &spritesheet, &shaderProgram);

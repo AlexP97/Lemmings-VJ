@@ -2,23 +2,23 @@
 #include <cmath>
 #include <algorithm>
 #include <glm/gtc/matrix_transform.hpp>
-#include "Scene2.h"
+#include "Scene3.h"
 #include <Windows.h>
 #include <mmsystem.h>
 
 
-Scene2::Scene2()
+Scene3::Scene3()
 {
 	map = NULL;
 }
 
-Scene2::~Scene2()
+Scene3::~Scene3()
 {
 	if (map != NULL)
 		delete map;
 }
 
-void Scene2::init()
+void Scene3::init()
 {
 	currentTime = 0;
 	lemmingsIn = 0;
@@ -27,30 +27,29 @@ void Scene2::init()
 	stop_Lemmings = false;
 	//glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(float(CAMERA_WIDTH), float(CAMERA_HEIGHT)) };
 	glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(float(CAMERA_WIDTH), float(160.f)) };
-	//glm::vec2 texCoords[2] = { glm::vec2(120.f / 1024.0, 0.f), glm::vec2((120.f + 950.f) / 1024.0f, 160.f / 256.0f) };
-	//glm::vec2 texCoords[2] = { glm::vec2(120.f + 200 / 1024.0, 0.f), glm::vec2((120.f + 840.f) / 1024.0f, 160.f / 256.0f) };
 	glm::vec2 texCoords[2] = { glm::vec2(120.f / 512.0, 0.f), glm::vec2((120.f + 320.f) / 512.0f, 160.f / 256.0f) };
 
 	initShaders();
 
 	map = MaskedTexturedQuad::createTexturedQuad(geom, texCoords, maskedTexProgram);
-	colorTexture.loadFromFile("images/tricky9.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	colorTexture.loadFromFile("images/taxing5.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	colorTexture.setMinFilter(GL_NEAREST);
 	colorTexture.setMagFilter(GL_NEAREST);
-	maskTexture.loadFromFile("images/tricky9_mask.png", TEXTURE_PIXEL_FORMAT_L);
+	maskTexture.loadFromFile("images/taxing5_mask.png", TEXTURE_PIXEL_FORMAT_L);
 	maskTexture.setMinFilter(GL_NEAREST);
 	maskTexture.setMagFilter(GL_NEAREST);
-	parados.loadFromFile("images/tricky9_mask.png", TEXTURE_PIXEL_FORMAT_L);
+	parados.loadFromFile("images/taxing5_mask.png", TEXTURE_PIXEL_FORMAT_L);
 	parados.setMinFilter(GL_NEAREST);
 	parados.setMagFilter(GL_NEAREST);
 
 	projection = glm::ortho(0.f, float(CAMERA_WIDTH - 1), float(CAMERA_HEIGHT - 1), 0.f);
 
-	puerta.init(glm::vec2(60, 30), simpleTexProgram, 0);
+	puerta.init(glm::vec2(50, 60), simpleTexProgram, 2);
+	lava.init(glm::vec2(99, 145), simpleTexProgram);
 	botonPlay.init(glm::vec2(300, 185), simpleTexProgram, 0);
 	botonSpeed.init(glm::vec2(280, 185), simpleTexProgram, 1);
 	cursor.init(glm::vec2(90, 30), simpleTexProgram);
-	salida.init(glm::vec2(245, 107), simpleTexProgram, 1);
+	salida.init(glm::vec2(263, 14), simpleTexProgram, 2);
 	panel.init(glm::vec2(10, 159), simpleTexProgram);
 	iconSelected.init(glm::vec2(9, 158), simpleTexProgram);
 	//iconSelected.init(glm::vec2(60, 30), simpleTexProgram);
@@ -69,7 +68,7 @@ void Scene2::init()
 
 //unsigned int x = 0; 
 
-bool Scene2::update(int deltaTime)
+bool Scene3::update(int deltaTime)
 {
 	currentTime += deltaTime;
 
@@ -80,8 +79,7 @@ bool Scene2::update(int deltaTime)
 	}
 
 	if (!stop_Lemmings && lemmingsIn < 8 && currentTime >= (3000 * (lemmingsIn + 1))) {
-		lemming[lemmingsIn].init(glm::vec2(70, 30), simpleTexProgram);
-		//lemming[lemmingsIn].init(glm::vec2(200, 95), simpleTexProgram);
+		lemming[lemmingsIn].init(glm::vec2(60, 60), simpleTexProgram);
 		lemming[lemmingsIn].setMapMask(&maskTexture, &parados);
 		lemmingInit[lemmingsIn] = true;
 		++lemmingsIn;
@@ -96,7 +94,10 @@ bool Scene2::update(int deltaTime)
 			if (lemming[i].eliminar()) {
 				lemmingInit[i] = false;
 			}
-
+			if (lemmingOnLava(lemming[i].position())) {
+				mciSendString(TEXT("play sound/PLOP.WAV"), NULL, 0, NULL);
+				lemmingInit[i] = false;
+			}
 		}
 	}
 
@@ -136,6 +137,7 @@ bool Scene2::update(int deltaTime)
 	}
 
 	puerta.update(deltaTime);
+	lava.update(deltaTime);
 	botonPlay.update(deltaTime);
 	botonSpeed.update(deltaTime);
 	salida.update(deltaTime);
@@ -148,7 +150,7 @@ bool Scene2::update(int deltaTime)
 	return true;
 }
 
-void Scene2::render()
+void Scene3::render()
 {
 	glm::mat4 modelview;
 
@@ -177,12 +179,13 @@ void Scene2::render()
 		stairs[i].render();
 	}
 	panel.render();
+	lava.render();
 
 	if (iconSelected.getState() == 1) iconSelected.render();
 	cursor.render();
 }
 
-pair<bool, bool> Scene2::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton, bool paused)
+pair<bool, bool> Scene3::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton, bool paused)
 {
 	pair<bool, bool> ret;
 	ret.first = false;
@@ -225,13 +228,13 @@ pair<bool, bool> Scene2::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bo
 	return ret;
 }
 
-void Scene2::clickOnLemming(int indLemming) {
+void Scene3::clickOnLemming(int indLemming) {
 
 	lemming[indLemming].setAbility(ability);
 	if (ability != 0) mciSendString(TEXT("play sound/ACTION.WAV"), NULL, 0, NULL);
 }
 
-bool Scene2::clickOnPause(int mouseX, int mouseY) {
+bool Scene3::clickOnPause(int mouseX, int mouseY) {
 	glm::vec2 center = botonPlay.centerPosition();
 	int x = mouseX / 3 - 2.f;
 	int y = mouseY / 3 - 2.f;
@@ -244,7 +247,7 @@ bool Scene2::clickOnPause(int mouseX, int mouseY) {
 	return false;
 }
 
-bool Scene2::clickOnSpeed(int mouseX, int mouseY) {
+bool Scene3::clickOnSpeed(int mouseX, int mouseY) {
 	glm::vec2 center = botonSpeed.centerPosition();
 	int x = mouseX / 3 - 2.f;
 	int y = mouseY / 3 - 2.f;
@@ -257,15 +260,23 @@ bool Scene2::clickOnSpeed(int mouseX, int mouseY) {
 	return false;
 }
 
-bool Scene2::lemmingOnExit(glm::vec2 position) {
+bool Scene3::lemmingOnExit(glm::vec2 position) {
 	glm::vec2 salidaPos = salida.position();
-	if (position.x > (salidaPos.x + 4.f) && position.x < (salidaPos.x + 10.f)) {
-		if (position.y < (salidaPos.y + 12.f) && position.y > salidaPos.y) return true;
+	if (position.x > (salidaPos.x + 8.f) && position.x < (salidaPos.x + 14.f)) {
+		if (position.y < (salidaPos.y + 30.f) && position.y > (salidaPos.y + 25)) return true;
 	}
 	return false;
 }
 
-pair<bool, int> Scene2::cursorOnLemming(int mouseX, int mouseY) {
+bool Scene3::lemmingOnLava(glm::vec2 position) {
+	glm::vec2 lavaPos = lava.position();
+	if (position.x > (lavaPos.x - 10.f) && position.x < (lavaPos.x + 124.f)) {
+		if (position.y < (lavaPos.y + 14.f) && position.y > (lavaPos.y - 10.f)) return true;
+	}
+	return false;
+}
+
+pair<bool, int> Scene3::cursorOnLemming(int mouseX, int mouseY) {
 	glm::vec2 position;
 	int x = mouseX / 3 - 2.f;
 	int y = mouseY / 3 - 2.f;
@@ -289,7 +300,7 @@ pair<bool, int> Scene2::cursorOnLemming(int mouseX, int mouseY) {
 
 
 
-void Scene2::clickOnAbility(int mouseX, int mouseY) {
+void Scene3::clickOnAbility(int mouseX, int mouseY) {
 	int x = mouseX / 3;
 	int y = mouseY / 3;
 	glm::vec2 positionPanel = panel.position();
@@ -381,7 +392,7 @@ void Scene2::clickOnAbility(int mouseX, int mouseY) {
 	}
 }
 
-void Scene2::eraseMask(int mouseX, int mouseY)
+void Scene3::eraseMask(int mouseX, int mouseY)
 {
 	int posX, posY;
 
@@ -395,7 +406,7 @@ void Scene2::eraseMask(int mouseX, int mouseY)
 			maskTexture.setPixel(x, y, 0);
 }
 
-void Scene2::applyMask(int mouseX, int mouseY)
+void Scene3::applyMask(int mouseX, int mouseY)
 {
 	int posX, posY;
 
@@ -409,7 +420,7 @@ void Scene2::applyMask(int mouseX, int mouseY)
 			maskTexture.setPixel(x, y, 255);
 }
 
-void Scene2::initShaders()
+void Scene3::initShaders()
 {
 	Shader vShader, fShader;
 

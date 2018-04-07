@@ -1,5 +1,5 @@
-#ifndef _SALIDA_INCLUDE
-#define _SALIDA_INCLUDE
+#ifndef _LAVA_INCLUDE
+#define _LAVA_INCLUDE
 
 
 #include "Sprite.h"
@@ -7,11 +7,11 @@
 
 
 
-class Salida
+class Lava
 {
 
 public:
-	void init(const glm::vec2 &initialPosition, ShaderProgram &shaderProgram, int escena);
+	void init(const glm::vec2 &initialPosition, ShaderProgram &shaderProgram);
 	void update(int deltaTime);
 	void render();
 	glm::vec2 position();
@@ -24,4 +24,4 @@ private:
 };
 
 
-#endif // _SALIDA_INCLUDE
+#endif // _LAVA_INCLUDE

@@ -11,7 +11,7 @@ class Puerta
 {
 
 public:
-	void init(const glm::vec2 &initialPosition, ShaderProgram &shaderProgram);
+	void init(const glm::vec2 &initialPosition, ShaderProgram &shaderProgram, int escena);
 	void update(int deltaTime);
 	void render();
 	void open();
