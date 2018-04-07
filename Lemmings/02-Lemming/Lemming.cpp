@@ -443,41 +443,42 @@ bool Lemming::hayParado()
 }
 
 void Lemming::setAbility(int ability) {
-	if (ability == 2) {
-		state = BLOCKING_STATE;
-		sprite->changeAnimation(BLOCKING);
-		applyMask();
-	}
-	else if (ability == 3) {
-		state = DIG_STATE;
-		sprite->changeAnimation(DIG);
-	}
-	else if (ability == 4) {
-		if (state == WALKING_LEFT_STATE) {
-			state = DIG_LEFT_STATE;
-			sprite->changeAnimation(DIG_LEFT);
+	if (state != BLOCKING_STATE) {
+		if (ability == 2) {
+			state = BLOCKING_STATE;
+			sprite->changeAnimation(BLOCKING);
+			applyMask();
 		}
-		if (state == WALKING_RIGHT_STATE) {
-			state = DIG_RIGHT_STATE;
-			sprite->changeAnimation(DIG_RIGHT);
+		else if (ability == 3) {
+			state = DIG_STATE;
+			sprite->changeAnimation(DIG);
+		}
+		else if (ability == 4) {
+			if (state == WALKING_LEFT_STATE) {
+				state = DIG_LEFT_STATE;
+				sprite->changeAnimation(DIG_LEFT);
+			}
+			if (state == WALKING_RIGHT_STATE) {
+				state = DIG_RIGHT_STATE;
+				sprite->changeAnimation(DIG_RIGHT);
+			}
+		}
+		else if (ability == 5) climber = true;
+		else if (ability == 6) {
+			if (state == WALKING_LEFT_STATE) {
+				state = BUILDING_LEFT_STATE;
+				sprite->changeAnimation(BUILDING_LEFT);
+				numberOfStairs = 0;
+			}
+			else if (state == WALKING_RIGHT_STATE) {
+				state = BUILDING_RIGHT_STATE;
+				sprite->changeAnimation(BUILDING_RIGHT);
+				numberOfStairs = 0;
+			}
+			else if (state == BUILDING_LEFT_STATE || state == BUILDING_RIGHT_STATE) numberOfStairs = 0;
 		}
 	}
-	else if (ability == 5) climber = true;
-	else if (ability == 6) {
-		if (state == WALKING_LEFT_STATE) {
-			state = BUILDING_LEFT_STATE;
-			sprite->changeAnimation(BUILDING_LEFT);
-			numberOfStairs = 0;
-		}
-		else if (state == WALKING_RIGHT_STATE) {
-			state = BUILDING_RIGHT_STATE;
-			sprite->changeAnimation(BUILDING_RIGHT);
-			numberOfStairs = 0;
-		}
-		else if (state == BUILDING_LEFT_STATE || state == BUILDING_RIGHT_STATE) numberOfStairs = 0;
-	}
-
-	else if (ability == 7 || ability == 1) {
+	if (ability == 7 || ability == 1) {
 		if(ability == 1 && state == BLOCKING_STATE) 
 			eraseMask(position()[0] + 120, position()[1], 0, 16, 0, 16, parados);
 		state = EXPLODE_STATE;
