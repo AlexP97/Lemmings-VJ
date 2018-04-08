@@ -356,18 +356,10 @@ bool Lemming::update(int deltaTime)
 			state = WALKING_LEFT_STATE;
 		}
 		else {
-			sprite->position() -= glm::vec2(3, 0);
-			fall = collisionFloor(3);
-			sprite->position() -= glm::vec2(0, -1);
-			if (fall < 3) {
-				if (sprite->currentKeyFrame() == 0) {
-					sprite->position() += glm::vec2(2.0f, -1.0f);
-					numberOfStairs++;
-				}
-			}
-			else {
-				sprite->changeAnimation(FALLING_RIGHT);
-				state = FALLING_RIGHT_STATE;
+			sprite->position() -= glm::vec2(3, -1);
+			if (sprite->currentKeyFrame() == 0) {
+				sprite->position() += glm::vec2(2.0f, -1.0f);
+				numberOfStairs++;
 			}
 		}
 		break;
@@ -408,6 +400,7 @@ void Lemming::displace(float d)
 	glm::vec2 pos = sprite->position();
 	pos.x += d;
 	sprite->setPosition(pos);
+	displacement -= d;
 }
 
 bool Lemming::goOut() {

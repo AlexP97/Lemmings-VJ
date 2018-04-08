@@ -15,11 +15,12 @@ enum SalidaAnims
 void Salida::init(const glm::vec2 &initialPosition, ShaderProgram &shaderProgram, int escena)
 {
 	if (escena == 0) spritesheet.loadFromFile("images/puertas3.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	else if (escena == 1) spritesheet.loadFromFile("images/puertas3.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	else if (escena == 1) spritesheet.loadFromFile("images/puertas5.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	else if (escena == 2) spritesheet.loadFromFile("images/puertas7_sinfondo.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spritesheet.setMinFilter(GL_NEAREST);
 	spritesheet.setMagFilter(GL_NEAREST);
 	if (escena == 0) sprite = Sprite::createSprite(glm::ivec2(32, 24), glm::vec2(1.f, 1.f / 6.f), &spritesheet, &shaderProgram);
+	else if (escena == 1) sprite = Sprite::createSprite(glm::ivec2(32, 24), glm::vec2(1.f, 1.f / 6.f), &spritesheet, &shaderProgram);
 	else if (escena == 2) sprite = Sprite::createSprite(glm::ivec2(44, 46), glm::vec2(1.f / 6.f, 1.f), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(1);
 

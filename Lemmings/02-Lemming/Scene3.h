@@ -36,6 +36,7 @@ public:
 
 private:
 	void initShaders();
+	void changeDisplacement(float d);
 	void eraseMask(int mouseX, int mouseY);
 	void applyMask(int mouseX, int mouseY);
 	pair<bool, int> cursorOnLemming(int mouseX, int mouseY);
@@ -45,6 +46,7 @@ private:
 	bool lemmingOnExit(glm::vec2 position);
 	bool lemmingOnLava(glm::vec2 position);
 	void clickOnAbility(int mouseX, int mouseY);
+	pair<bool, bool> mouseOnBorder(int mouseX, int mouseY);
 
 private:
 	Texture colorTexture;
@@ -68,6 +70,7 @@ private:
 	int ability;
 	bool abre_Puerta;
 	bool stop_Lemmings;
+	float displacement;
 };
 
 

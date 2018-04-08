@@ -39,6 +39,13 @@ glm::vec2 Lava::position() {
 	return sprite->position();
 }
 
+void Lava::displace(float d)
+{
+	glm::vec2 pos = sprite->position();
+	pos.x += d;
+	sprite->setPosition(pos);
+}
+
 void Lava::render()
 {
 	sprite->render();

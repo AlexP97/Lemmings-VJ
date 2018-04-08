@@ -23,6 +23,7 @@ void Scene3::init()
 	currentTime = 0;
 	lemmingsIn = 0;
 	int ability = 0;
+	displacement = 0;
 	abre_Puerta = true;
 	stop_Lemmings = false;
 	//glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(float(CAMERA_WIDTH), float(CAMERA_HEIGHT)) };
@@ -79,7 +80,7 @@ bool Scene3::update(int deltaTime)
 	}
 
 	if (!stop_Lemmings && lemmingsIn < 8 && currentTime >= (3000 * (lemmingsIn + 1))) {
-		lemming[lemmingsIn].init(glm::vec2(60, 60), simpleTexProgram, 120);
+		lemming[lemmingsIn].init(glm::vec2(60 - displacement, 60), simpleTexProgram, 120 + displacement);
 		lemming[lemmingsIn].setMapMask(&maskTexture, &parados);
 		lemmingInit[lemmingsIn] = true;
 		++lemmingsIn;
@@ -192,6 +193,12 @@ pair<bool, bool> Scene3::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bo
 	ret.second = false;
 	cursor.setPosition(mouseX, mouseY);
 	if (!paused) {
+		pair<bool, bool> changeDisp = mouseOnBorder(mouseX, mouseY);
+		if (changeDisp.first) {
+			if (changeDisp.second && (displacement >= -10)) changeDisplacement(-2);
+			else if (!changeDisp.second && (displacement <= 20)) changeDisplacement(2);
+		}
+
 		if (bLeftButton)
 			eraseMask(mouseX, mouseY);
 		else if (bRightButton)
@@ -392,6 +399,24 @@ void Scene3::clickOnAbility(int mouseX, int mouseY) {
 	}
 }
 
+pair<bool, bool> Scene3::mouseOnBorder(int mouseX, int mouseY)
+{
+	int x = mouseX / 3 - 2.f;
+	int y = mouseY / 3 - 2.f;
+	pair<bool, bool> ret;
+	ret.first = ret.second = false;
+	if (y < 160) {
+		if (x < 20) {
+			ret.first = true;
+			ret.second = true;
+		}
+		else if (x > 300) {
+			ret.first = true;
+		}
+	}
+	return ret;
+}
+
 void Scene3::eraseMask(int mouseX, int mouseY)
 {
 	int posX, posY;
@@ -418,6 +443,29 @@ void Scene3::applyMask(int mouseX, int mouseY)
 	for (int y = max(0, posY - 3); y <= min(maskTexture.height() - 1, posY + 3); y++)
 		for (int x = max(0, posX - 3); x <= min(maskTexture.width() - 1, posX + 3); x++)
 			maskTexture.setPixel(x, y, 255);
+}
+
+void Scene3::changeDisplacement(float d)
+{
+	displacement += d;
+
+	glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(float(CAMERA_WIDTH), float(160.f)) };
+	glm::vec2 texCoords[2] = { glm::vec2((120.f + displacement) / 512.0, 0.f), glm::vec2((120.f + 320.f + displacement) / 512.0f, 160.f / 256.0f) };
+
+	map = MaskedTexturedQuad::createTexturedQuad(geom, texCoords, maskedTexProgram);
+
+	for (int i = 0; i < lemming.size(); i++) {
+		if (lemmingInit[i]) {
+			lemming[i].displace(-d);
+
+		}
+	}
+	puerta.displace(-d);
+	salida.displace(-d);
+	for (int i = 0; i < stairs.size(); i++) {
+		stairs[i].displace(-d);
+	}
+	lava.displace(-d);
 }
 
 void Scene3::initShaders()

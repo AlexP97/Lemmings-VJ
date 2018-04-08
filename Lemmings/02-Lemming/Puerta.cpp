@@ -16,7 +16,7 @@ void Puerta::init(const glm::vec2 &initialPosition, ShaderProgram &shaderProgram
 {
 	state = CLOSED_STATE;
 	if (escena == 0) spritesheet.loadFromFile("images/puertas2.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	else if (escena == 1) spritesheet.loadFromFile("images/puertas2.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	else if (escena == 1) spritesheet.loadFromFile("images/puertas4.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	else if (escena == 2) spritesheet.loadFromFile("images/puertas6_sinfondo.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spritesheet.setMinFilter(GL_NEAREST);
 	spritesheet.setMagFilter(GL_NEAREST);
