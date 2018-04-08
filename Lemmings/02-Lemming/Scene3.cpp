@@ -79,7 +79,7 @@ bool Scene3::update(int deltaTime)
 	}
 
 	if (!stop_Lemmings && lemmingsIn < 8 && currentTime >= (3000 * (lemmingsIn + 1))) {
-		lemming[lemmingsIn].init(glm::vec2(60, 60), simpleTexProgram);
+		lemming[lemmingsIn].init(glm::vec2(60, 60), simpleTexProgram, 120);
 		lemming[lemmingsIn].setMapMask(&maskTexture, &parados);
 		lemmingInit[lemmingsIn] = true;
 		++lemmingsIn;

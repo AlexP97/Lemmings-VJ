@@ -23,13 +23,13 @@ void Scene2::init()
 	currentTime = 0;
 	lemmingsIn = 0;
 	int ability = 0;
+	displacement = 0;
 	abre_Puerta = true;
 	stop_Lemmings = false;
 	//glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(float(CAMERA_WIDTH), float(CAMERA_HEIGHT)) };
 	glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(float(CAMERA_WIDTH), float(160.f)) };
-	//glm::vec2 texCoords[2] = { glm::vec2(120.f / 1024.0, 0.f), glm::vec2((120.f + 950.f) / 1024.0f, 160.f / 256.0f) };
-	//glm::vec2 texCoords[2] = { glm::vec2(120.f + 200 / 1024.0, 0.f), glm::vec2((120.f + 840.f) / 1024.0f, 160.f / 256.0f) };
-	glm::vec2 texCoords[2] = { glm::vec2(120.f / 512.0, 0.f), glm::vec2((120.f + 320.f) / 512.0f, 160.f / 256.0f) };
+	//glm::vec2 texCoords[2] = { glm::vec2(120.f / 512.0, 0.f), glm::vec2((120.f + 320.f) / 512.0f, 160.f / 256.0f) };
+	glm::vec2 texCoords[2] = { glm::vec2(330.f / 1024.0, 0.f), glm::vec2((650.f) / 1024.0f, 160.f / 256.0f) };
 
 	initShaders();
 
@@ -50,7 +50,7 @@ void Scene2::init()
 	botonPlay.init(glm::vec2(300, 185), simpleTexProgram, 0);
 	botonSpeed.init(glm::vec2(280, 185), simpleTexProgram, 1);
 	cursor.init(glm::vec2(90, 30), simpleTexProgram);
-	salida.init(glm::vec2(245, 107), simpleTexProgram, 1);
+	salida.init(glm::vec2(223, 108), simpleTexProgram, 0);
 	panel.init(glm::vec2(10, 159), simpleTexProgram);
 	iconSelected.init(glm::vec2(9, 158), simpleTexProgram);
 	//iconSelected.init(glm::vec2(60, 30), simpleTexProgram);
@@ -80,7 +80,7 @@ bool Scene2::update(int deltaTime)
 	}
 
 	if (!stop_Lemmings && lemmingsIn < 8 && currentTime >= (3000 * (lemmingsIn + 1))) {
-		lemming[lemmingsIn].init(glm::vec2(70, 30), simpleTexProgram);
+		lemming[lemmingsIn].init(glm::vec2(70, 80), simpleTexProgram, 330);
 		//lemming[lemmingsIn].init(glm::vec2(200, 95), simpleTexProgram);
 		lemming[lemmingsIn].setMapMask(&maskTexture, &parados);
 		lemmingInit[lemmingsIn] = true;

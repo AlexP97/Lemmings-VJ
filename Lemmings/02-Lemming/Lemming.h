@@ -14,7 +14,7 @@ class Lemming
 {
 
 public:
-	void init(const glm::vec2 &initialPosition, ShaderProgram &shaderProgram);
+	void init(const glm::vec2 &initialPosition, ShaderProgram &shaderProgram, int desplazamiento);
 	bool update(int deltaTime);
 	void render();
 	glm::vec2 position();
@@ -52,6 +52,7 @@ private:
 	bool climber;
 	bool primeraPasada;
 	int numberOfStairs;
+	int displacement;
 };
 
 

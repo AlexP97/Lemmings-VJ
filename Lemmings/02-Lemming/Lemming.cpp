@@ -21,13 +21,14 @@ enum LemmingAnims
 };
 
 
-void Lemming::init(const glm::vec2 &initialPosition, ShaderProgram &shaderProgram)
+void Lemming::init(const glm::vec2 &initialPosition, ShaderProgram &shaderProgram, int desplazamiento)
 {
 	eliminado = false;
 	climber = false;
 	come_Out = false;
 	primeraPasada = false;
 	numberOfStairs = 0;
+	displacement = desplazamiento;
 	state = FALLING_RIGHT_STATE;
 	spritesheet.loadFromFile("images/lemming2_sinfondo.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spritesheet.setMinFilter(GL_NEAREST);
@@ -423,7 +424,7 @@ int Lemming::collisionFloor(int maxFall)
 {
 	bool bContact = false;
 	int fall = 0;
-	glm::ivec2 posBase = sprite->position() + glm::vec2(120, 0); // Add the map displacement
+	glm::ivec2 posBase = sprite->position() + glm::vec2(displacement, 0); // Add the map displacement
 	
 	posBase += glm::ivec2(7, 16);
 	while((fall < maxFall) && !bContact)
@@ -439,7 +440,7 @@ int Lemming::collisionFloor(int maxFall)
 
 bool Lemming::collision()
 {
-	glm::ivec2 posBase = sprite->position() + glm::vec2(120, 0); // Add the map displacement
+	glm::ivec2 posBase = sprite->position() + glm::vec2(displacement, 0); // Add the map displacement
 	
 	posBase += glm::ivec2(7, 15);
 	if((mask->pixel(posBase.x, posBase.y) == 0) && (mask->pixel(posBase.x+1, posBase.y) == 0))
@@ -515,7 +516,7 @@ void Lemming::eraseMask(int posX, int posY, float ymin, float ymax, float xmin, 
 
 void Lemming::applyMask() {
 	int posX, posY;
-	posX = position()[0] + 120;
+	posX = position()[0] + displacement;
 	posY = position()[1];
 
 	for (int y = max(0, posY); y <= min(mask->height() - 1, posY + 16); y++) {

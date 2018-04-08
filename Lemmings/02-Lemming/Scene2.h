@@ -65,6 +65,7 @@ private:
 	int ability;
 	bool abre_Puerta;
 	bool stop_Lemmings;
+	float displacement;
 };
 
 
