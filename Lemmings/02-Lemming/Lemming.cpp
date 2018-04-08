@@ -243,7 +243,7 @@ bool Lemming::update(int deltaTime)
 			state = FALLING_RIGHT_STATE;
 		}
 		if (state != FALLING_RIGHT_STATE) {
-			eraseMask(position()[0] + 8 + 120, position()[1] + 16, 0, 0.25,-3,3, mask);
+			eraseMask(position()[0] + 8 + displacement, position()[1] + 16, 0, 0.25,-3,3, mask);
 			sprite->position() += glm::vec2(0, 0.25);
 		}
 		break;
@@ -253,7 +253,7 @@ bool Lemming::update(int deltaTime)
 
 	case DIG_LEFT_STATE:
 		if(collision()) {
-			eraseMask(position()[0] + 120, position()[1] + 8, -3, 3, -0.25, 0, mask);
+			eraseMask(position()[0] + displacement, position()[1] + 8, -3, 3, -0.25, 0, mask);
 			sprite->position() += glm::vec2(-0.25, 0);
 		}
 		else {
@@ -265,7 +265,7 @@ bool Lemming::update(int deltaTime)
 	case DIG_RIGHT_STATE:
 		sprite->position() += glm::vec2(1.0, 0);
 		if (collision()) {
-			eraseMask(position()[0] + 12 + 120, position()[1] + 8, -8, 8, 0, 0.25, mask);
+			eraseMask(position()[0] + 12 + displacement, position()[1] + 8, -8, 8, 0, 0.25, mask);
 			sprite->position() += glm::vec2(0.25, 0);
 		}
 		else {
@@ -403,6 +403,13 @@ void Lemming::setComeOut(bool b) {
 	}
 }
 
+void Lemming::displace(float d)
+{
+	glm::vec2 pos = sprite->position();
+	pos.x += d;
+	sprite->setPosition(pos);
+}
+
 bool Lemming::goOut() {
 	return come_Out;
 }
@@ -451,7 +458,7 @@ bool Lemming::collision()
 
 bool Lemming::hayParado()
 {
-	glm::ivec2 posBase = sprite->position() + glm::vec2(120, 0); // Add the map displacement
+	glm::ivec2 posBase = sprite->position() + glm::vec2(displacement, 0); // Add the map displacement
 
 	posBase += glm::ivec2(7, 15);
 	if ((parados->pixel(posBase.x, posBase.y) == 0) && (parados->pixel(posBase.x + 1, posBase.y) == 0))
@@ -498,7 +505,7 @@ void Lemming::setAbility(int ability) {
 	}
 	if (ability == 7 || ability == 1) {
 		if(ability == 1 && state == BLOCKING_STATE) 
-			eraseMask(position()[0] + 120, position()[1], 0, 16, 0, 16, parados);
+			eraseMask(position()[0] + displacement, position()[1], 0, 16, 0, 16, parados);
 		state = EXPLODE_STATE;
 		sprite->changeAnimation(EXPLODING);
 	}

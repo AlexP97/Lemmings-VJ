@@ -54,6 +54,13 @@ void Salida::render()
 	sprite->render();
 }
 
+void Salida::displace(float d)
+{
+	glm::vec2 pos = sprite->position();
+	pos.x += d;
+	sprite->setPosition(pos);
+}
+
 glm::vec2 Salida::position() {
 	return sprite->position();
 }

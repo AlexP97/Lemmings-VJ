@@ -15,6 +15,7 @@ public:
 	void update(int deltaTime);
 	void render();
 	void open();
+	void displace(float d);
 
 private:
 	enum PuertaState

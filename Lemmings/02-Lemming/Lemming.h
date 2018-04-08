@@ -20,6 +20,7 @@ public:
 	glm::vec2 position();
 	bool eliminar();
 	void setComeOut(bool b);
+	void displace(float d);
 	
 	void setMapMask(VariableTexture *mapMask, VariableTexture* lemmingMask);
 	void setAbility(int ability);

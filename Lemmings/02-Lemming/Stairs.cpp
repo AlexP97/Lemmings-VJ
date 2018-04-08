@@ -38,3 +38,10 @@ void Stairs::render()
 {
 	sprite->render();
 }
+
+void Stairs::displace(float d)
+{
+	glm::vec2 pos = sprite->position();
+	pos.x += d;
+	sprite->setPosition(pos);
+}

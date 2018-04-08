@@ -58,6 +58,13 @@ void Puerta::open() {
 	state = OPENING_STATE;
 }
 
+void Puerta::displace(float d)
+{
+	glm::vec2 pos = sprite->position();
+	pos.x += d;
+	sprite->setPosition(pos);
+}
+
 void Puerta::render()
 {
 	sprite->render();

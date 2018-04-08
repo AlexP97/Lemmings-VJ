@@ -46,7 +46,7 @@ void Scene2::init()
 
 	projection = glm::ortho(0.f, float(CAMERA_WIDTH - 1), float(CAMERA_HEIGHT - 1), 0.f);
 
-	puerta.init(glm::vec2(60, 30), simpleTexProgram, 0);
+	puerta.init(glm::vec2(55, 40), simpleTexProgram, 0);
 	botonPlay.init(glm::vec2(300, 185), simpleTexProgram, 0);
 	botonSpeed.init(glm::vec2(280, 185), simpleTexProgram, 1);
 	cursor.init(glm::vec2(90, 30), simpleTexProgram);
@@ -189,6 +189,12 @@ pair<bool, bool> Scene2::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bo
 	ret.second = false;
 	cursor.setPosition(mouseX, mouseY);
 	if (!paused) {
+		pair<bool, bool> changeDisp = mouseOnBorder(mouseX, mouseY);
+		if (changeDisp.first) {
+			if (changeDisp.second) changeDisplacement(-2);
+			else changeDisplacement(2);
+		}
+
 		if (bLeftButton)
 			eraseMask(mouseX, mouseY);
 		else if (bRightButton)
@@ -221,6 +227,23 @@ pair<bool, bool> Scene2::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bo
 	if (bLeftButton) {
 		if (clickOnSpeed(mouseX, mouseY)) ret.first = true;
 		if (clickOnPause(mouseX, mouseY)) ret.second = true;
+	}
+	return ret;
+}
+
+pair<bool, bool> Scene2::mouseOnBorder(int mouseX, int mouseY) {
+	int x = mouseX / 3 - 2.f;
+	int y = mouseY / 3 - 2.f;
+	pair<bool, bool> ret;
+	ret.first = ret.second = false;
+	if (y < 160) {
+		if (x < 20) {
+			ret.first = true;
+			ret.second = true;
+		}
+		else if (x > 300) {
+			ret.first = true;
+		}
 	}
 	return ret;
 }
@@ -381,13 +404,35 @@ void Scene2::clickOnAbility(int mouseX, int mouseY) {
 	}
 }
 
+void Scene2::changeDisplacement(float d) {
+	displacement += d;
+	//projection = glm::ortho(displacement, float(CAMERA_WIDTH - 1 + displacement), float(CAMERA_HEIGHT - 1), 0.f);
+	
+	glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(float(CAMERA_WIDTH), float(160.f)) };
+	glm::vec2 texCoords[2] = { glm::vec2((330.f + displacement) / 1024.0, 0.f), glm::vec2((650.f + displacement) / 1024.0f, 160.f / 256.0f) };
+
+	map = MaskedTexturedQuad::createTexturedQuad(geom, texCoords, maskedTexProgram);
+	
+	for (int i = 0; i < lemming.size(); i++) {
+		if (lemmingInit[i]) {
+			lemming[i].displace(-d);
+			
+		}
+	}
+	puerta.displace(-d);
+	salida.displace(-d);
+	for (int i = 0; i < stairs.size(); i++) {
+		stairs[i].displace(-d);
+	}
+}
+
 void Scene2::eraseMask(int mouseX, int mouseY)
 {
 	int posX, posY;
 
 	// Transform from mouse coordinates to map coordinates
 	//   The map is enlarged 3 times and displaced 120 pixels
-	posX = mouseX / 3 + 120;
+	posX = mouseX / 3 + 330;
 	posY = mouseY / 3;
 
 	for (int y = max(0, posY - 3); y <= min(maskTexture.height() - 1, posY + 3); y++)
@@ -401,7 +446,7 @@ void Scene2::applyMask(int mouseX, int mouseY)
 
 	// Transform from mouse coordinates to map coordinates
 	//   The map is enlarged 3 times and displaced 120 pixels
-	posX = mouseX / 3 + 120;
+	posX = mouseX / 3 + 330;
 	posY = mouseY / 3;
 
 	for (int y = max(0, posY - 3); y <= min(maskTexture.height() - 1, posY + 3); y++)

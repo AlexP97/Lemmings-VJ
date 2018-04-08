@@ -14,6 +14,7 @@ public:
 	void init(const glm::vec2 &initialPosition, ShaderProgram &shaderProgram);
 	void update(int deltaTime);
 	void render();
+	void displace(float d);
 
 private:
 
