@@ -49,11 +49,12 @@ void Scene2::init()
 	botonPlay.init(glm::vec2(300, 185), simpleTexProgram, 0);
 	botonSpeed.init(glm::vec2(280, 185), simpleTexProgram, 1);
 	cursor.init(glm::vec2(90, 30), simpleTexProgram);
-	salida.init(glm::vec2(217, 114), simpleTexProgram, 1);
+	salida.init(glm::vec2(217, 113), simpleTexProgram, 1);
 	panel.init(glm::vec2(2, 159), simpleTexProgram);
 	iconSelected.init(glm::vec2(9, 158), simpleTexProgram);
 	minimap.init(glm::vec2(158, 180), simpleTexProgram, 1);
-	//iconSelected.init(glm::vec2(60, 30), simpleTexProgram);
+	mRectangle1.init(glm::vec2(157, 179), simpleTexProgram, 1, 0);
+	mRectangle2.init(glm::vec2(187, 179), simpleTexProgram, 1, 1);
 
 	lemmingsIn = 0;
 
@@ -142,6 +143,8 @@ bool Scene2::update(int deltaTime)
 		stairs[i].update(deltaTime);
 	}
 	minimap.update(deltaTime);
+	mRectangle1.update(deltaTime);
+	mRectangle2.update(deltaTime);
 	panel.update(deltaTime);
 	if (iconSelected.getState() == 1) iconSelected.update(deltaTime);
 	cursor.update(deltaTime);
@@ -178,6 +181,8 @@ void Scene2::render()
 	}
 	panel.render();
 	minimap.render();
+	mRectangle1.render();
+	mRectangle2.render();
 
 	if (iconSelected.getState() == 1) iconSelected.render();
 	cursor.render();
@@ -192,8 +197,11 @@ pair<bool, bool> Scene2::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bo
 	if (!paused) {
 		pair<bool, bool> changeDisp = mouseOnBorder(mouseX, mouseY);
 		if (changeDisp.first) {
-			if (changeDisp.second && (displacement >= -250)) changeDisplacement(-2);
-			else if (!changeDisp.second && (displacement <= 300)) changeDisplacement(2);
+			float d = 0;
+			if (changeDisp.second && (displacement >= -225)) d = -2.f;
+			else if (!changeDisp.second && (displacement <= 300)) d = 2.f;
+			changeDisplacement(d);
+			mRectangle2.displace(d / 7.5f);
 		}
 
 		if (bLeftButton)
