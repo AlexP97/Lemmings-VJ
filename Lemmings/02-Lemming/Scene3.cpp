@@ -51,8 +51,9 @@ void Scene3::init()
 	botonSpeed.init(glm::vec2(280, 185), simpleTexProgram, 1);
 	cursor.init(glm::vec2(90, 30), simpleTexProgram);
 	salida.init(glm::vec2(263, 14), simpleTexProgram, 2);
-	panel.init(glm::vec2(10, 159), simpleTexProgram);
+	panel.init(glm::vec2(2, 159), simpleTexProgram);
 	iconSelected.init(glm::vec2(9, 158), simpleTexProgram);
+	minimap.init(glm::vec2(195, 181), simpleTexProgram, 2);
 	//iconSelected.init(glm::vec2(60, 30), simpleTexProgram);
 
 	lemmingsIn = 0;
@@ -142,6 +143,7 @@ bool Scene3::update(int deltaTime)
 	botonPlay.update(deltaTime);
 	botonSpeed.update(deltaTime);
 	salida.update(deltaTime);
+	minimap.update(deltaTime);
 	for (int i = 0; i < stairs.size(); i++) {
 		stairs[i].update(deltaTime);
 	}
@@ -181,6 +183,7 @@ void Scene3::render()
 	}
 	panel.render();
 	lava.render();
+	minimap.render();
 
 	if (iconSelected.getState() == 1) iconSelected.render();
 	cursor.render();

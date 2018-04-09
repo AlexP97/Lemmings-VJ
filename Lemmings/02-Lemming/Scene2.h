@@ -14,6 +14,7 @@
 #include "IconPanel.h"
 #include "IconSelected.h"
 #include "Stairs.h"
+#include "Minimap.h"
 
 
 // Scene contains all the entities of our game.
@@ -63,6 +64,7 @@ private:
 	IconPanel panel;
 	IconSelected iconSelected;
 	vector<Stairs> stairs;
+	Minimap minimap;
 	int lemmingsIn;
 	int ability;
 	bool abre_Puerta;

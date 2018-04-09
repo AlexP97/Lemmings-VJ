@@ -12,7 +12,7 @@ void Game::init()
 	paused = false;
 	doubleSpeed = false;
 	bLeftMouse = bRightMouse = false;
-	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	mciSendString(TEXT("open sound/MAIN_THEME.mp3 alias main"), NULL, 0, NULL);
 	mciSendString(TEXT("play main repeat"), NULL, 0, NULL);
 	home.init();

@@ -22,6 +22,7 @@
     <ClInclude Include="Lava.h" />
     <ClInclude Include="Lemming.h" />
     <ClInclude Include="MaskedTexturedQuad.h" />
+    <ClInclude Include="Minimap.h" />
     <ClInclude Include="Puerta.h" />
     <ClInclude Include="Salida.h" />
     <ClInclude Include="Scene.h" />
@@ -45,6 +46,7 @@
     <ClCompile Include="Lemming.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MaskedTexturedQuad.cpp" />
+    <ClCompile Include="Minimap.cpp" />
     <ClCompile Include="Puerta.cpp" />
     <ClCompile Include="Salida.cpp" />
     <ClCompile Include="Scene.cpp" />
