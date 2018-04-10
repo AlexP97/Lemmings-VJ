@@ -15,7 +15,7 @@ enum BotonAnims
 void IconSelected::init(const glm::vec2 &initialPosition, ShaderProgram &shaderProgram)
 {
 	state = NOTICONSELECTED_STATE;
-	spritesheet.loadFromFile("images/iconselected_sinfondo.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	spritesheet.loadFromFile("images/marker.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spritesheet.setMinFilter(GL_NEAREST);
 	spritesheet.setMagFilter(GL_NEAREST);
 	sprite = Sprite::createSprite(glm::ivec2(74.f / 3.f, 141.f / 3.f), glm::vec2(1.f, 1.f), &spritesheet, &shaderProgram);

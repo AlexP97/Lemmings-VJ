@@ -22,7 +22,7 @@ void Minimap::init(const glm::vec2 &initialPosition, ShaderProgram &shaderProgra
 
 	if (scene == 0) sprite = Sprite::createSprite(glm::ivec2(96.38f, 28.f), glm::vec2(0.99f, 0.625f), &spritesheet, &shaderProgram);
 	else if (scene == 1) sprite = Sprite::createSprite(glm::ivec2(120.f, 22.5f), glm::vec2(0.78f, 0.625f), &spritesheet, &shaderProgram);
-	else if (scene == 2) sprite = Sprite::createSprite(glm::ivec2(55.125f, 22.5f), glm::vec2(1.0f, 0.625f), &spritesheet, &shaderProgram);
+	else if (scene == 2) sprite = Sprite::createSprite(glm::ivec2(80.f, 22.5f), glm::vec2(0.8f, 0.625f), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(1);
 
 	sprite->setAnimationSpeed(NORMAL, 0);

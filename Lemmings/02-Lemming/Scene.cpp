@@ -53,7 +53,8 @@ void Scene::init()
 	panel.init(glm::vec2(2, 159), simpleTexProgram);
 	iconSelected.init(glm::vec2(9, 158), simpleTexProgram);
 	minimap.init(glm::vec2(170, 174), simpleTexProgram, 0);
-	//iconSelected.init(glm::vec2(60, 30), simpleTexProgram);
+	mRectangle1.init(glm::vec2(170, 173), simpleTexProgram, 0, 0);
+	mRectangle2.init(glm::vec2(193, 173), simpleTexProgram, 0, 1);
 
 	lemmingsIn = 0;
 
@@ -80,13 +81,13 @@ bool Scene::update(int deltaTime)
 	}
 
 	if (!stop_Lemmings && lemmingsIn < 8 && currentTime >= (3000 * (lemmingsIn + 1))) {
-		lemming[lemmingsIn].init(glm::vec2(70 - displacement, 30), simpleTexProgram, 120 + displacement);
+		lemming[lemmingsIn].init(glm::vec2(70.f - displacement, 30.f), simpleTexProgram, 120.f + displacement);
 		lemming[lemmingsIn].setMapMask(&maskTexture, &parados);
 		lemmingInit[lemmingsIn] = true;
 		++lemmingsIn;
 	}
 
-	for (int i = 0; i < lemming.size(); i++) {
+	for (unsigned int i = 0; i < lemming.size(); i++) {
 		if (lemmingInit[i]) {
 			if (lemmingOnExit(lemming[i].position()) && !lemming[i].goOut()) {
 				mciSendString(TEXT("play sound/YIPPEE.WAV"), NULL, 0, NULL);
@@ -99,14 +100,14 @@ bool Scene::update(int deltaTime)
 		}
 	}
 
-	for (int i = 0; i < lemming.size(); i++) {
+	for (unsigned int i = 0; i < lemming.size(); i++) {
 		if (lemmingInit[i]) {
 			int cont = lemming[i].update(deltaTime);
 			if (stop_Lemmings && !cont) return false;
 		}
 	}
 
-	for (int i = 0; i < lemming.size(); i++) {
+	for (unsigned int i = 0; i < lemming.size(); i++) {
 		if (lemmingInit[i]) {
 			pair<bool, int> putStair = lemming[i].putStair();
 			if (putStair.first) {
@@ -122,9 +123,9 @@ bool Scene::update(int deltaTime)
 					stair.init(pos, simpleTexProgram);
 				}
 				for (int j = 0; j < 4; j++) {
-					maskTexture.setPixel(pos.x + j + 120, pos.y, 255);
+					maskTexture.setPixel(pos.x + j + 120.f, pos.y, 255);
 				}
-				for (int j = 0; j < lemming.size(); j++) {
+				for (unsigned int j = 0; j < lemming.size(); j++) {
 					if (lemmingInit[i]) {
 						lemming[i].setMapMask(&maskTexture, &parados);
 					}
@@ -138,11 +139,13 @@ bool Scene::update(int deltaTime)
 	botonPlay.update(deltaTime);
 	botonSpeed.update(deltaTime);
 	salida.update(deltaTime);
-	for (int i = 0; i < stairs.size(); i++) {
+	for (unsigned int i = 0; i < stairs.size(); i++) {
 		stairs[i].update(deltaTime);
 	}
 	panel.update(deltaTime);
 	minimap.update(deltaTime);
+	mRectangle1.update(deltaTime);
+	mRectangle2.update(deltaTime);
 	if (iconSelected.getState() == 1) iconSelected.update(deltaTime);
 	cursor.update(deltaTime);
 	return true;
@@ -167,17 +170,19 @@ void Scene::render()
 
 	puerta.render();
 	salida.render();
-	for (int i = 0; i < lemming.size(); i++) {
+	for (unsigned int i = 0; i < lemming.size(); i++) {
 		if (lemmingInit[i]) lemming[i].render();
 	}
 	
 	botonPlay.render();
 	botonSpeed.render();
-	for (int i = 0; i < stairs.size(); i++) {
+	for (unsigned int i = 0; i < stairs.size(); i++) {
 		stairs[i].render();
 	}
 	panel.render();
 	minimap.render();
+	mRectangle1.render();
+	mRectangle2.render();
 
 	if(iconSelected.getState() == 1) iconSelected.render();
 	cursor.render();
@@ -192,8 +197,11 @@ pair<bool, bool> Scene::mouseMoved(int mouseX, int mouseY, bool bLeftButton, boo
 	if (!paused) {
 		pair<bool, bool> changeDisp = mouseOnBorder(mouseX, mouseY);
 		if (changeDisp.first) {
-			if (changeDisp.second && (displacement >= -100)) changeDisplacement(-2);
-			else if (!changeDisp.second && (displacement <= 70)) changeDisplacement(2);
+			float d = 0;
+			if (changeDisp.second && (displacement >= -100)) d = -2;
+			else if (!changeDisp.second && (displacement <= 70)) d = 2;
+			changeDisplacement(d);
+			mRectangle2.displace(d / 6.5f);
 		}
 
 		if (bLeftButton)
@@ -212,7 +220,7 @@ pair<bool, bool> Scene::mouseMoved(int mouseX, int mouseY, bool bLeftButton, boo
 		if (bLeftButton) {
 			clickOnAbility(mouseX, mouseY);
 			if (ability == 7) {
-				for (int i = 0; i < lemming.size(); i++) {
+				for (unsigned int i = 0; i < lemming.size(); i++) {
 					if (lemmingInit[i]) {
 						lemming[i].setAbility(ability);
 						bool stop_Lemmings = true;
@@ -240,8 +248,8 @@ void Scene::clickOnLemming(int indLemming) {
 
 bool Scene::clickOnPause(int mouseX, int mouseY) {
 	glm::vec2 center = botonPlay.centerPosition();
-	int x = mouseX / 3 - 2.f;
-	int y = mouseY / 3 - 2.f;
+	int x = mouseX / 3.f - 2.f;
+	int y = mouseY / 3.f - 2.f;
 
 	float distFromCenter = sqrt((x - center.x) * (x - center.x) + (y - center.y) * (y - center.y));
 	if (distFromCenter <= 8.f) {
@@ -253,8 +261,8 @@ bool Scene::clickOnPause(int mouseX, int mouseY) {
 
 bool Scene::clickOnSpeed(int mouseX, int mouseY) {
 	glm::vec2 center = botonSpeed.centerPosition();
-	int x = mouseX / 3 - 2.f;
-	int y = mouseY / 3 - 2.f;
+	int x = mouseX / 3.f - 2.f;
+	int y = mouseY / 3.f - 2.f;
 
 	float distFromCenter = sqrt((x - center.x) * (x - center.x) + (y - center.y) * (y - center.y));
 	if (distFromCenter <= 8.f) {
@@ -274,12 +282,12 @@ bool Scene::lemmingOnExit(glm::vec2 position) {
 
 pair<bool, int> Scene::cursorOnLemming(int mouseX, int mouseY) {
 	glm::vec2 position;
-	int x = mouseX / 3 - 2.f;
-	int y = mouseY / 3 - 2.f;
+	int x = mouseX / 3.f - 2.f;
+	int y = mouseY / 3.f - 2.f;
 	pair<bool, int> p;
 	p.first = false;
 	p.second = -1;
-	for (int i = 0; i < lemming.size(); i++) {
+	for (unsigned int i = 0; i < lemming.size(); i++) {
 		if (lemmingInit[i]) {
 			position = lemming[i].position();
 			if (x > position.x && (x - 15) < position.x) {
@@ -315,7 +323,7 @@ void Scene::clickOnAbility(int mouseX, int mouseY) {
 					iconSelected.changeState(1);
 					ability = 1;
 				}
-				iconSelected.setPosition(positionPanel.x - 1, 158);
+				iconSelected.setPosition(positionPanel.x - 1.f, 158);
 			}
 			else if (x > (positionPanel.x + sizeAbility - 2) && x < (positionPanel.x + sizeAbility * 2 - 2)) {
 				if (ability == 2) {
@@ -326,7 +334,7 @@ void Scene::clickOnAbility(int mouseX, int mouseY) {
 					iconSelected.changeState(1);
 					ability = 2;
 				}
-				iconSelected.setPosition(positionPanel.x + sizeAbility, 158);
+				iconSelected.setPosition(positionPanel.x + sizeAbility, 158.f);
 			}
 			else if (x >(positionPanel.x + sizeAbility*2 - 2) && x < (positionPanel.x + sizeAbility * 3 - 2)) {
 				if (ability == 3) {
@@ -498,7 +506,7 @@ void Scene::changeDisplacement(float d)
 
 	map = MaskedTexturedQuad::createTexturedQuad(geom, texCoords, maskedTexProgram);
 
-	for (int i = 0; i < lemming.size(); i++) {
+	for (unsigned int i = 0; i < lemming.size(); i++) {
 		if (lemmingInit[i]) {
 			lemming[i].displace(-d);
 
@@ -506,7 +514,7 @@ void Scene::changeDisplacement(float d)
 	}
 	puerta.displace(-d);
 	salida.displace(-d);
-	for (int i = 0; i < stairs.size(); i++) {
+	for (unsigned int i = 0; i < stairs.size(); i++) {
 		stairs[i].displace(-d);
 	}
 }

@@ -53,8 +53,9 @@ void Scene3::init()
 	salida.init(glm::vec2(263, 14), simpleTexProgram, 2);
 	panel.init(glm::vec2(2, 159), simpleTexProgram);
 	iconSelected.init(glm::vec2(9, 158), simpleTexProgram);
-	minimap.init(glm::vec2(195, 181), simpleTexProgram, 2);
-	//iconSelected.init(glm::vec2(60, 30), simpleTexProgram);
+	minimap.init(glm::vec2(175, 181), simpleTexProgram, 2);
+	mRectangle1.init(glm::vec2(175, 180), simpleTexProgram, 2, 0);
+	mRectangle2.init(glm::vec2(182, 180), simpleTexProgram, 2, 1);
 
 	lemmingsIn = 0;
 
@@ -144,6 +145,8 @@ bool Scene3::update(int deltaTime)
 	botonSpeed.update(deltaTime);
 	salida.update(deltaTime);
 	minimap.update(deltaTime);
+	mRectangle1.update(deltaTime);
+	mRectangle2.update(deltaTime);
 	for (int i = 0; i < stairs.size(); i++) {
 		stairs[i].update(deltaTime);
 	}
@@ -184,6 +187,8 @@ void Scene3::render()
 	panel.render();
 	lava.render();
 	minimap.render();
+	mRectangle1.render();
+	mRectangle2.render();
 
 	if (iconSelected.getState() == 1) iconSelected.render();
 	cursor.render();
@@ -198,8 +203,11 @@ pair<bool, bool> Scene3::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bo
 	if (!paused) {
 		pair<bool, bool> changeDisp = mouseOnBorder(mouseX, mouseY);
 		if (changeDisp.first) {
-			if (changeDisp.second && (displacement >= -10)) changeDisplacement(-2);
-			else if (!changeDisp.second && (displacement <= 20)) changeDisplacement(2);
+			float d = 0;
+			if (changeDisp.second && (displacement >= -10)) d = -2;
+			else if (!changeDisp.second && (displacement <= 20)) d = 2;
+			changeDisplacement(d);
+			mRectangle2.displace(d / 7.5f);
 		}
 
 		if (bLeftButton)

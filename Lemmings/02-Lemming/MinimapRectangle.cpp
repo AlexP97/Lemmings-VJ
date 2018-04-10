@@ -17,16 +17,16 @@ void MinimapRectangle::init(const glm::vec2 &initialPosition, ShaderProgram &sha
 	spritesheet.setMinFilter(GL_NEAREST);
 	spritesheet.setMagFilter(GL_NEAREST);
 	if (scene == 0) {
-		if (typeRectangle == 0) sprite = Sprite::createSprite(glm::ivec2(96.38f, 28.f), glm::vec2(1.f, 1.f), &spritesheet, &shaderProgram);
-		else sprite = Sprite::createSprite(glm::ivec2(30.f, 28.f), glm::vec2(1.f, 1.f), &spritesheet, &shaderProgram);
+		if (typeRectangle == 0) sprite = Sprite::createSprite(glm::ivec2(96.38f, 30.f), glm::vec2(1.f, 1.f), &spritesheet, &shaderProgram);
+		else sprite = Sprite::createSprite(glm::ivec2(60.f, 30.f), glm::vec2(1.f, 1.f), &spritesheet, &shaderProgram);
 	}
 	else if (scene == 1) {
 		if (typeRectangle == 0) sprite = Sprite::createSprite(glm::ivec2(122.5f, 24.f), glm::vec2(1.f, 1.f), &spritesheet, &shaderProgram);
 		else sprite = Sprite::createSprite(glm::ivec2(51.f, 24.f), glm::vec2(1.f, 1.f), &spritesheet, &shaderProgram);
 	}
 	else if (scene == 2) {
-		if (typeRectangle == 0) sprite = Sprite::createSprite(glm::ivec2(55.125f, 22.5f), glm::vec2(1.f, 1.f), &spritesheet, &shaderProgram);
-		else sprite = Sprite::createSprite(glm::ivec2(30.f, 22.5f), glm::vec2(1.f, 1.f), &spritesheet, &shaderProgram);
+		if (typeRectangle == 0) sprite = Sprite::createSprite(glm::ivec2(80.f, 24.f), glm::vec2(1.f, 1.f), &spritesheet, &shaderProgram);
+		else sprite = Sprite::createSprite(glm::ivec2(64.f, 24.f), glm::vec2(1.f, 1.f), &spritesheet, &shaderProgram);
 	}
 
 	sprite->setNumberAnimations(1);
