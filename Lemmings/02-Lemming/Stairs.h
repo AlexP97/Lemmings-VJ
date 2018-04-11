@@ -15,6 +15,7 @@ public:
 	void update(int deltaTime);
 	void render();
 	void displace(float d);
+	glm::vec2 getPosition();
 
 private:
 

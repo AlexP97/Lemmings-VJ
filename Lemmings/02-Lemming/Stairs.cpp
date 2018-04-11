@@ -45,3 +45,8 @@ void Stairs::displace(float d)
 	pos.x += d;
 	sprite->setPosition(pos);
 }
+
+glm::vec2 Stairs::getPosition()
+{
+	return sprite->position();
+}

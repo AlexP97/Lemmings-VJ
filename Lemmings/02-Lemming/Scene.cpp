@@ -83,6 +83,7 @@ bool Scene::update(int deltaTime)
 	if (!stop_Lemmings && lemmingsIn < 8 && currentTime >= (3000 * (lemmingsIn + 1))) {
 		lemming[lemmingsIn].init(glm::vec2(70.f - displacement, 30.f), simpleTexProgram, 120.f + displacement);
 		lemming[lemmingsIn].setMapMask(&maskTexture, &parados);
+		lemming[lemmingsIn].setStairs(stairs);
 		lemmingInit[lemmingsIn] = true;
 		++lemmingsIn;
 	}
@@ -111,26 +112,25 @@ bool Scene::update(int deltaTime)
 		if (lemmingInit[i]) {
 			pair<bool, int> putStair = lemming[i].putStair();
 			if (putStair.first) {
-				Stairs stair;
+				pair<Stairs, bool> stair;
+				stairs.push_back(stair);
 				glm::vec2 pos = lemming[i].position();
 				pos.y += 15;
 				if (putStair.second == 0) {		//escalera hacia la izquierda
-					pos.x += 3;
-					stair.init(pos, simpleTexProgram);
+					pos.x += 2;
+					stairs[stairs.size() - 1].first.init(pos, simpleTexProgram);
+					stairs[stairs.size() - 1].second = 0;
 				}
 				else if (putStair.second == 1) {	//escalera hacia la derecha
 					pos.x += 9;
-					stair.init(pos, simpleTexProgram);
-				}
-				for (int j = 0; j < 4; j++) {
-					maskTexture.setPixel(pos.x + j + 120.f, pos.y, 255);
+					stairs[stairs.size() - 1].first.init(pos, simpleTexProgram);
+					stairs[stairs.size() - 1].second = 1;
 				}
 				for (unsigned int j = 0; j < lemming.size(); j++) {
-					if (lemmingInit[i]) {
-						lemming[i].setMapMask(&maskTexture, &parados);
+					if (lemmingInit[j]) {
+						lemming[j].setStairs(stairs);
 					}
 				}
-				stairs.push_back(stair);
 			}
 		}
 	}
@@ -140,7 +140,7 @@ bool Scene::update(int deltaTime)
 	botonSpeed.update(deltaTime);
 	salida.update(deltaTime);
 	for (unsigned int i = 0; i < stairs.size(); i++) {
-		stairs[i].update(deltaTime);
+		stairs[i].first.update(deltaTime);
 	}
 	panel.update(deltaTime);
 	minimap.update(deltaTime);
@@ -177,7 +177,7 @@ void Scene::render()
 	botonPlay.render();
 	botonSpeed.render();
 	for (unsigned int i = 0; i < stairs.size(); i++) {
-		stairs[i].render();
+		stairs[i].first.render();
 	}
 	panel.render();
 	minimap.render();
@@ -515,7 +515,7 @@ void Scene::changeDisplacement(float d)
 	puerta.displace(-d);
 	salida.displace(-d);
 	for (unsigned int i = 0; i < stairs.size(); i++) {
-		stairs[i].displace(-d);
+		stairs[i].first.displace(-d);
 	}
 }
 

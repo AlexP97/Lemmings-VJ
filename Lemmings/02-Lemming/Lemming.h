@@ -4,6 +4,7 @@
 
 #include "Sprite.h"
 #include "VariableTexture.h"
+#include "Stairs.h"
 
 
 // Lemming is basically a Sprite that represents one lemming. As such it has
@@ -23,6 +24,7 @@ public:
 	void displace(float d);
 	
 	void setMapMask(VariableTexture *mapMask, VariableTexture* lemmingMask);
+	void setStairs(vector<pair<Stairs, bool>> stairs);
 	void setAbility(int ability);
 	bool goOut();
 	pair<bool, int> putStair();
@@ -30,6 +32,8 @@ public:
 private:
 	int collisionFloor(int maxFall);
 	bool collision();
+	int collisionStairRight();
+	int collisionStairLeft();
 	bool hayParado();
 	void eraseMask(int posX, int posY, float ymin, float ymax, float xmin, float xmax, VariableTexture *mascara);
 	void applyMask();
@@ -48,6 +52,7 @@ private:
 	Sprite *sprite;
 	VariableTexture *mask;
 	VariableTexture *parados;
+	vector<pair<Stairs, bool>> stairsPos;
 	bool come_Out;
 	bool eliminado;
 	bool climber;
