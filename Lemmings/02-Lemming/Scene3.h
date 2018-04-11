@@ -67,7 +67,7 @@ private:
 	Lava lava;
 	IconPanel panel;
 	IconSelected iconSelected;
-	vector<Stairs> stairs;
+	vector<pair<Stairs, bool>> stairs;
 	Minimap minimap;
 	MinimapRectangle mRectangle1, mRectangle2;
 	int lemmingsIn;
