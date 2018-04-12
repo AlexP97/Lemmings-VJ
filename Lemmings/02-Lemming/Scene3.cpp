@@ -22,8 +22,10 @@ void Scene3::init()
 {
 	currentTime = 0;
 	lemmingsIn = 0;
+	lemmingsOut = 0;
 	int ability = 0;
 	displacement = 0;
+	time = 300 * 1000;
 	abre_Puerta = true;
 	stop_Lemmings = false;
 	//glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(float(CAMERA_WIDTH), float(CAMERA_HEIGHT)) };
@@ -56,8 +58,7 @@ void Scene3::init()
 	minimap.init(glm::vec2(175, 181), simpleTexProgram, 2);
 	mRectangle1.init(glm::vec2(175, 180), simpleTexProgram, 2, 0);
 	mRectangle2.init(glm::vec2(182, 180), simpleTexProgram, 2, 1);
-
-	lemmingsIn = 0;
+	text.init("fonts/OpenSans-Regular.ttf");
 
 	lemmingInit = vector<bool>(20, false);
 	Lemming lem;
@@ -74,6 +75,9 @@ void Scene3::init()
 bool Scene3::update(int deltaTime)
 {
 	currentTime += deltaTime;
+	if (time > 0) time -= deltaTime;
+
+	if (lemmingsOut == 8) return false;
 
 	if (abre_Puerta && currentTime >= 2000) {
 		puerta.open();
@@ -101,6 +105,7 @@ bool Scene3::update(int deltaTime)
 			if (lemmingOnLava(lemming[i].position())) {
 				mciSendString(TEXT("play sound/PLOP.WAV"), NULL, 0, NULL);
 				lemmingInit[i] = false;
+				lemmingsOut++;
 			}
 		}
 	}
@@ -156,6 +161,11 @@ bool Scene3::update(int deltaTime)
 	panel.update(deltaTime);
 	if (iconSelected.getState() == 1) iconSelected.update(deltaTime);
 	cursor.update(deltaTime);
+	if (time < 0) {
+		time = 0;
+		ability = 7;
+		explode();
+	}
 	return true;
 }
 
@@ -195,6 +205,12 @@ void Scene3::render()
 
 	if (iconSelected.getState() == 1) iconSelected.render();
 	cursor.render();
+	float percentage = 0;
+	if (lemmingsIn > 0) percentage = (float(lemmingsOut) / float(lemmingsIn)) * 100;
+	int timeInSeconds = time / 1000;
+	int minutes = timeInSeconds / 60;
+	int seconds = timeInSeconds % 60;
+	text.render("OUT  " + to_string(lemmingsIn) + "   IN  " + to_string(int(percentage)) + "%  TIME  " + to_string(minutes) + ":" + to_string(seconds), glm::vec2(500, 510), 32, glm::vec4(0.4, 0.96, 0.07, 1));
 }
 
 pair<bool, bool> Scene3::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton, bool paused)
@@ -229,12 +245,7 @@ pair<bool, bool> Scene3::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bo
 		if (bLeftButton) {
 			clickOnAbility(mouseX, mouseY);
 			if (ability == 7) {
-				for (int i = 0; i < lemming.size(); i++) {
-					if (lemmingInit[i]) {
-						lemming[i].setAbility(ability);
-						bool stop_Lemmings = true;
-					}
-				}
+				explode();
 			}
 			if (cOL.first && ability != 7) {
 				clickOnLemming(cOL.second);
@@ -247,6 +258,15 @@ pair<bool, bool> Scene3::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bo
 		if (clickOnPause(mouseX, mouseY)) ret.second = true;
 	}
 	return ret;
+}
+
+void Scene3::explode() {
+	for (unsigned int i = 0; i < lemming.size(); i++) {
+		if (lemmingInit[i]) {
+			lemming[i].setAbility(ability);
+			stop_Lemmings = true;
+		}
+	}
 }
 
 void Scene3::clickOnLemming(int indLemming) {

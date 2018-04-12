@@ -394,7 +394,7 @@ int Lemming::collisionStairLeft() {
 	for (unsigned int i = 0; i < stairsPos.size(); i++) {
 		if (stairsPos[i].second == 0) {
 			glm::vec2 lemmingPosBase = sprite->position();
-			lemmingPosBase += glm::ivec2(7, 16);
+			lemmingPosBase += glm::ivec2(6, 16);
 			glm::vec2 stairPos = stairsPos[i].first.getPosition();
 			if (lemmingPosBase.x == stairPos.x && lemmingPosBase.y == stairPos.y) {
 				ret = 0;

@@ -16,6 +16,7 @@
 #include "Stairs.h"
 #include "Minimap.h"
 #include "MinimapRectangle.h"
+#include "Text.h"
 
 
 // Scene contains all the entities of our game.
@@ -46,6 +47,7 @@ private:
 	bool clickOnSpeed(int mouseX, int mouseY);
 	bool lemmingOnExit(glm::vec2 position);
 	void clickOnAbility(int mouseX, int mouseY);
+	void explode();
 	pair<bool, bool> mouseOnBorder(int mouseX, int mouseY);
 
 private:
@@ -67,7 +69,10 @@ private:
 	vector<pair<Stairs, bool>> stairs;
 	Minimap minimap;
 	MinimapRectangle mRectangle1, mRectangle2;
+	Text text;
 	int lemmingsIn;
+	int lemmingsOut;
+	int time;
 	int ability;
 	bool abre_Puerta;
 	bool stop_Lemmings;

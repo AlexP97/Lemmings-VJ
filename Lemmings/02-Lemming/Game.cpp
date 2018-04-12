@@ -34,6 +34,8 @@ bool Game::update(int deltaTime)
 				mciSendString(TEXT("close scene1"), NULL, 0, NULL);
 				mciSendString(TEXT("open sound/MAIN_THEME.mp3 alias main"), NULL, 0, NULL);
 				mciSendString(TEXT("play main repeat"), NULL, 0, NULL);
+				paused = false;
+				doubleSpeed = false;
 				home.init();
 				actualScene = 0;
 			}
@@ -48,6 +50,8 @@ bool Game::update(int deltaTime)
 				mciSendString(TEXT("close scene2"), NULL, 0, NULL);
 				mciSendString(TEXT("open sound/MAIN_THEME.mp3 alias main"), NULL, 0, NULL);
 				mciSendString(TEXT("play main repeat"), NULL, 0, NULL);
+				paused = false;
+				doubleSpeed = false;
 				home.init();
 				actualScene = 0;
 			}
@@ -62,6 +66,8 @@ bool Game::update(int deltaTime)
 				mciSendString(TEXT("close scene3"), NULL, 0, NULL);
 				mciSendString(TEXT("open sound/MAIN_THEME.mp3 alias main"), NULL, 0, NULL);
 				mciSendString(TEXT("play main repeat"), NULL, 0, NULL);
+				paused = false;
+				doubleSpeed = false;
 				home.init();
 				actualScene = 0;
 			}
