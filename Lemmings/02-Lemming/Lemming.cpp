@@ -273,7 +273,8 @@ bool Lemming::update(int deltaTime)
 	case DIG_RIGHT_STATE:
 		sprite->position() += glm::vec2(1.0, 0);
 		if (collision()) {
-			eraseMask(position()[0] + 12 + displacement, position()[1] + 8, -8, 8, 0, 0.25, mask);
+
+			eraseMask(position()[0] + 12 + displacement, position()[1] + 8, -6, 6, 0, 0.25, mask);
 			sprite->position() += glm::vec2(0.25, 0);
 		}
 		else {
@@ -539,7 +540,7 @@ bool Lemming::hayParado()
 
 void Lemming::setAbility(int ability) {
 	if (state != BLOCKING_STATE) {
-		if (ability == 2) {
+		if (ability == 2 && (state == WALKING_LEFT_STATE || state == WALKING_RIGHT_STATE)) {
 			state = BLOCKING_STATE;
 			sprite->changeAnimation(BLOCKING);
 			applyMask();
