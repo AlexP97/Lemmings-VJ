@@ -180,7 +180,7 @@ bool Lemming::update(int deltaTime)
 				state = CLIMBING_LEFT_STATE;
 			}
 		}
-		else if (fallStair != -1) {
+		else if (fallStair != -2) {
 			sprite->position() += glm::vec2(0, fallStair);
 		}
 		else
@@ -217,7 +217,7 @@ bool Lemming::update(int deltaTime)
 				state = CLIMBING_RIGHT_STATE;
 			}
 		}
-		else if (fallStair != -1) {
+		else if (fallStair != -2) {
 			sprite->position() += glm::vec2(0, fallStair);
 		}
 		else
@@ -368,19 +368,33 @@ bool Lemming::update(int deltaTime)
 }
 
 int Lemming::collisionStairRight() {
-	int ret = -1;
+	int ret = -2;
 	for (unsigned int i = 0; i < stairsPos.size(); i++) {
+		glm::vec2 lemmingPosBase = sprite->position();
+		lemmingPosBase += glm::ivec2(7, 16);
+		glm::vec2 stairPos = stairsPos[i].first.getPosition();
 		if (stairsPos[i].second == 1) {
-			glm::vec2 lemmingPosBase = sprite->position();
-			lemmingPosBase += glm::ivec2(7, 16);
-			glm::vec2 stairPos = stairsPos[i].first.getPosition();
 			if (lemmingPosBase.x == stairPos.x && lemmingPosBase.y == stairPos.y) {
 				ret = 0;
 				return ret;
 			}
-			else if (((lemmingPosBase.y + 1) == stairPos.y)) {
+			else if ((lemmingPosBase.y + 1) == stairPos.y) {
 				if ((lemmingPosBase.x == stairPos.x) || (lemmingPosBase.x == (stairPos.x + 1))) {
 					ret = 1;
+					return ret;
+				}
+			}
+		}
+		else {
+			if ((lemmingPosBase.y + 1) == stairPos.y) {
+				if ((lemmingPosBase.x == stairPos.x) || (lemmingPosBase.x == (stairPos.x - 1))) {
+					ret = 1;
+					return ret;
+				}
+			}
+			else if ((lemmingPosBase.y + 2) == stairPos.y) {
+				if ((lemmingPosBase.x == stairPos.x) || (lemmingPosBase.x == (stairPos.x - 1))) {
+					ret = 2;
 					return ret;
 				}
 			}
@@ -390,19 +404,33 @@ int Lemming::collisionStairRight() {
 }
 
 int Lemming::collisionStairLeft() {
-	int ret = -1;
+	int ret = -2;
 	for (unsigned int i = 0; i < stairsPos.size(); i++) {
+		glm::vec2 lemmingPosBase = sprite->position();
+		lemmingPosBase += glm::ivec2(6, 16);
+		glm::vec2 stairPos = stairsPos[i].first.getPosition();
 		if (stairsPos[i].second == 0) {
-			glm::vec2 lemmingPosBase = sprite->position();
-			lemmingPosBase += glm::ivec2(6, 16);
-			glm::vec2 stairPos = stairsPos[i].first.getPosition();
 			if (lemmingPosBase.x == stairPos.x && lemmingPosBase.y == stairPos.y) {
 				ret = 0;
 				return ret;
 			}
-			else if (((lemmingPosBase.y + 1) == stairPos.y)) {
+			else if ((lemmingPosBase.y + 1) == stairPos.y) {
 				if ((lemmingPosBase.x == stairPos.x) || (lemmingPosBase.x == (stairPos.x - 1))) {
 					ret = 1;
+					return ret;
+				}
+			}
+		}
+		else {
+			if ((lemmingPosBase.y + 1) == stairPos.y) {
+				if ((lemmingPosBase.x == stairPos.x) || (lemmingPosBase.x == (stairPos.x + 1))) {
+					ret = 1;
+					return ret;
+				}
+			}
+			else if ((lemmingPosBase.y + 2) == stairPos.y) {
+				if ((lemmingPosBase.x == stairPos.x) || (lemmingPosBase.x == (stairPos.x + 1))) {
+					ret = 2;
 					return ret;
 				}
 			}

@@ -28,6 +28,8 @@ void Scene::init()
 	time = 300 * 1000;
 	abre_Puerta = true;
 	stop_Lemmings = false;
+	won = false;
+	lemmingsRemaining = 10;
 	//glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(float(CAMERA_WIDTH), float(CAMERA_HEIGHT)) };
 	glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(float(CAMERA_WIDTH), float(160.f)) };
 	glm::vec2 texCoords[2] = { glm::vec2(120.f / 512.0, 0.f), glm::vec2((120.f + 320.f) / 512.0f, 160.f / 256.0f) };
@@ -59,10 +61,10 @@ void Scene::init()
 	mRectangle2.init(glm::vec2(193, 173), simpleTexProgram, 0, 1);
 	text.init("fonts/OpenSans-Regular.ttf");
 
-	lemmingInit = vector<bool>(20, false);
+	lemmingInit = vector<bool>(10, false);
 	Lemming lem;
 	lemming = vector<Lemming>(0);
-	for (int i = 0; i < 20; i++) {
+	for (int i = 0; i < 10; i++) {
 		lemming.push_back(lem);
 	}
 	ability = 0;
@@ -71,12 +73,30 @@ void Scene::init()
 
 //unsigned int x = 0; 
 
-bool Scene::update(int deltaTime)
+pair<bool, bool> Scene::update(int deltaTime)
 {
+	pair<bool, bool> ret;
+	ret.first = true;
+	ret.second = false;
+
 	currentTime += deltaTime;
 	if (time > 0) time -= deltaTime;
 
-	if (lemmingsOut == 8) return false;
+	if (lemmingsOut >= (10.f*0.1f)) {
+		won = true;
+	}
+	if (lemmingsRemaining == 0) {
+		if (won) {
+			ret.first = false;
+			ret.second = true;
+			return ret;
+		}
+		else {
+			ret.first = false;
+			ret.second = false;
+			return ret;
+		}
+	}
 
 	if (abre_Puerta && currentTime >= 2000) {
 		puerta.open();
@@ -84,7 +104,7 @@ bool Scene::update(int deltaTime)
 		abre_Puerta = false;
 	}
 
-	if (!stop_Lemmings && lemmingsIn < 8 && currentTime >= (3000 * (lemmingsIn + 1))) {
+	if (!stop_Lemmings && lemmingsIn < 10 && currentTime >= (3000 * (lemmingsIn + 1))) {
 		lemming[lemmingsIn].init(glm::vec2(70.f - displacement, 30.f), simpleTexProgram, 120.f + displacement);
 		lemming[lemmingsIn].setMapMask(&maskTexture, &parados);
 		lemming[lemmingsIn].setStairs(stairs);
@@ -97,10 +117,11 @@ bool Scene::update(int deltaTime)
 			if (lemmingOnExit(lemming[i].position()) && !lemming[i].goOut()) {
 				mciSendString(TEXT("play sound/YIPPEE.WAV"), NULL, 0, NULL);
 				lemming[i].setComeOut(true);
+				lemmingsOut++;
 			}
 			if (lemming[i].eliminar()) {
 				lemmingInit[i] = false;
-				lemmingsOut++;
+				lemmingsRemaining--;
 			}
 			
 		}
@@ -109,7 +130,12 @@ bool Scene::update(int deltaTime)
 	for (unsigned int i = 0; i < lemming.size(); i++) {
 		if (lemmingInit[i]) {
 			int cont = lemming[i].update(deltaTime);
-			if (stop_Lemmings && !cont) return false;
+			if (stop_Lemmings && !cont) {
+				ret.first = false;
+				if (won) ret.second = true;
+				else ret.second = false;
+				return ret;
+			}
 		}
 	}
 
@@ -159,7 +185,9 @@ bool Scene::update(int deltaTime)
 		ability = 7;
 		explode();
 	}
-	return true;
+	ret.first = true;
+	ret.second = false;
+	return ret;
 }
 
 void Scene::render()

@@ -27,49 +27,76 @@ bool Game::update(int deltaTime)
 		break;
 	case 1:
 		if (!paused) {
-			bool cont;
+			pair<bool, bool> cont;
 			if (!doubleSpeed) cont = scene.update(deltaTime);
 			else cont = scene.update(deltaTime * 2);
-			if (!cont) {
-				mciSendString(TEXT("close scene1"), NULL, 0, NULL);
-				mciSendString(TEXT("open sound/MAIN_THEME.mp3 alias main"), NULL, 0, NULL);
-				mciSendString(TEXT("play main repeat"), NULL, 0, NULL);
-				paused = false;
-				doubleSpeed = false;
-				home.init();
-				actualScene = 0;
+			if (!cont.first) {
+				if (!cont.second) {
+					mciSendString(TEXT("close scene1"), NULL, 0, NULL);
+					mciSendString(TEXT("open sound/MAIN_THEME.mp3 alias main"), NULL, 0, NULL);
+					mciSendString(TEXT("play main repeat"), NULL, 0, NULL);
+					paused = false;
+					doubleSpeed = false;
+					home.init();
+					actualScene = 0;
+				}
+				else {
+					mciSendString(TEXT("close scene1"), NULL, 0, NULL);
+					paused = false;
+					doubleSpeed = false;
+					simpleScene.init(3);
+					actualScene = 7;
+				}
 			}
 		}
 		break;
 	case 2:
 		if (!paused) {
-			bool cont;
+			pair<bool, bool> cont;
 			if (!doubleSpeed) cont = scene2.update(deltaTime);
 			else cont = scene2.update(deltaTime * 2);
-			if (!cont) {
-				mciSendString(TEXT("close scene2"), NULL, 0, NULL);
-				mciSendString(TEXT("open sound/MAIN_THEME.mp3 alias main"), NULL, 0, NULL);
-				mciSendString(TEXT("play main repeat"), NULL, 0, NULL);
-				paused = false;
-				doubleSpeed = false;
-				home.init();
-				actualScene = 0;
+			if (!cont.first) {
+				if (!cont.second) {
+					mciSendString(TEXT("close scene2"), NULL, 0, NULL);
+					mciSendString(TEXT("open sound/MAIN_THEME.mp3 alias main"), NULL, 0, NULL);
+					mciSendString(TEXT("play main repeat"), NULL, 0, NULL);
+					paused = false;
+					doubleSpeed = false;
+					home.init();
+					actualScene = 0;
+				}
+				else {
+					mciSendString(TEXT("close scene2"), NULL, 0, NULL);
+					paused = false;
+					doubleSpeed = false;
+					simpleScene.init(4);
+					actualScene = 8;
+				}
 			}
 		}
 		break;
 	case 3:
 		if (!paused) {
-			bool cont;
+			pair<bool, bool> cont;
 			if (!doubleSpeed) cont = scene3.update(deltaTime);
 			else cont = scene3.update(deltaTime * 2);
-			if (!cont) {
-				mciSendString(TEXT("close scene3"), NULL, 0, NULL);
-				mciSendString(TEXT("open sound/MAIN_THEME.mp3 alias main"), NULL, 0, NULL);
-				mciSendString(TEXT("play main repeat"), NULL, 0, NULL);
-				paused = false;
-				doubleSpeed = false;
-				home.init();
-				actualScene = 0;
+			if (!cont.first) {
+				if (!cont.second) {
+					mciSendString(TEXT("close scene3"), NULL, 0, NULL);
+					mciSendString(TEXT("open sound/MAIN_THEME.mp3 alias main"), NULL, 0, NULL);
+					mciSendString(TEXT("play main repeat"), NULL, 0, NULL);
+					paused = false;
+					doubleSpeed = false;
+					home.init();
+					actualScene = 0;
+				}
+				else {
+					mciSendString(TEXT("close scene3"), NULL, 0, NULL);
+					paused = false;
+					doubleSpeed = false;
+					simpleScene.init(0);
+					actualScene = 4;
+				}
 			}
 		}
 		break;

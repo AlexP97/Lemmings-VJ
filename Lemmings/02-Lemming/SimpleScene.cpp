@@ -39,19 +39,11 @@ void SimpleScene::init(int image)
 	maskTexture.setMagFilter(GL_NEAREST);
 
 	projection = glm::ortho(0.f, float(CAMERA_WIDTH - 1), float(CAMERA_HEIGHT - 1), 0.f);
-
-	//minimap.init(glm::vec2(170, 174), simpleTexProgram, 0);
-	//text.init("fonts/OpenSans-Regular.ttf");
-
 }
-
-//unsigned int x = 0; 
 
 bool SimpleScene::update(int deltaTime)
 {
 	currentTime += deltaTime;
-
-	//minimap.update(deltaTime);
 
 	return true;
 }
@@ -72,10 +64,6 @@ void SimpleScene::render()
 	simpleTexProgram.setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);
 	modelview = glm::mat4(1.0f);
 	simpleTexProgram.setUniformMatrix4f("modelview", modelview);
-
-	//minimap.render();
-
-	//text.render("Version del juego Lemmings de la asignatura VJ \n Realizado por: \n Adrian Espejo Saldaña \n Alejandro Perez Ortiz", glm::vec2(50, 300), 32, glm::vec4(0.4, 0.96, 0.07, 1));
 }
 
 void SimpleScene::initShaders()

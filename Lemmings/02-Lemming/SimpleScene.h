@@ -16,7 +16,6 @@
 #include "Stairs.h"
 #include "Minimap.h"
 #include "MinimapRectangle.h"
-#include "Text.h"
 
 
 // SimpleScene contains all the entities of our game.
@@ -45,7 +44,6 @@ private:
 	float currentTime;
 	glm::mat4 projection;
 	Minimap minimap;
-	Text text;
 };
 
 

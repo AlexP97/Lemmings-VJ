@@ -33,7 +33,7 @@ public:
 	~Scene3();
 
 	void init();
-	bool update(int deltaTime);
+	pair<bool, bool> update(int deltaTime);
 	void render();
 
 	pair<bool, bool> mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton, bool paused);
@@ -81,6 +81,8 @@ private:
 	bool abre_Puerta;
 	bool stop_Lemmings;
 	float displacement;
+	bool won;
+	int lemmingsRemaining;
 };
 
 
