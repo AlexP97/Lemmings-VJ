@@ -70,6 +70,7 @@ private:
 	Minimap minimap;
 	MinimapRectangle mRectangle1, mRectangle2;
 	Text text;
+	vector<int> abilitiesRemaining;
 	int lemmingsIn;
 	int lemmingsOut;
 	int time;

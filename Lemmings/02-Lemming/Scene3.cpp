@@ -30,6 +30,11 @@ void Scene3::init()
 	stop_Lemmings = false;
 	won = false;
 	lemmingsRemaining = 60;
+	abilitiesRemaining = vector<int>(6, 0);
+	abilitiesRemaining[0] = 5;
+	abilitiesRemaining[1] = 4;
+	abilitiesRemaining[3] = 10;
+	abilitiesRemaining[5] = 20;
 	//glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(float(CAMERA_WIDTH), float(CAMERA_HEIGHT)) };
 	glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(float(CAMERA_WIDTH), float(160.f)) };
 	glm::vec2 texCoords[2] = { glm::vec2(120.f / 512.0, 0.f), glm::vec2((120.f + 320.f) / 512.0f, 160.f / 256.0f) };
@@ -235,11 +240,23 @@ void Scene3::render()
 	if (iconSelected.getState() == 1) iconSelected.render();
 	cursor.render();
 	float percentage = 0;
-	if (lemmingsIn > 0) percentage = (float(lemmingsOut) / float(lemmingsIn)) * 100;
+	if (lemmingsIn > 0) percentage = (float(lemmingsOut) / float(60)) * 100;
 	int timeInSeconds = time / 1000;
 	int minutes = timeInSeconds / 60;
 	int seconds = timeInSeconds % 60;
 	text.render("OUT  " + to_string(lemmingsIn) + "   IN  " + to_string(int(percentage)) + "%  TIME  " + to_string(minutes) + ":" + to_string(seconds), glm::vec2(500, 510), 32, glm::vec4(0.4, 0.96, 0.07, 1));
+	if (abilitiesRemaining[0] > 9) text.render(to_string(abilitiesRemaining[0]), glm::vec2(15, 530), 40, glm::vec4(0.0, 0.0, 0.0, 1));
+	else text.render(to_string(abilitiesRemaining[0]), glm::vec2(28, 530), 40, glm::vec4(0.0, 0.0, 0.0, 1));
+	if (abilitiesRemaining[1] > 9) text.render(to_string(abilitiesRemaining[1]), glm::vec2(82, 530), 40, glm::vec4(0.0, 0.0, 0.0, 1));
+	else text.render(to_string(abilitiesRemaining[1]), glm::vec2(95, 530), 40, glm::vec4(0.0, 0.0, 0.0, 1));
+	if (abilitiesRemaining[2] > 9) text.render(to_string(abilitiesRemaining[2]), glm::vec2(147, 530), 40, glm::vec4(0.0, 0.0, 0.0, 1));
+	else text.render(to_string(abilitiesRemaining[2]), glm::vec2(160, 530), 40, glm::vec4(0.0, 0.0, 0.0, 1));
+	if (abilitiesRemaining[3] > 9) text.render(to_string(abilitiesRemaining[3]), glm::vec2(214, 530), 40, glm::vec4(0.0, 0.0, 0.0, 1));
+	else text.render(to_string(abilitiesRemaining[3]), glm::vec2(227, 530), 40, glm::vec4(0.0, 0.0, 0.0, 1));
+	if (abilitiesRemaining[4] > 9) text.render(to_string(abilitiesRemaining[4]), glm::vec2(280, 530), 40, glm::vec4(0.0, 0.0, 0.0, 1));
+	else text.render(to_string(abilitiesRemaining[4]), glm::vec2(293, 530), 40, glm::vec4(0.0, 0.0, 0.0, 1));
+	if (abilitiesRemaining[5] > 9) text.render(to_string(abilitiesRemaining[5]), glm::vec2(348, 530), 40, glm::vec4(0.0, 0.0, 0.0, 1));
+	else text.render(to_string(abilitiesRemaining[5]), glm::vec2(361, 530), 40, glm::vec4(0.0, 0.0, 0.0, 1));
 }
 
 pair<bool, bool> Scene3::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton, bool paused)
@@ -300,7 +317,44 @@ void Scene3::explode() {
 
 void Scene3::clickOnLemming(int indLemming) {
 
-	lemming[indLemming].setAbility(ability);
+	switch (ability) {
+	case 1:
+		if (abilitiesRemaining[0] > 0) {
+			lemming[indLemming].setAbility(ability);
+			abilitiesRemaining[0]--;
+		}
+		break;
+	case 2:
+		if (abilitiesRemaining[1] > 0) {
+			lemming[indLemming].setAbility(ability);
+			abilitiesRemaining[1]--;
+		}
+		break;
+	case 3:
+		if (abilitiesRemaining[2] > 0) {
+			lemming[indLemming].setAbility(ability);
+			abilitiesRemaining[2]--;
+		}
+		break;
+	case 4:
+		if (abilitiesRemaining[3] > 0) {
+			lemming[indLemming].setAbility(ability);
+			abilitiesRemaining[3]--;
+		}
+		break;
+	case 5:
+		if (abilitiesRemaining[4] > 0) {
+			lemming[indLemming].setAbility(ability);
+			abilitiesRemaining[4]--;
+		}
+		break;
+	case 6:
+		if (abilitiesRemaining[5] > 0) {
+			lemming[indLemming].setAbility(ability);
+			abilitiesRemaining[5]--;
+		}
+		break;
+	}
 	if (ability != 0) mciSendString(TEXT("play sound/ACTION.WAV"), NULL, 0, NULL);
 }
 
