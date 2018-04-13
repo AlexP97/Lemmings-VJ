@@ -18,7 +18,7 @@ SimpleScene::~SimpleScene()
 		delete map;
 }
 
-void SimpleScene::init()
+void SimpleScene::init(int image)
 {
 	currentTime = 0;
 	//glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(float(CAMERA_WIDTH), float(CAMERA_HEIGHT)) };
@@ -28,7 +28,10 @@ void SimpleScene::init()
 	initShaders();
 
 	map = MaskedTexturedQuad::createTexturedQuad(geom, texCoords, maskedTexProgram);
-	colorTexture.loadFromFile("images/simplescene.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	if (image == 0) colorTexture.loadFromFile("images/credits.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	else if (image == 2) colorTexture.loadFromFile("images/just_dig.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	else if (image == 3) colorTexture.loadFromFile("images/theyjustkeeponcoming.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	else if (image == 4) colorTexture.loadFromFile("images/theprison.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	colorTexture.setMinFilter(GL_NEAREST);
 	colorTexture.setMagFilter(GL_NEAREST);
 	maskTexture.loadFromFile("images/home_screen-alfa.png", TEXTURE_PIXEL_FORMAT_L);

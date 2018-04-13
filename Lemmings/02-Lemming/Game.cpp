@@ -79,6 +79,15 @@ bool Game::update(int deltaTime)
 	case 5:
 		simpleScene.update(deltaTime);
 		break;
+	case 6:
+		simpleScene.update(deltaTime);
+		break;
+	case 7:
+		simpleScene.update(deltaTime);
+		break;
+	case 8:
+		simpleScene.update(deltaTime);
+		break;
 	}
 	
 	return bPlay;
@@ -106,6 +115,15 @@ void Game::render()
 	case 5:
 		simpleScene.render();
 		break;
+	case 6:
+		simpleScene.render();
+		break;
+	case 7:
+		simpleScene.render();
+		break;
+	case 8:
+		simpleScene.render();
+		break;
 	}
 }
 
@@ -129,31 +147,25 @@ void Game::specialKeyPressed(int key)
 {
 	if (actualScene == 0 && key == GLUT_KEY_F1) {
 		mciSendString(TEXT("close main"), NULL, 0, NULL);
-		mciSendString(TEXT("open sound/BACKGROUND-1.mp3 alias scene1"), NULL, 0, NULL);
-		mciSendString(TEXT("play scene1 repeat"), NULL, 0, NULL);
-		scene.init();
-		actualScene = 1;
+		simpleScene.init(2);
+		actualScene = 6;
 	}
 	else if (actualScene == 0 && key == GLUT_KEY_F2) {
 		mciSendString(TEXT("close main"), NULL, 0, NULL);
-		mciSendString(TEXT("open sound/BACKGROUND-2.mp3 alias scene2"), NULL, 0, NULL);
-		mciSendString(TEXT("play scene2 repeat"), NULL, 0, NULL);
-		scene2.init();
-		actualScene = 2;
+		simpleScene.init(3);
+		actualScene = 7;
 	}
 	else if (actualScene == 0 && key == GLUT_KEY_F3) {
 		mciSendString(TEXT("close main"), NULL, 0, NULL);
-		mciSendString(TEXT("open sound/BACKGROUND-3.mp3 alias scene3"), NULL, 0, NULL);
-		mciSendString(TEXT("play scene3 repeat"), NULL, 0, NULL);
-		scene3.init();
-		actualScene = 3;
+		simpleScene.init(4);
+		actualScene = 8;
 	}
 	else if (actualScene == 0 && key == GLUT_KEY_F4) {
-		simpleScene.init();
+		simpleScene.init(0);
 		actualScene = 4;
 	}
 	else if (actualScene == 0 && key == GLUT_KEY_F5) {
-		simpleScene.init();
+		simpleScene.init(0);
 		actualScene = 5;
 	}
 	specialKeys[key] = true;
@@ -227,6 +239,30 @@ void Game::mousePress(int button)
 				doubleSpeed = !doubleSpeed;
 				if (doubleSpeed) mciSendString(TEXT("set scene3 speed 1500"), NULL, 0, NULL);
 				else mciSendString(TEXT("set scene3 speed 1000"), NULL, 0, NULL);
+			}
+			break;
+		case 6:
+			if (bLeftMouse) {
+				mciSendString(TEXT("open sound/BACKGROUND-1.mp3 alias scene1"), NULL, 0, NULL);
+				mciSendString(TEXT("play scene1 repeat"), NULL, 0, NULL);
+				scene.init();
+				actualScene = 1;
+			}
+			break;
+		case 7:
+			if (bLeftMouse) {
+				mciSendString(TEXT("open sound/BACKGROUND-2.mp3 alias scene2"), NULL, 0, NULL);
+				mciSendString(TEXT("play scene2 repeat"), NULL, 0, NULL);
+				scene2.init();
+				actualScene = 2;
+			}
+			break;
+		case 8:
+			if (bLeftMouse) {
+				mciSendString(TEXT("open sound/BACKGROUND-3.mp3 alias scene3"), NULL, 0, NULL);
+				mciSendString(TEXT("play scene3 repeat"), NULL, 0, NULL);
+				scene3.init();
+				actualScene = 3;
 			}
 			break;
 		}

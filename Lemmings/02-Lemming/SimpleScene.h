@@ -30,7 +30,7 @@ public:
 	SimpleScene();
 	~SimpleScene();
 
-	void init();
+	void init(int image);
 	bool update(int deltaTime);
 	void render();
 
