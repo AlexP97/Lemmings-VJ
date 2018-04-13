@@ -23,7 +23,7 @@ void Scene::init()
 	currentTime = 0;
 	lemmingsIn = 0;
 	lemmingsOut = 0;
-	int ability = 0;
+	ability = 0;
 	displacement = 0;
 	time = 300 * 1000;
 	abre_Puerta = true;

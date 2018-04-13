@@ -32,7 +32,6 @@ private:
 	ShaderProgram simpleTexProgram, maskedTexProgram;
 	float currentTime;
 	glm::mat4 projection;
-	
 };
 
 

@@ -73,6 +73,12 @@ bool Game::update(int deltaTime)
 			}
 		}
 		break;
+	case 4:
+		simpleScene.update(deltaTime);
+		break;
+	case 5:
+		simpleScene.update(deltaTime);
+		break;
 	}
 	
 	return bPlay;
@@ -94,6 +100,12 @@ void Game::render()
 	case 3:
 		scene3.render();
 		break;
+	case 4:
+		simpleScene.render();
+		break;
+	case 5:
+		simpleScene.render();
+		break;
 	}
 }
 
@@ -102,6 +114,9 @@ void Game::keyPressed(int key)
 	if(key == 27) // Escape code
 		bPlay = false;
 
+	if (key == 8) {
+		if (actualScene == 4 || actualScene == 5) actualScene = 0;
+	}
 	keys[key] = true;
 }
 
@@ -132,6 +147,14 @@ void Game::specialKeyPressed(int key)
 		mciSendString(TEXT("play scene3 repeat"), NULL, 0, NULL);
 		scene3.init();
 		actualScene = 3;
+	}
+	else if (actualScene == 0 && key == GLUT_KEY_F4) {
+		simpleScene.init();
+		actualScene = 4;
+	}
+	else if (actualScene == 0 && key == GLUT_KEY_F5) {
+		simpleScene.init();
+		actualScene = 5;
 	}
 	specialKeys[key] = true;
 }
