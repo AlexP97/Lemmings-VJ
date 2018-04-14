@@ -271,17 +271,18 @@ bool Lemming::update(int deltaTime)
 		break;
 
 	case DIG_RIGHT_STATE:
-		sprite->position() += glm::vec2(1.0, 0);
-		if (collision()) {
-
-			eraseMask(position()[0] + 12 + displacement, position()[1] + 8, -6, 6, 0, 0.25, mask);
+		sprite->position() += glm::vec2(0.0, 0);
+		if (collisionBasher()) {
+			sprite->position() += glm::vec2(-0.0, 0);;
+			cout << "Empiezo en " << position()[0]+12+displacement << ' ' << position()[1]+8 << endl;
+			eraseMask(position()[0] + 12 + displacement, position()[1] + 8, -5, 8, 0, 1.0, mask);
 			sprite->position() += glm::vec2(0.25, 0);
 		}
 		else {
+			sprite->position() += glm::vec2(-0.0, 0);;
 			sprite->changeAnimation(WALKING_RIGHT);
 			state = WALKING_RIGHT_STATE;
 		}
-		sprite->position() += glm::vec2(-1.0, 0);;
 		break;
 	case EXPLODE_STATE:
 		if (sprite->currentKeyFrame() == 20) {
@@ -527,6 +528,18 @@ bool Lemming::collision()
 	return true;
 }
 
+bool Lemming::collisionBasher()
+{
+	glm::ivec2 posBase = sprite->position() + glm::vec2(displacement, 0); // Add the map displacement
+
+	posBase += glm::ivec2(15, 8);
+	for (int i = max(posBase.y - 8, 0); i <= min(mask->height() - 1, posBase.y + 7); i++) {
+		if (mask->pixel(posBase.x, i) == 255)
+			return true;
+	}
+	return false;
+}
+
 bool Lemming::hayParado()
 {
 	glm::ivec2 posBase = sprite->position() + glm::vec2(displacement, 0); // Add the map displacement
@@ -585,6 +598,7 @@ void Lemming::setAbility(int ability) {
 void Lemming::eraseMask(int posX, int posY, float ymin, float ymax, float xmin, float xmax, VariableTexture* mascara) {
 	for (int y = max(0.f, posY+ymin); y <= min((float)mask->height() - 1, posY + ymax); y++) {
 		for (int x = max(0.f, posX + xmin); x <= min((float)mask->width() - 1, posX + xmax); x++) {
+			cout << "Borrar pixel " << x << ' ' << y << endl;
 			mascara->setPixel(x, y, 0);
 		}
 	}

@@ -32,6 +32,7 @@ public:
 private:
 	int collisionFloor(int maxFall);
 	bool collision();
+	bool collisionBasher();
 	int collisionStairRight();
 	int collisionStairLeft();
 	bool hayParado();
