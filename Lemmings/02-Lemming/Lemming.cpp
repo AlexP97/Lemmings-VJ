@@ -17,7 +17,8 @@
 enum LemmingAnims
 {
 	WALKING_LEFT, WALKING_RIGHT, COMING_OUT, FALLING_LEFT, FALLING_RIGHT, DIG, BLOCKING, DIG_LEFT, DIG_RIGHT, EXPLODING, CLIMBING_LEFT,
-	CLIMBING_RIGHT, STOPPING_CLIMB_LEFT, STOPPING_CLIMB_RIGHT, BUILDING_LEFT, BUILDING_RIGHT, WALKING_RIGHT_STAIR
+	CLIMBING_RIGHT, STOPPING_CLIMB_LEFT, STOPPING_CLIMB_RIGHT, BUILDING_LEFT, BUILDING_RIGHT, WALKING_RIGHT_STAIR, FLOATING_RIGHT,
+	FLOATING_LEFT
 };
 
 
@@ -28,49 +29,51 @@ void Lemming::init(const glm::vec2 &initialPosition, ShaderProgram &shaderProgra
 	come_Out = false;
 	primeraPasada = false;
 	numberOfStairs = 0;
+	floating = false;
+	currentFloating = 0;
 	displacement = desplazamiento;
 	state = FALLING_RIGHT_STATE;
-	spritesheet.loadFromFile("images/lemming2_sinfondo.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	spritesheet.loadFromFile("images/lemming3_sinfondo.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spritesheet.setMinFilter(GL_NEAREST);
 	spritesheet.setMagFilter(GL_NEAREST);
-	sprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(0.125, 1 / 23.f), &spritesheet, &shaderProgram);
-	sprite->setNumberAnimations(16);
+	sprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(0.125, 1 / 24.f), &spritesheet, &shaderProgram);
+	sprite->setNumberAnimations(18);
 	
 		sprite->setAnimationSpeed(WALKING_RIGHT, 12);
 		for(int i=0; i<8; i++)
-			sprite->addKeyframe(WALKING_RIGHT, glm::vec2(float(i) / 8, 0.f / 23.f));
+			sprite->addKeyframe(WALKING_RIGHT, glm::vec2(float(i) / 8, 0.f / 24.f));
 		
 		sprite->setAnimationSpeed(WALKING_LEFT, 12);
 		for(int i=0; i<8; i++)
-			sprite->addKeyframe(WALKING_LEFT, glm::vec2(float(i) / 8, 1.f / 23.f));
+			sprite->addKeyframe(WALKING_LEFT, glm::vec2(float(i) / 8, 1.f / 24.f));
 
 		sprite->setAnimationSpeed(COMING_OUT, 9);
 		for (int i = 0; i<8; i++)
-			sprite->addKeyframe(COMING_OUT, glm::vec2(float(i) / 8, 2.f / 23.f));
+			sprite->addKeyframe(COMING_OUT, glm::vec2(float(i) / 8, 2.f / 24.f));
 
 		sprite->setAnimationSpeed(FALLING_LEFT, 12);
 		for (int i = 7; i>3; i--)
-			sprite->addKeyframe(FALLING_LEFT, glm::vec2(float(i) / 8, 3.f / 23.f));
+			sprite->addKeyframe(FALLING_LEFT, glm::vec2(float(i) / 8, 3.f / 24.f));
 
 		sprite->setAnimationSpeed(FALLING_RIGHT, 12);
 		for (int i = 0; i<4; i++)
-			sprite->addKeyframe(FALLING_RIGHT, glm::vec2(float(i) / 8, 3.f / 23.f));
+			sprite->addKeyframe(FALLING_RIGHT, glm::vec2(float(i) / 8, 3.f / 24.f));
 
 		sprite->setAnimationSpeed(DIG, 9);
 		for (int i = 0; i<8; i++)
-			sprite->addKeyframe(DIG, glm::vec2(float(i) / 8, 6.f / 23.f));
+			sprite->addKeyframe(DIG, glm::vec2(float(i) / 8, 6.f / 24.f));
 
 		sprite->setAnimationSpeed(DIG_RIGHT, 9);
 		for (int j = 0; j < 2; j++) {
 			for (int i = 0; i < 8; i++) {
-				sprite->addKeyframe(DIG_RIGHT, glm::vec2(float(i) / 8, (7.f + float(j)) / 23.f));
+				sprite->addKeyframe(DIG_RIGHT, glm::vec2(float(i) / 8, (7.f + float(j)) / 24.f));
 			}
 		}
 
 		sprite->setAnimationSpeed(DIG_LEFT, 9);
 		for (int j = 0; j < 2; j++) {
 			for (int i = 0; i < 8; i++) {
-				sprite->addKeyframe(DIG_LEFT, glm::vec2(float(i) / 8, (9.f + float(j)) / 23.f));
+				sprite->addKeyframe(DIG_LEFT, glm::vec2(float(i) / 8, (9.f + float(j)) / 24.f));
 			}
 		}
 
@@ -80,50 +83,58 @@ void Lemming::init(const glm::vec2 &initialPosition, ShaderProgram &shaderProgra
 		sprite->setAnimationSpeed(BLOCKING, 9);
 		for (int j = 0; j < 2; j++) {
 			for (int i = 0; i < 8; i++) {
-				sprite->addKeyframe(BLOCKING, glm::vec2(float(i) / 8, (4.f+float(j)) / 23.f));
+				sprite->addKeyframe(BLOCKING, glm::vec2(float(i) / 8, (4.f+float(j)) / 24.f));
 			}
 		}
 
 		sprite->setAnimationSpeed(EXPLODING, 12);
 		for (int j = 0; j < 4; j++) {
 			for (int i = 0; i < 8; i++) {
-				sprite->addKeyframe(EXPLODING, glm::vec2(float(i) / 8, (15.f + float(j)) / 23.f));
+				sprite->addKeyframe(EXPLODING, glm::vec2(float(i) / 8, (15.f + float(j)) / 24.f));
 			}
 		}
 
 
 		sprite->setAnimationSpeed(CLIMBING_LEFT, 9);
 		for (int i = 0; i < 8; i++) {
-			sprite->addKeyframe(CLIMBING_LEFT, glm::vec2(float(i) / 8, 13.f / 23.f));
+			sprite->addKeyframe(CLIMBING_LEFT, glm::vec2(float(i) / 8, 13.f / 24.f));
 		}
 
 		sprite->setAnimationSpeed(CLIMBING_RIGHT, 9);
 		for (int i = 0; i < 8; i++) {
-			sprite->addKeyframe(CLIMBING_RIGHT, glm::vec2(float(i) / 8, 11.f / 23.f));
+			sprite->addKeyframe(CLIMBING_RIGHT, glm::vec2(float(i) / 8, 11.f / 24.f));
 		}
 
 		sprite->setAnimationSpeed(STOPPING_CLIMB_LEFT, 12);
 		for (int i = 0; i < 8; i++) {
-			sprite->addKeyframe(STOPPING_CLIMB_LEFT, glm::vec2(float(i) / 8, 14.f / 23.f));
+			sprite->addKeyframe(STOPPING_CLIMB_LEFT, glm::vec2(float(i) / 8, 14.f / 24.f));
 		}
 
 		sprite->setAnimationSpeed(STOPPING_CLIMB_RIGHT, 12);
 		for (int i = 0; i < 8; i++) {
-			sprite->addKeyframe(STOPPING_CLIMB_RIGHT, glm::vec2(float(i) / 8, 12.f / 23.f));
+			sprite->addKeyframe(STOPPING_CLIMB_RIGHT, glm::vec2(float(i) / 8, 12.f / 24.f));
 		}
 
 		sprite->setAnimationSpeed(BUILDING_LEFT, 9);
 		for (int j = 0; j < 2; j++) {
 			for (int i = 7; i >= 0; i--) {
-				sprite->addKeyframe(BUILDING_LEFT, glm::vec2(float(i) / 8, (21.f + float(j)) / 23.f));
+				sprite->addKeyframe(BUILDING_LEFT, glm::vec2(float(i) / 8, (21.f + float(j)) / 24.f));
 			}
 		}
 
 		sprite->setAnimationSpeed(BUILDING_RIGHT, 9);
 		for (int j = 0; j < 2; j++) {
 			for (int i = 0; i < 8; i++) {
-				sprite->addKeyframe(BUILDING_RIGHT, glm::vec2(float(i) / 8, (19.f + float(j)) / 23.f));
+				sprite->addKeyframe(BUILDING_RIGHT, glm::vec2(float(i) / 8, (19.f + float(j)) / 24.f));
 			}
+		}
+		sprite->setAnimationSpeed(FLOATING_RIGHT, 12);
+		for (int i = 0; i < 4; i++) {
+			sprite->addKeyframe(FLOATING_RIGHT, glm::vec2(glm::vec2(float(i) / 8, 23.f / 24.f)));
+		}
+		sprite->setAnimationSpeed(FLOATING_LEFT, 12);
+		for (int i = 4; i < 8; i++) {
+			sprite->addKeyframe(FLOATING_LEFT, glm::vec2(glm::vec2(float(i) / 8, 23.f / 24.f)));
 		}
 		
 	sprite->changeAnimation(FALLING_RIGHT);
@@ -365,6 +376,30 @@ bool Lemming::update(int deltaTime)
 			}
 		}
 		break;
+	case FLOATING_RIGHT_STATE:
+		sprite->position() += glm::vec2(0, -1);
+		if (collisionTop()) {
+			sprite->position() -= glm::vec2(0, -1);
+		}
+		currentFloating += deltaTime;
+		if (currentFloating > (5 * 1000)) {
+			sprite->changeAnimation(WALKING_RIGHT);
+			state = WALKING_RIGHT_STATE;
+			floating = false;
+		}
+		break;
+	case FLOATING_LEFT_STATE:
+		sprite->position() += glm::vec2(0, -1);
+		if (collisionTop()) {
+			sprite->position() -= glm::vec2(0, -1);
+		}
+		currentFloating += deltaTime;
+		if (currentFloating > (5 * 1000)) {
+			sprite->changeAnimation(WALKING_LEFT);
+			state = WALKING_LEFT_STATE;
+			floating = false;
+		}
+		break;
 	}
 	return true;
 }
@@ -450,6 +485,41 @@ glm::vec2 Lemming::position() {
 	return sprite->position();
 }
 
+bool Lemming::floats() {
+	return floating;
+}
+
+void Lemming::setPosition(glm::vec2 position) {
+	sprite->setPosition(position);
+}
+
+void Lemming::moveFloatingLemming(int mouseX, int mouseY)
+{
+	int x = mouseX / 3.f - 2.f;
+	int y = mouseY / 3.f - 2.f;
+	glm::vec2 move = glm::vec2(0, 0);
+	glm::vec2 position = sprite->position();
+	position += glm::vec2(7, 7);
+	if ((x + 15) > position.x && (x - 15) < position.x) {
+		if ((y + 15) > position.y && (y - 15) < position.y) {
+			sprite->position() += glm::vec2(-4, 0);
+			if (x > position.x && !collision()) move += glm::vec2(-1, 0);
+			sprite->position() += glm::vec2(7, 0);
+			if (x < position.x && !collision()) move += glm::vec2(1, 0);
+			sprite->position() += glm::vec2(-3, 0);
+
+			sprite->position() += glm::vec2(0, -2);
+			if (y > position.y && !collisionTop()) move += glm::vec2(0, -1);
+			sprite->position() += glm::vec2(0, 2);
+			int fall = collisionFloor(3);
+			if (y < position.y && fall > 2) move += glm::vec2(0, 1);
+
+			position -= glm::vec2(7, 7);
+			setPosition(position + move);
+		}
+	}
+}
+
 void Lemming::setMapMask(VariableTexture *mapMask, VariableTexture *lemmingMask)
 {
 	mask = mapMask;
@@ -464,6 +534,16 @@ void Lemming::setStairs(vector<pair<Stairs, bool>> stairs)
 bool Lemming::eliminar() 
 {
 	return eliminado;
+}
+
+bool Lemming::collisionTop() {
+	glm::ivec2 posBase = sprite->position() + glm::vec2(displacement, 0); // Add the map displacement
+
+	posBase += glm::ivec2(7, 7);
+	if ((mask->pixel(posBase.x, posBase.y) == 0) && (mask->pixel(posBase.x + 1, posBase.y) == 0))
+		return false;
+
+	return true;
 }
 
 void Lemming::setComeOut(bool b) {
@@ -586,8 +666,22 @@ void Lemming::setAbility(int ability) {
 			}
 			else if (state == BUILDING_LEFT_STATE || state == BUILDING_RIGHT_STATE) numberOfStairs = 0;
 		}
+		else if (ability == 7) {
+			if (state == WALKING_RIGHT_STATE) {
+				sprite->changeAnimation(FLOATING_RIGHT);
+				state = FLOATING_RIGHT_STATE;
+				floating = true;
+				currentFloating = 0;
+			}
+			if (state == WALKING_LEFT_STATE) {
+				sprite->changeAnimation(FLOATING_LEFT);
+				state = FLOATING_LEFT_STATE;
+				floating = true;
+				currentFloating = 0;
+			}
+		}
 	}
-	if (ability == 7 || ability == 1) {
+	if (ability == 8 || ability == 1) {
 		if(ability == 1 && state == BLOCKING_STATE) 
 			eraseMask(position()[0] + displacement, position()[1], 0, 16, 0, 16, parados);
 		state = EXPLODE_STATE;

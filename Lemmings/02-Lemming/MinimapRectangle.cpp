@@ -21,8 +21,8 @@ void MinimapRectangle::init(const glm::vec2 &initialPosition, ShaderProgram &sha
 		else sprite = Sprite::createSprite(glm::ivec2(60.f, 30.f), glm::vec2(1.f, 1.f), &spritesheet, &shaderProgram);
 	}
 	else if (scene == 1) {
-		if (typeRectangle == 0) sprite = Sprite::createSprite(glm::ivec2(122.5f, 24.f), glm::vec2(1.f, 1.f), &spritesheet, &shaderProgram);
-		else sprite = Sprite::createSprite(glm::ivec2(51.f, 24.f), glm::vec2(1.f, 1.f), &spritesheet, &shaderProgram);
+		if (typeRectangle == 0) sprite = Sprite::createSprite(glm::ivec2(102.5f, 24.f), glm::vec2(1.f, 1.f), &spritesheet, &shaderProgram);
+		else sprite = Sprite::createSprite(glm::ivec2(42.f, 24.f), glm::vec2(1.f, 1.f), &spritesheet, &shaderProgram);
 	}
 	else if (scene == 2) {
 		if (typeRectangle == 0) sprite = Sprite::createSprite(glm::ivec2(80.f, 24.f), glm::vec2(1.f, 1.f), &spritesheet, &shaderProgram);

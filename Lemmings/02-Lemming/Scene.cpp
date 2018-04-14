@@ -30,7 +30,7 @@ void Scene::init()
 	stop_Lemmings = false;
 	won = false;
 	lemmingsRemaining = 10;
-	abilitiesRemaining = vector<int>(6, 0);
+	abilitiesRemaining = vector<int>(7, 0);
 	abilitiesRemaining[2] = 10;
 	//glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(float(CAMERA_WIDTH), float(CAMERA_HEIGHT)) };
 	glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(float(CAMERA_WIDTH), float(160.f)) };
@@ -56,11 +56,11 @@ void Scene::init()
 	botonSpeed.init(glm::vec2(280, 185), simpleTexProgram, 1);
 	cursor.init(glm::vec2(90, 30), simpleTexProgram);
 	salida.init(glm::vec2(223, 108), simpleTexProgram, 0);
-	panel.init(glm::vec2(2, 159), simpleTexProgram);
+	panel.init(glm::vec2(0, 159), simpleTexProgram);
 	iconSelected.init(glm::vec2(9, 158), simpleTexProgram);
-	minimap.init(glm::vec2(170, 174), simpleTexProgram, 0);
-	mRectangle1.init(glm::vec2(170, 173), simpleTexProgram, 0, 0);
-	mRectangle2.init(glm::vec2(193, 173), simpleTexProgram, 0, 1);
+	minimap.init(glm::vec2(180, 174), simpleTexProgram, 0);
+	mRectangle1.init(glm::vec2(180, 173), simpleTexProgram, 0, 0);
+	mRectangle2.init(glm::vec2(203, 173), simpleTexProgram, 0, 1);
 	text.init("fonts/OpenSans-Regular.ttf");
 
 	lemmingInit = vector<bool>(10, false);
@@ -184,7 +184,7 @@ pair<bool, bool> Scene::update(int deltaTime)
 
 	if (time < 0) {
 		time = 0;
-		ability = 7;
+		ability = 8;
 		explode();
 	}
 	ret.first = true;
@@ -232,14 +232,15 @@ void Scene::render()
 	int timeInSeconds = time / 1000;
 	int minutes = timeInSeconds / 60;
 	int seconds = timeInSeconds % 60;
-	text.render("OUT  " + to_string(lemmingsIn) + "   IN  " + to_string(int(percentage)) + "%  TIME  " + to_string(minutes) + ":" + to_string(seconds), glm::vec2(500, 510), 32, glm::vec4(0.4, 0.96, 0.07, 1));
-	text.render(to_string(abilitiesRemaining[0]) , glm::vec2(28, 530), 40, glm::vec4(0.0, 0.0, 0.0, 1));
-	text.render(to_string(abilitiesRemaining[1]), glm::vec2(95, 530), 40, glm::vec4(0.0, 0.0, 0.0, 1));
-	if (abilitiesRemaining[2] > 9) text.render(to_string(abilitiesRemaining[2]), glm::vec2(147, 530), 40, glm::vec4(0.0, 0.0, 0.0, 1));
-	else text.render(to_string(abilitiesRemaining[2]), glm::vec2(160, 530), 40, glm::vec4(0.0, 0.0, 0.0, 1));
-	text.render(to_string(abilitiesRemaining[3]), glm::vec2(227, 530), 40, glm::vec4(0.0, 0.0, 0.0, 1));
-	text.render(to_string(abilitiesRemaining[4]), glm::vec2(293, 530), 40, glm::vec4(0.0, 0.0, 0.0, 1));
-	text.render(to_string(abilitiesRemaining[5]), glm::vec2(361, 530), 40, glm::vec4(0.0, 0.0, 0.0, 1));
+	text.render("OUT  " + to_string(lemmingsIn) + "   IN  " + to_string(int(percentage)) + "%  TIME  " + to_string(minutes) + ":" + to_string(seconds), glm::vec2(545, 510), 32, glm::vec4(0.4, 0.96, 0.07, 1));
+	text.render(to_string(abilitiesRemaining[0]), glm::vec2(24, 530), 40, glm::vec4(0.0, 0.0, 0.0, 1));
+	text.render(to_string(abilitiesRemaining[1]), glm::vec2(91, 530), 40, glm::vec4(0.0, 0.0, 0.0, 1));
+	if (abilitiesRemaining[2] > 9) text.render(to_string(abilitiesRemaining[2]), glm::vec2(143, 530), 40, glm::vec4(0.0, 0.0, 0.0, 1));
+	else text.render(to_string(abilitiesRemaining[2]), glm::vec2(156, 530), 40, glm::vec4(0.0, 0.0, 0.0, 1));
+	text.render(to_string(abilitiesRemaining[3]), glm::vec2(223, 530), 40, glm::vec4(0.0, 0.0, 0.0, 1));
+	text.render(to_string(abilitiesRemaining[4]), glm::vec2(289, 530), 40, glm::vec4(0.0, 0.0, 0.0, 1));
+	text.render(to_string(abilitiesRemaining[5]), glm::vec2(357, 530), 40, glm::vec4(0.0, 0.0, 0.0, 1));
+	text.render(to_string(abilitiesRemaining[6]), glm::vec2(425, 530), 40, glm::vec4(0.0, 0.0, 0.0, 1));
 }
 
 pair<bool, bool> Scene::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton, bool paused)
@@ -258,11 +259,6 @@ pair<bool, bool> Scene::mouseMoved(int mouseX, int mouseY, bool bLeftButton, boo
 			mRectangle2.displace(d / 6.5f);
 		}
 
-		if (bLeftButton)
-			eraseMask(mouseX, mouseY);
-		else if (bRightButton)
-			applyMask(mouseX, mouseY);
-
 		pair<bool, int> cOL = cursorOnLemming(mouseX, mouseY);
 		if (cursor.currentAnimation() == 0) {
 			if (cOL.first) cursor.changeAnimation(1);
@@ -273,15 +269,23 @@ pair<bool, bool> Scene::mouseMoved(int mouseX, int mouseY, bool bLeftButton, boo
 
 		if (bLeftButton) {
 			clickOnAbility(mouseX, mouseY);
-			if (ability == 7) {
+			if (ability == 8) {
 				explode();
 			}
-			if (cOL.first && ability != 7) {
+			if (cOL.first && ability != 8) {
 				clickOnLemming(cOL.second);
 			}
 		}
 	}
 	
+	for (unsigned int i = 0; i < lemming.size(); i++) {
+		if (lemmingInit[i]) {
+			if (lemming[i].floats()) {
+				lemming[i].moveFloatingLemming(mouseX, mouseY);
+			}
+		}
+	}
+
 	if (bLeftButton) {
 		if (clickOnSpeed(mouseX, mouseY)) ret.first = true;
 		if (clickOnPause(mouseX, mouseY)) ret.second = true;
@@ -369,9 +373,9 @@ void Scene::clickOnAbility(int mouseX, int mouseY) {
 	int x = mouseX / 3;
 	int y = mouseY / 3;
 	glm::vec2 positionPanel = panel.position();
-	float sizeX = 465.f / 3.f;
+	float sizeX = 530.f / 3.f;
 	float sizeY = 135.f / 3.f;
-	float sizeAbility = sizeX / 7.f;
+	float sizeAbility = sizeX / 8.f;
 
 	if (x > (positionPanel.x - 2) && x < (positionPanel.x + sizeX)) {
 		if (y > positionPanel.y && y < (positionPanel.y + sizeY)) {
@@ -448,10 +452,21 @@ void Scene::clickOnAbility(int mouseX, int mouseY) {
 				}
 				else {
 					iconSelected.changeState(1);
-					stop_Lemmings = true;
 					ability = 7;
 				}
 				iconSelected.setPosition(positionPanel.x - 1 + sizeAbility * 6, 158);
+			}
+			else if (x >(positionPanel.x + sizeAbility * 7 - 2) && x < (positionPanel.x + sizeAbility * 8 - 2)) {
+				if (ability == 8) {
+					iconSelected.changeState(0);
+					ability = 0;
+				}
+				else {
+					iconSelected.changeState(1);
+					stop_Lemmings = true;
+					ability = 8;
+				}
+				iconSelected.setPosition(positionPanel.x - 1 + sizeAbility * 7, 158);
 			}
 		}
 	}
