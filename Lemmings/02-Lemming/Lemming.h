@@ -24,7 +24,7 @@ public:
 	void displace(float d);
 	void setPosition(glm::vec2 position);
 	bool floats();
-	void moveFloatingLemming(int mouseX, int mouseY);
+	bool moveFloatingLemming(int mouseX, int mouseY);
 	
 	void setMapMask(VariableTexture *mapMask, VariableTexture* lemmingMask);
 	void setStairs(vector<pair<Stairs, bool>> stairs);

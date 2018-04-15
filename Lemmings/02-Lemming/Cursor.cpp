@@ -7,25 +7,32 @@
 
 enum CursorAnims
 {
-	NORMAL, HOVER
+	NORMAL, HOVER, FAN_NORMAL, FAN_MOVING
 };
 
 
 void Cursor::init(const glm::vec2 &initialPosition, ShaderProgram &shaderProgram)
 {
-	spritesheet.loadFromFile("images/miscelanea.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	spritesheet.loadFromFile("images/cursor.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spritesheet.setMinFilter(GL_NEAREST);
 	spritesheet.setMagFilter(GL_NEAREST);
-	sprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(0.9f / 20.0f, 0.9f / 30.0f), &spritesheet, &shaderProgram);
-	sprite->setNumberAnimations(2);
+	sprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(1.f / 6.f, 1.f), &spritesheet, &shaderProgram);
+	sprite->setNumberAnimations(4);
 
 	sprite->setAnimationSpeed(NORMAL, 0);
-	sprite->addKeyframe(NORMAL, glm::vec2(0.6f / 16.0f, 12.5 / 32.0));
+	sprite->addKeyframe(NORMAL, glm::vec2(1.f / 6.f, 1.f));
 
 	sprite->setAnimationSpeed(HOVER, 0);
-	sprite->addKeyframe(HOVER, glm::vec2(0.0f / 16.0f, 12.5 / 32.0));
+	sprite->addKeyframe(HOVER, glm::vec2(0.0f / 6.0f, 1.f));
 
-	sprite->changeAnimation(NORMAL);
+	sprite->setAnimationSpeed(FAN_NORMAL, 0);
+	sprite->addKeyframe(FAN_NORMAL, glm::vec2(2.f / 6.f, 1.f));
+
+	sprite->setAnimationSpeed(FAN_MOVING, 20);
+	for (int i = 2; i<6; i++)
+		sprite->addKeyframe(FAN_MOVING, glm::vec2(float(i) / 6.f, 1.f));
+
+	sprite->changeAnimation(FAN_NORMAL);
 	sprite->setPosition(initialPosition);
 }
 

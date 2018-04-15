@@ -241,7 +241,8 @@ void Scene2::render()
 	int timeInSeconds = time / 1000;
 	int minutes = timeInSeconds / 60;
 	int seconds = timeInSeconds % 60;
-	text.render("OUT  " + to_string(lemmingsIn) + "   IN  " + to_string(int(percentage)) + "%  TIME  " + to_string(minutes) + ":" + to_string(seconds), glm::vec2(545, 510), 32, glm::vec4(0.4, 0.96, 0.07, 1));
+	if (seconds > 9) text.render("OUT  " + to_string(lemmingsIn) + "   IN  " + to_string(int(percentage)) + "%  TIME  " + to_string(minutes) + ":" + to_string(seconds), glm::vec2(545, 510), 32, glm::vec4(0.4, 0.96, 0.07, 1));
+	else text.render("OUT  " + to_string(lemmingsIn) + "   IN  " + to_string(int(percentage)) + "%  TIME  " + to_string(minutes) + ":0" + to_string(seconds), glm::vec2(545, 510), 32, glm::vec4(0.4, 0.96, 0.07, 1));
 	if (abilitiesRemaining[0] > 9) text.render(to_string(abilitiesRemaining[0]), glm::vec2(11, 530), 40, glm::vec4(0.0, 0.0, 0.0, 1));
 	else text.render(to_string(abilitiesRemaining[0]), glm::vec2(24, 530), 40, glm::vec4(0.0, 0.0, 0.0, 1));
 	if (abilitiesRemaining[1] > 9) text.render(to_string(abilitiesRemaining[1]), glm::vec2(78, 530), 40, glm::vec4(0.0, 0.0, 0.0, 1));
@@ -274,12 +275,29 @@ pair<bool, bool> Scene2::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bo
 			mRectangle2.displace(d / 7.5f);
 		}
 
+		bool moved = false;
+		bool oneFloats = false;
+		for (unsigned int i = 0; i < lemming.size(); i++) {
+			if (lemmingInit[i]) {
+				if (lemming[i].floats()) {
+					oneFloats = true;
+					moved = lemming[i].moveFloatingLemming(mouseX, mouseY);
+				}
+			}
+		}
 		pair<bool, int> cOL = cursorOnLemming(mouseX, mouseY);
-		if (cursor.currentAnimation() == 0) {
+		if (oneFloats) {
 			if (cOL.first) cursor.changeAnimation(1);
+			else if (moved && (cursor.currentAnimation() != 3)) cursor.changeAnimation(3);
+			else cursor.changeAnimation(2);
 		}
 		else {
-			if (!cOL.first) cursor.changeAnimation(0);
+			if (cursor.currentAnimation() == 0) {
+				if (cOL.first) cursor.changeAnimation(1);
+			}
+			else {
+				if (!cOL.first) cursor.changeAnimation(0);
+			}
 		}
 
 		if (bLeftButton) {
@@ -420,9 +438,11 @@ pair<bool, int> Scene2::cursorOnLemming(int mouseX, int mouseY) {
 			position = lemming[i].position();
 			if (x > position.x && (x - 15) < position.x) {
 				if (y > position.y && (y - 15) < position.y) {
-					p.first = true;
-					p.second = i;
-					return p;
+					if (!lemming[i].floats()) {
+						p.first = true;
+						p.second = i;
+						return p;
+					}
 				}
 			}
 		}

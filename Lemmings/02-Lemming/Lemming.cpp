@@ -493,15 +493,17 @@ void Lemming::setPosition(glm::vec2 position) {
 	sprite->setPosition(position);
 }
 
-void Lemming::moveFloatingLemming(int mouseX, int mouseY)
+bool Lemming::moveFloatingLemming(int mouseX, int mouseY)
 {
 	int x = mouseX / 3.f - 2.f;
 	int y = mouseY / 3.f - 2.f;
 	glm::vec2 move = glm::vec2(0, 0);
 	glm::vec2 position = sprite->position();
 	position += glm::vec2(7, 7);
+	bool moved = false;
 	if ((x + 15) > position.x && (x - 15) < position.x) {
 		if ((y + 15) > position.y && (y - 15) < position.y) {
+			moved = true;
 			sprite->position() += glm::vec2(-4, 0);
 			if (x > position.x && !collision()) move += glm::vec2(-1, 0);
 			sprite->position() += glm::vec2(7, 0);
@@ -518,6 +520,7 @@ void Lemming::moveFloatingLemming(int mouseX, int mouseY)
 			setPosition(position + move);
 		}
 	}
+	return moved;
 }
 
 void Lemming::setMapMask(VariableTexture *mapMask, VariableTexture *lemmingMask)
