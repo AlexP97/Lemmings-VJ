@@ -271,30 +271,21 @@ bool Lemming::update(int deltaTime)
 		break;
 
 	case DIG_LEFT_STATE:
-		if(collision()) {
-			eraseMask(position()[0] + displacement, position()[1] + 8, -3, 3, -0.25, 0, mask);
-			sprite->position() += glm::vec2(-0.25, 0);
-		}
-		else {
+		sprite->position() += glm::vec2(-1.0, 0);
+		if (!collision()) {
 			sprite->changeAnimation(WALKING_LEFT);
 			state = WALKING_LEFT_STATE;
 		}
 		break;
 
 	case DIG_RIGHT_STATE:
-		sprite->position() += glm::vec2(0.0, 0);
-		if (collisionBasher()) {
-			sprite->position() += glm::vec2(-0.0, 0);;
-			cout << "Empiezo en " << position()[0]+12+displacement << ' ' << position()[1]+8 << endl;
-			eraseMask(position()[0] + 12 + displacement, position()[1] + 8, -5, 8, 0, 1.0, mask);
-			sprite->position() += glm::vec2(0.25, 0);
-		}
-		else {
-			sprite->position() += glm::vec2(-0.0, 0);;
+		sprite->position() += glm::vec2(1.0, 0);
+		if (!collision()) {
 			sprite->changeAnimation(WALKING_RIGHT);
 			state = WALKING_RIGHT_STATE;
 		}
 		break;
+
 	case EXPLODE_STATE:
 		if (sprite->currentKeyFrame() == 20) {
 			mciSendString(TEXT("play sound/BANG.WAV"), NULL, 0, NULL);
@@ -699,6 +690,14 @@ void Lemming::eraseMask(int posX, int posY, float ymin, float ymax, float xmin, 
 			mascara->setPixel(x, y, 0);
 		}
 	}
+}
+
+bool Lemming::isBashing(int position) {
+	if (position == 2)
+		return state == DIG_RIGHT_STATE;
+	if (position == 1)
+		return state == DIG_LEFT_STATE;
+	return false;
 }
 
 

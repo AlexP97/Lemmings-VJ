@@ -168,6 +168,28 @@ pair<bool, bool> Scene::update(int deltaTime)
 		}
 	}
 
+	for (unsigned int i = 0; i < lemming.size(); i++) {
+		if (lemmingInit[i]) {
+			if (lemming[i].isBashing(2)) {
+				glm::vec2 pos = lemming[i].position();
+				for (int i = 0; i < 13; i++) {
+					unsigned int posX = unsigned int(pos.x + 7 + 120);
+					unsigned int posY = unsigned int(pos.y + 5 + i);
+					maskTexture.setPixel(posX, posY, 0);
+				}
+			}
+			else if (lemming[i].isBashing(1)) {
+				glm::vec2 pos = lemming[i].position();
+				for (int i = 0; i < 13; i++) {
+					unsigned int posX = unsigned int(pos.x + 8 + 120);
+					unsigned int posY = unsigned int(pos.y + 5 + i);
+					maskTexture.setPixel(posX, posY, 0);
+				}
+			}
+		}
+	}
+
+
 	puerta.update(deltaTime);
 	botonPlay.update(deltaTime);
 	botonSpeed.update(deltaTime);
