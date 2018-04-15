@@ -185,7 +185,7 @@ pair<bool, bool> Scene3::update(int deltaTime)
 			if (lemming[i].isBashing(2)) {
 				glm::vec2 pos = lemming[i].position();
 				for (int i = 0; i < 13; i++) {
-					unsigned int posX = unsigned int(pos.x + 7 + 120);
+					unsigned int posX = unsigned int(pos.x + 7 + 120 + displacement);
 					unsigned int posY = unsigned int(pos.y + 5 + i);
 					maskTexture.setPixel(posX, posY, 0);
 				}
@@ -193,7 +193,7 @@ pair<bool, bool> Scene3::update(int deltaTime)
 			else if (lemming[i].isBashing(1)) {
 				glm::vec2 pos = lemming[i].position();
 				for (int i = 0; i < 13; i++) {
-					unsigned int posX = unsigned int(pos.x + 8 + 120);
+					unsigned int posX = unsigned int(pos.x + 8 + 120 + displacement);
 					unsigned int posY = unsigned int(pos.y + 5 + i);
 					maskTexture.setPixel(posX, posY, 0);
 				}
