@@ -109,7 +109,7 @@ pair<bool, bool> Scene::update(int deltaTime)
 	if (!stop_Lemmings && lemmingsIn < 10 && currentTime >= (3000 * (lemmingsIn + 1))) {
 		lemming[lemmingsIn].init(glm::vec2(70.f - displacement, 30.f), simpleTexProgram, 120.f + displacement);
 		lemming[lemmingsIn].setMapMask(&maskTexture, &parados);
-		lemming[lemmingsIn].setStairs(stairs);
+		lemming[lemmingsIn].setStairs(stairs, 0);
 		lemmingInit[lemmingsIn] = true;
 		++lemmingsIn;
 	}
@@ -161,7 +161,7 @@ pair<bool, bool> Scene::update(int deltaTime)
 				}
 				for (unsigned int j = 0; j < lemming.size(); j++) {
 					if (lemmingInit[j]) {
-						lemming[j].setStairs(stairs);
+						lemming[j].setStairs(stairs, 0);
 					}
 				}
 			}

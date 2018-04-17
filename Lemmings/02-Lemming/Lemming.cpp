@@ -406,7 +406,7 @@ bool Lemming::update(int deltaTime)
 
 int Lemming::collisionStairRight() {
 	int ret = -2;
-	for (unsigned int i = 0; i < stairsPos.size(); i++) {
+	for (unsigned int i = 0; i < nStairs; i++) {
 		glm::vec2 lemmingPosBase = sprite->position();
 		lemmingPosBase += glm::ivec2(7, 16);
 		glm::vec2 stairPos = stairsPos[i].first.getPosition();
@@ -442,7 +442,7 @@ int Lemming::collisionStairRight() {
 
 int Lemming::collisionStairLeft() {
 	int ret = -2;
-	for (unsigned int i = 0; i < stairsPos.size(); i++) {
+	for (unsigned int i = 0; i < nStairs; i++) {
 		glm::vec2 lemmingPosBase = sprite->position();
 		lemmingPosBase += glm::ivec2(6, 16);
 		glm::vec2 stairPos = stairsPos[i].first.getPosition();
@@ -529,9 +529,10 @@ void Lemming::setMapMask(VariableTexture *mapMask, VariableTexture *lemmingMask)
 	parados = lemmingMask;
 }
 
-void Lemming::setStairs(vector<pair<Stairs, bool>> stairs)
+void Lemming::setStairs(vector<pair<Stairs, bool>> stairs, int n)
 {
 	stairsPos = stairs;
+	nStairs = n;
 }
 
 bool Lemming::eliminar() 

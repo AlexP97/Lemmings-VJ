@@ -27,7 +27,7 @@ public:
 	bool moveFloatingLemming(int mouseX, int mouseY);
 	
 	void setMapMask(VariableTexture *mapMask, VariableTexture* lemmingMask);
-	void setStairs(vector<pair<Stairs, bool>> stairs);
+	void setStairs(vector<pair<Stairs, bool>> stairs, int n);
 	void setAbility(int ability);
 	bool goOut();
 	pair<bool, int> putStair();
@@ -59,6 +59,7 @@ private:
 	VariableTexture *mask;
 	VariableTexture *parados;
 	vector<pair<Stairs, bool>> stairsPos;
+	int nStairs;
 	bool come_Out;
 	bool eliminado;
 	bool climber;

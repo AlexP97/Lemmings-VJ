@@ -36,6 +36,9 @@ void Scene3::init()
 	abilitiesRemaining[3] = 10;
 	abilitiesRemaining[5] = 20;
 	abilitiesRemaining[6] = 10;
+	pair<Stairs, bool> p;
+	for (int i = 0; i < 20 * 12; i++) stairs.push_back(p);
+	nStairs = 0;
 	//glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(float(CAMERA_WIDTH), float(CAMERA_HEIGHT)) };
 	glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(float(CAMERA_WIDTH), float(160.f)) };
 	glm::vec2 texCoords[2] = { glm::vec2(120.f / 512.0, 0.f), glm::vec2((120.f + 320.f) / 512.0f, 160.f / 256.0f) };
@@ -114,7 +117,7 @@ pair<bool, bool> Scene3::update(int deltaTime)
 	if (!stop_Lemmings && lemmingsIn < 60 && currentTime >= (3000 * (lemmingsIn + 1))) {
 		lemming[lemmingsIn].init(glm::vec2(60 - displacement, 60), simpleTexProgram, 120 + displacement);
 		lemming[lemmingsIn].setMapMask(&maskTexture, &parados);
-		lemming[lemmingsIn].setStairs(stairs);
+		lemming[lemmingsIn].setStairs(stairs, nStairs);
 		lemmingInit[lemmingsIn] = true;
 		++lemmingsIn;
 	}
@@ -154,26 +157,22 @@ pair<bool, bool> Scene3::update(int deltaTime)
 		if (lemmingInit[i]) {
 			pair<bool, int> putStair = lemming[i].putStair();
 			if (putStair.first) {
-				pair<Stairs, bool> stair;
-				stairs.push_back(stair);
 				glm::vec2 pos = lemming[i].position();
 				pos.y += 15;
+				nStairs++;
 				if (putStair.second == 0) {		//escalera hacia la izquierda
 					pos.x += 2;
-					stairs[stairs.size() - 1].first.init(pos, simpleTexProgram);
-					stairs[stairs.size() - 1].second = 0;
+					stairs[nStairs - 1].first.init(pos, simpleTexProgram);
+					stairs[nStairs - 1].second = 0;
 				}
 				else if (putStair.second == 1) {	//escalera hacia la derecha
 					pos.x += 9;
-					stairs[stairs.size() - 1].first.init(pos, simpleTexProgram);
-					stairs[stairs.size() - 1].second = 1;
-				}
-				for (int j = 0; j < 4; j++) {
-					maskTexture.setPixel(pos.x + j + 120, pos.y, 255);
+					stairs[nStairs - 1].first.init(pos, simpleTexProgram);
+					stairs[nStairs - 1].second = 1;
 				}
 				for (int j = 0; j < lemming.size(); j++) {
 					if (lemmingInit[j]) {
-						lemming[j].setStairs(stairs);
+						lemming[j].setStairs(stairs, nStairs);
 					}
 				}
 			}
@@ -188,7 +187,7 @@ pair<bool, bool> Scene3::update(int deltaTime)
 	minimap.update(deltaTime);
 	mRectangle1.update(deltaTime);
 	mRectangle2.update(deltaTime);
-	for (int i = 0; i < stairs.size(); i++) {
+	for (int i = 0; i < nStairs; i++) {
 		stairs[i].first.update(deltaTime);
 	}
 	panel.update(deltaTime);
@@ -229,7 +228,7 @@ void Scene3::render()
 
 	botonPlay.render();
 	botonSpeed.render();
-	for (int i = 0; i < stairs.size(); i++) {
+	for (int i = 0; i < nStairs; i++) {
 		stairs[i].first.render();
 	}
 	panel.render();
@@ -614,7 +613,7 @@ void Scene3::changeDisplacement(float d)
 	}
 	puerta.displace(-d);
 	salida.displace(-d);
-	for (int i = 0; i < stairs.size(); i++) {
+	for (int i = 0; i < nStairs; i++) {
 		stairs[i].first.displace(-d);
 	}
 	lava.displace(-d);

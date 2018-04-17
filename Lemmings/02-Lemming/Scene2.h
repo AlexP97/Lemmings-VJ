@@ -67,6 +67,7 @@ private:
 	IconPanel panel;
 	IconSelected iconSelected;
 	vector<pair<Stairs, bool>> stairs;
+	int nStairs;
 	Minimap minimap;
 	MinimapRectangle mRectangle1, mRectangle2;
 	Text text;
