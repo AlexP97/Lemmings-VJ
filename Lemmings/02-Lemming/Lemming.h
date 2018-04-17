@@ -25,7 +25,7 @@ public:
 	void setPosition(glm::vec2 position);
 	bool floats();
 	bool moveFloatingLemming(int mouseX, int mouseY);
-	
+	bool isBashing(int position);
 	void setMapMask(VariableTexture *mapMask, VariableTexture* lemmingMask);
 	void setStairs(vector<pair<Stairs, bool>> stairs, int n);
 	void setAbility(int ability);

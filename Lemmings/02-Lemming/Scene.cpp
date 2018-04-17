@@ -32,6 +32,8 @@ void Scene::init()
 	lemmingsRemaining = 10;
 	abilitiesRemaining = vector<int>(7, 0);
 	abilitiesRemaining[2] = 10;
+
+	abilitiesRemaining[3] = 10;
 	//glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(float(CAMERA_WIDTH), float(CAMERA_HEIGHT)) };
 	glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(float(CAMERA_WIDTH), float(160.f)) };
 	glm::vec2 texCoords[2] = { glm::vec2(120.f / 512.0, 0.f), glm::vec2((120.f + 320.f) / 512.0f, 160.f / 256.0f) };
@@ -167,6 +169,28 @@ pair<bool, bool> Scene::update(int deltaTime)
 			}
 		}
 	}
+
+	for (unsigned int i = 0; i < lemming.size(); i++) {
+		if (lemmingInit[i]) {
+			if (lemming[i].isBashing(2)) {
+				glm::vec2 pos = lemming[i].position();
+				for (int i = 0; i < 13; i++) {
+					unsigned int posX = unsigned int(pos.x + 7 + 120 + displacement);
+					unsigned int posY = unsigned int(pos.y + 5 + i);
+					maskTexture.setPixel(posX, posY, 0);
+				}
+			}
+			else if (lemming[i].isBashing(1)) {
+				glm::vec2 pos = lemming[i].position();
+				for (int i = 0; i < 13; i++) {
+					unsigned int posX = unsigned int(pos.x + 8 + 120 + displacement);
+					unsigned int posY = unsigned int(pos.y + 5 + i);
+					maskTexture.setPixel(posX, posY, 0);
+				}
+			}
+		}
+	}
+
 
 	puerta.update(deltaTime);
 	botonPlay.update(deltaTime);
@@ -314,7 +338,11 @@ void Scene::explode() {
 
 void Scene::clickOnLemming(int indLemming) {
 	
-	if (ability == 3 && abilitiesRemaining[2] > 0) {
+	if ((ability == 3 || ability == 4) && (abilitiesRemaining[2] > 0 || abilitiesRemaining[3] > 0)) {
+		if (ability == 3)
+			abilitiesRemaining[2]--;
+		else
+			abilitiesRemaining[3]--;
 		lemming[indLemming].setAbility(ability);
 		abilitiesRemaining[2]--;
 	}
