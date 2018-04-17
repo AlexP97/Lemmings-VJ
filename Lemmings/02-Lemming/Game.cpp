@@ -140,7 +140,7 @@ void Game::render()
 		simpleScene.render();
 		break;
 	case 5:
-		simpleScene.render();
+		sceneInstruccions.render();
 		break;
 	case 6:
 		simpleScene.render();
@@ -192,8 +192,11 @@ void Game::specialKeyPressed(int key)
 		actualScene = 4;
 	}
 	else if (actualScene == 0 && key == GLUT_KEY_F5) {
-		simpleScene.init(0);
+		sceneInstruccions.init();
 		actualScene = 5;
+	}
+	else if (actualScene == 5 && (key == GLUT_KEY_LEFT || key == GLUT_KEY_RIGHT)) {
+		sceneInstruccions.keyPressed(key);
 	}
 	specialKeys[key] = true;
 }

@@ -13,12 +13,15 @@
   <ItemGroup>
     <ClInclude Include="AnimKeyframes.h" />
     <ClInclude Include="Boton.h" />
+    <ClInclude Include="ButtonInst.h" />
     <ClInclude Include="common_defs.h" />
     <ClInclude Include="Cursor.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Home.h" />
     <ClInclude Include="IconPanel.h" />
     <ClInclude Include="IconSelected.h" />
+    <ClInclude Include="InstPage.h" />
+    <ClInclude Include="Instruccions.h" />
     <ClInclude Include="Lava.h" />
     <ClInclude Include="Lemming.h" />
     <ClInclude Include="MaskedTexturedQuad.h" />
@@ -40,11 +43,14 @@
     <ClInclude Include="VariableTexture.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ButtonInst.cpp" />
     <ClCompile Include="Cursor.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Home.cpp" />
     <ClCompile Include="IconPanel.cpp" />
     <ClCompile Include="IconSelected.cpp" />
+    <ClCompile Include="InstPage.cpp" />
+    <ClCompile Include="Instruccions.cpp" />
     <ClCompile Include="Lava.cpp" />
     <ClCompile Include="Lemming.cpp" />
     <ClCompile Include="main.cpp" />

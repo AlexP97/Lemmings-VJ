@@ -96,6 +96,15 @@
     <ClInclude Include="SimpleScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Instruccions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ButtonInst.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="InstPage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -174,6 +183,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SimpleScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Instruccions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ButtonInst.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="InstPage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -7,6 +7,7 @@
 #include "Scene3.h"
 #include "Home.h"
 #include "SimpleScene.h"
+#include "Instruccions.h"
 
 
 // Game is a singleton (a class with a single instance) that represents our whole application
@@ -49,6 +50,7 @@ private:
 	Scene2 scene2;
 	Scene3 scene3;
 	SimpleScene simpleScene;
+	Instruccions sceneInstruccions;
 	bool keys[256], specialKeys[256]; // Store key states so that 
 	                                  // we can have access at any time
 	int mouseX, mouseY;               // Mouse position
