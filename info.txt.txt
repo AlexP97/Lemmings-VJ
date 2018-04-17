@@ -1,0 +1,47 @@
+Integrantes:
+	- Adrián Espejo Saldaña
+	- Alejandro Pérez Ortiz
+Funcionalidades implementadas:
+	- Parte común:
+		- Tres niveles de dificultad creciente.
+		- Los lemmings aparecen por una puerta de entrada y abandonan por una
+		  salida. Cada nivel tiene asociado un número de lemmings que
+		  se generarán y un número de lemmings mínimos que tienen que llegar
+		  a la salida para ganar. De esto se informa en una pantalla
+		  antes de empezar el nivel.
+		- Habilidades implementadas: blocker, digger, basher, climber, builder,
+		  ballooner (ver parte adicional).
+		- Botón de pausa y botón que permite alternar entre dos velocidades
+		  de simulación.
+		- Botón que permite hacer explotar a todos los lemmings. Esta funcionalidad
+		  sirve para rendirse.
+		- Interfície gráfica mostrando la puntuación y el nivel.
+	- Funcionalidades del juego:
+		- Estructura de 4 pantallas, menú principal, jugar, instrucciones
+		  y créditos.
+		- Sonido: música de fondo y efectos especiales.
+		- Interactividad de todas las entidades del juego. Cada evento que se produce
+		  va acompañado de una o más animaciones.
+	- Parte adicional:
+		- Hemos añadido la habilidad ballooner (Lemmings 2: The Tribes) el cual,
+		  sujetando un globo, empieza a subir lentamente hacia arriba. El
+		  movimiento del lemming se decide gracias al cursor, que se habrá 
+		  convertido en una hélice (excepto cuando esta encima de otro lemming
+		  para que se pueda seguir jugando). El movimiento del lemming será el
+		  contrario a la posición relativa del cursor respecto del lemming.
+		- Hemos añadido un minimapa y movimiento de izquierda a derecha en la
+		  cámara, para así poder ver mapas más grandes. El minimapa tiene un
+		  rectángulo que delimita la zona que se ve en la cámara. Esto si estaba
+		  en el lemming original pero no se pedía en el enunciado.
+Instrucciones:
+	- Para jugar a los tres niveles hay que pulsar F1, F2 o F3 respectivamente.
+	- Cuando se acaba un nivel si han pasado los suficientes lemmings pasa al
+	  siguiente automáticamente, y si no han pasado suficientes vuelve al menú
+	  principal.
+	- Si se clica en la habilidad de explosión nuclear, explotarán todos y se vuelve
+	  al menú principal.
+	- Para ver los créditos se tiene que pulsar F4, y para volver retroceso.
+	- Para ver las instrucciones se tiene que pulsar F5, y para volver retroceso.
+	  Para navegar por las instrucciones se hace con las teclas de dirección izquierda
+	  y derecha.
+	- Para salir del juego en cualquier pantalla hay que pulsar escape.

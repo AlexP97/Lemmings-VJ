@@ -281,7 +281,7 @@ pair<bool, bool> Scene::mouseMoved(int mouseX, int mouseY, bool bLeftButton, boo
 			if (changeDisp.second && (displacement >= -100)) d = -2;
 			else if (!changeDisp.second && (displacement <= 70)) d = 2;
 			changeDisplacement(d);
-			mRectangle2.displace(d / 6.5f);
+			mRectangle2.displace(d / 6.f);
 		}
 
 		bool moved = false;
