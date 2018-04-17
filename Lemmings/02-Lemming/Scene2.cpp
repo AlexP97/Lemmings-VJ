@@ -179,18 +179,6 @@ pair<bool, bool> Scene2::update(int deltaTime)
 
 	for (unsigned int i = 0; i < lemming.size(); i++) {
 		if (lemmingInit[i]) {
-			if (lemming[i].heExplotado()) {
-				float radio = 14.f;
-				int dist = int(radio * 2);
-				for (int z = 0; z < dist; z++) {
-					for (int y = 0; y < dist; y++) {
-						unsigned int posX = unsigned int(lemming[i].position().x + displacement + 7 + z - dist / 2);
-						unsigned int posY = unsigned int(lemming[i].position().y + 7 + y - dist / 2);
-						if (glm::distance(glm::vec2(posX, posY), glm::vec2(lemming[i].position().x + displacement + 7, lemming[i].position().y + 7)) < radio)
-							maskTexture.setPixel(posX, posY, 0);
-					}
-				}
-			}
 			if (lemming[i].isBashing(2)) {
 				glm::vec2 pos = lemming[i].position();
 				for (int i = 0; i < 13; i++) {
