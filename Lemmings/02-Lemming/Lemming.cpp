@@ -30,6 +30,7 @@ void Lemming::init(const glm::vec2 &initialPosition, ShaderProgram &shaderProgra
 	primeraPasada = false;
 	numberOfStairs = 0;
 	floating = false;
+	explotado = false;
 	currentFloating = 0;
 	displacement = desplazamiento;
 	state = FALLING_RIGHT_STATE;
@@ -76,8 +77,6 @@ void Lemming::init(const glm::vec2 &initialPosition, ShaderProgram &shaderProgra
 				sprite->addKeyframe(DIG_LEFT, glm::vec2(float(i) / 8, (9.f + float(j)) / 24.f));
 			}
 		}
-
-
 
 
 		sprite->setAnimationSpeed(BLOCKING, 9);
@@ -292,6 +291,7 @@ bool Lemming::update(int deltaTime)
 		}
 		else if (sprite->currentKeyFrame() == 31) {
 			eliminado = true;
+			explotado = true;
 			return false;
 		}
 		break;
@@ -701,6 +701,9 @@ bool Lemming::isBashing(int position) {
 	return false;
 }
 
+bool Lemming::heExplotado () {
+	return explotado;
+}
 
 
 void Lemming::applyMask() {
