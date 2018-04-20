@@ -32,8 +32,6 @@ void Scene::init()
 	lemmingsRemaining = 10;
 	abilitiesRemaining = vector<int>(7, 0);
 	abilitiesRemaining[2] = 10;
-
-	abilitiesRemaining[3] = 10;
 	//glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(float(CAMERA_WIDTH), float(CAMERA_HEIGHT)) };
 	glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(float(CAMERA_WIDTH), float(160.f)) };
 	glm::vec2 texCoords[2] = { glm::vec2(120.f / 512.0, 0.f), glm::vec2((120.f + 320.f) / 512.0f, 160.f / 256.0f) };
@@ -338,11 +336,9 @@ void Scene::explode() {
 
 void Scene::clickOnLemming(int indLemming) {
 	
-	if ((ability == 3 || ability == 4) && (abilitiesRemaining[2] > 0 || abilitiesRemaining[3] > 0)) {
+	if (ability == 3 && abilitiesRemaining[2]>0) {
 		if (ability == 3)
 			abilitiesRemaining[2]--;
-		else
-			abilitiesRemaining[3]--;
 		lemming[indLemming].setAbility(ability);
 		abilitiesRemaining[2]--;
 	}

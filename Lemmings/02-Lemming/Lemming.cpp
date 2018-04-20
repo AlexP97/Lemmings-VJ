@@ -243,7 +243,6 @@ bool Lemming::update(int deltaTime)
 		}
 		break;
 	case COMING_OUT_STATE:
-		cout << sprite->currentKeyFrame();
 		if (sprite->currentKeyFrame() == 7) {
 			eliminado = true;
 		}
@@ -685,7 +684,6 @@ void Lemming::setAbility(int ability) {
 void Lemming::eraseMask(int posX, int posY, float ymin, float ymax, float xmin, float xmax, VariableTexture* mascara) {
 	for (int y = max(0.f, posY+ymin); y <= min((float)mask->height() - 1, posY + ymax); y++) {
 		for (int x = max(0.f, posX + xmin); x <= min((float)mask->width() - 1, posX + xmax); x++) {
-			cout << "Borrar pixel " << x << ' ' << y << endl;
 			mascara->setPixel(x, y, 0);
 		}
 	}
